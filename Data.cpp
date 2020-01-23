@@ -1,4 +1,3 @@
-#include "../../OneDrive/Documents/UncertainLT/UncertainLT/stdafx.h"
 #include "Data.h"
 
 Data::Data(string dataFile)
