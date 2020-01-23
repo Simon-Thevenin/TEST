@@ -1,4 +1,3 @@
-#include "../../OneDrive/Documents/UncertainLT/UncertainLT/stdafx.h"
 #include "SubProblem.h"
 
 
@@ -14,7 +13,7 @@ SubProblem::SubProblem(void)
 
 SubProblem::SubProblem(Data* d, int gam)
 {
-	Data::print("Start Sub Prob");
+	Data::print("Start Sub Prob",this->data->getNPer() );
 	this->Gamma = gam;
 	this->data=d;
 	this->pbSub = new XPRBprob("SubProb");
@@ -45,6 +44,7 @@ SubProblem::SubProblem(Data* d, int gam)
 			}
 		}
 	}
+    Data::print("out of  Sub Prob");
 }
 
 SubProblem::~SubProblem(void)

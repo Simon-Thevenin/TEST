@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #include "xprb_cpp.h"
 #include "xprs.H"
 #include "xprm_mc.h"
