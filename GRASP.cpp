@@ -19,7 +19,7 @@ GRASP::~GRASP(void)
 
 double*** GRASP::translateLeadTime(int** L)
 {
-	
+
 return nullptr;
 }
 
@@ -35,12 +35,12 @@ int** GRASP::generateLeadTime()
 				LT[t][s] = rand();
 		    }
 	 }
-return nullptr;
+    return nullptr;
 }
 
 
 bool GRASP::CheckLeadTimeInBudget(int** L)
 {
 
-return false;
+   return false;
 }

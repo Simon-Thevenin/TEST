@@ -10,8 +10,42 @@
 #include "FGenetic.h"
 #include "Solution.h"
 #define AffichAG 1
+#include "GRASP.h"
+
 using namespace std;
 using namespace ::dashoptimization;
+
+
+
+int mainSimon() {
+    string file = "C://Users//simon//CLionProjects//untitled//1.txt";
+    ifstream fichier( file, ios::in);  // on ouvre le fichier en lecture
+    //ifstream fichier(argv[1], ios::in);  // on ouvre le fichier en lecture
+
+    if(true) {
+        Data *data = new Data(21, 6, file);
+        cout << "Create the model once:" << endl;
+        ModelQuantity* ModQ= new ModelQuantity(data, 3);
+        ModQ->BuildModel();
+
+
+        cout<<"create a Y to try!!!"<<endl;
+        int** givenY2 = new int*[data->getNSup()];
+        for(int s=0; s<data->getNSup(); s++)
+        {
+            givenY2[s] =  new int[data->getNPer()];
+            for(int t=0; t<data->getNPer(); t++)
+            {
+                givenY2[s][t] =1;
+            }
+        }
+
+        ModQ->Solve(true, givenY2, false);
+        cout<<"Now with Y"<<endl;
+        ModQ->Solve(false, nullptr, false);
+    }
+
+}
 
 double* fitness;
 double* fitness2;
@@ -38,6 +72,8 @@ double RCOST(int*** X, int a, Data *data)
 
     //return c;
 }
+
+
 int mainOussama() {
 
     cout << "Hello, World!!" << endl;
@@ -540,11 +576,11 @@ int mainOussama() {
     }
         else
         {
-            cerr << "Impossible d'ouvrir le fichier !" << endl;
+            cerr << "Impossible d'ouvrir le fichier ! 0" << endl;
         }
         return 0;
 }
 int main(int argc, char** argv){
-    mainOussama();
-
+  //  mainOussama();
+    mainSimon();
 }

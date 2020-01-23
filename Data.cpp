@@ -18,6 +18,7 @@ Data::~Data()
 void Data::parseData(string file){
 
    FILE *fichier = fopen(file.c_str(), "r");
+   cout<<file<<endl;
     if(fichier)
     {
         /** Si on ouvre le fichier correctement, on déclare et on importe**/
