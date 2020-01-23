@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.cpp
+Data.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
+
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
 iostream
 -
@@ -17,6 +21,22 @@ fstream
 -
 cstdlib
 -
+
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
+iostream
+-
+string
+-
+time.h
+-
+fstream
+-
+cstdlib
+-
+Data.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
+Solution.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Solution.h
 
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
 xprb_cpp.h
@@ -32,13 +52,25 @@ C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
 cmath
 -
 
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Solution.h
+iostream
+-
+string
+-
+time.h
+-
+fstream
+-
+Data.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
+
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
 cstddef
 -
 xprb_cpp.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprb_cpp.h
 xprs.H
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.H
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.h
 xprm_mc.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprm_mc.h
 Data.h
@@ -63,6 +95,10 @@ SubProblem.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
 Data.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
+FGenetic.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
+Solution.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Solution.h
 
 C:/xpressmp/include/mosel_mc.h
 mosel_rt.h

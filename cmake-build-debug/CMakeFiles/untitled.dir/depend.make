@@ -4,6 +4,11 @@
 CMakeFiles/untitled.dir/Data.cpp.obj: ../Data.cpp
 CMakeFiles/untitled.dir/Data.cpp.obj: ../Data.h
 
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: ../Data.h
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: ../FGenetic.cpp
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: ../FGenetic.h
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: ../Solution.h
+
 CMakeFiles/untitled.dir/GRASP.cpp.obj: ../Data.h
 CMakeFiles/untitled.dir/GRASP.cpp.obj: ../GRASP.cpp
 CMakeFiles/untitled.dir/GRASP.cpp.obj: ../GRASP.h
@@ -21,6 +26,10 @@ CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: C:/xpressmp/include/xprm_mc.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: C:/xpressmp/include/xprm_rt.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: C:/xpressmp/include/xprs.h
 
+CMakeFiles/untitled.dir/Solution.cpp.obj: ../Data.h
+CMakeFiles/untitled.dir/Solution.cpp.obj: ../Solution.cpp
+CMakeFiles/untitled.dir/Solution.cpp.obj: ../Solution.h
+
 CMakeFiles/untitled.dir/SubProblem.cpp.obj: ../Data.h
 CMakeFiles/untitled.dir/SubProblem.cpp.obj: ../SubProblem.cpp
 CMakeFiles/untitled.dir/SubProblem.cpp.obj: ../SubProblem.h
@@ -34,7 +43,9 @@ CMakeFiles/untitled.dir/SubProblem.cpp.obj: C:/xpressmp/include/xprm_rt.h
 CMakeFiles/untitled.dir/SubProblem.cpp.obj: C:/xpressmp/include/xprs.h
 
 CMakeFiles/untitled.dir/main.cpp.obj: ../Data.h
+CMakeFiles/untitled.dir/main.cpp.obj: ../FGenetic.h
 CMakeFiles/untitled.dir/main.cpp.obj: ../ModelQuantity.h
+CMakeFiles/untitled.dir/main.cpp.obj: ../Solution.h
 CMakeFiles/untitled.dir/main.cpp.obj: ../SubProblem.h
 CMakeFiles/untitled.dir/main.cpp.obj: ../main.cpp
 CMakeFiles/untitled.dir/main.cpp.obj: C:/xpressmp/include/mosel_mc.h
