@@ -149,6 +149,33 @@ Data.cpp.s:
 	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/Data.cpp.s
 .PHONY : Data.cpp.s
 
+FGenetic.obj: FGenetic.cpp.obj
+
+.PHONY : FGenetic.obj
+
+# target to build an object file
+FGenetic.cpp.obj:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/FGenetic.cpp.obj
+.PHONY : FGenetic.cpp.obj
+
+FGenetic.i: FGenetic.cpp.i
+
+.PHONY : FGenetic.i
+
+# target to preprocess a source file
+FGenetic.cpp.i:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/FGenetic.cpp.i
+.PHONY : FGenetic.cpp.i
+
+FGenetic.s: FGenetic.cpp.s
+
+.PHONY : FGenetic.s
+
+# target to generate assembly for a file
+FGenetic.cpp.s:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/FGenetic.cpp.s
+.PHONY : FGenetic.cpp.s
+
 GRASP.obj: GRASP.cpp.obj
 
 .PHONY : GRASP.obj
@@ -202,6 +229,33 @@ ModelQuantity.s: ModelQuantity.cpp.s
 ModelQuantity.cpp.s:
 	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/ModelQuantity.cpp.s
 .PHONY : ModelQuantity.cpp.s
+
+Solution.obj: Solution.cpp.obj
+
+.PHONY : Solution.obj
+
+# target to build an object file
+Solution.cpp.obj:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/Solution.cpp.obj
+.PHONY : Solution.cpp.obj
+
+Solution.i: Solution.cpp.i
+
+.PHONY : Solution.i
+
+# target to preprocess a source file
+Solution.cpp.i:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/Solution.cpp.i
+.PHONY : Solution.cpp.i
+
+Solution.s: Solution.cpp.s
+
+.PHONY : Solution.s
+
+# target to generate assembly for a file
+Solution.cpp.s:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/Solution.cpp.s
+.PHONY : Solution.cpp.s
 
 SubProblem.obj: SubProblem.cpp.obj
 
@@ -269,12 +323,18 @@ help:
 	@echo ... Data.obj
 	@echo ... Data.i
 	@echo ... Data.s
+	@echo ... FGenetic.obj
+	@echo ... FGenetic.i
+	@echo ... FGenetic.s
 	@echo ... GRASP.obj
 	@echo ... GRASP.i
 	@echo ... GRASP.s
 	@echo ... ModelQuantity.obj
 	@echo ... ModelQuantity.i
 	@echo ... ModelQuantity.s
+	@echo ... Solution.obj
+	@echo ... Solution.i
+	@echo ... Solution.s
 	@echo ... SubProblem.obj
 	@echo ... SubProblem.i
 	@echo ... SubProblem.s

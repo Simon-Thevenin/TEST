@@ -4,7 +4,7 @@ project(untitled)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-m64 -w -g -Wall -m64")
 
-add_executable(untitled data.cpp GRASP.cpp ModelQuantity.cpp SubProblem.cpp main.cpp )
+add_executable(untitled data.cpp GRASP.cpp ModelQuantity.cpp SubProblem.cpp  Solution.cpp FGenetic.cpp main.cpp )
 link_directories(C:\\xpressmp\\include C:\\xpressmp\\lib)
 include_directories(C:\\xpressmp\\include C:\\xpressmp\\lib)
 

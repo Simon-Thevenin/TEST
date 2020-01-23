@@ -112,10 +112,38 @@ CMakeFiles/untitled.dir/SubProblem.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/untitled.dir/SubProblem.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\oussama.ben-ammar\CLionProjects\TEST\SubProblem.cpp -o CMakeFiles\untitled.dir\SubProblem.cpp.s
 
+CMakeFiles/untitled.dir/Solution.cpp.obj: CMakeFiles/untitled.dir/flags.make
+CMakeFiles/untitled.dir/Solution.cpp.obj: CMakeFiles/untitled.dir/includes_CXX.rsp
+CMakeFiles/untitled.dir/Solution.cpp.obj: ../Solution.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\oussama.ben-ammar\CLionProjects\TEST\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/untitled.dir/Solution.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\untitled.dir\Solution.cpp.obj -c C:\Users\oussama.ben-ammar\CLionProjects\TEST\Solution.cpp
+
+CMakeFiles/untitled.dir/Solution.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/untitled.dir/Solution.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\oussama.ben-ammar\CLionProjects\TEST\Solution.cpp > CMakeFiles\untitled.dir\Solution.cpp.i
+
+CMakeFiles/untitled.dir/Solution.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/untitled.dir/Solution.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\oussama.ben-ammar\CLionProjects\TEST\Solution.cpp -o CMakeFiles\untitled.dir\Solution.cpp.s
+
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: CMakeFiles/untitled.dir/flags.make
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: CMakeFiles/untitled.dir/includes_CXX.rsp
+CMakeFiles/untitled.dir/FGenetic.cpp.obj: ../FGenetic.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\oussama.ben-ammar\CLionProjects\TEST\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/untitled.dir/FGenetic.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\untitled.dir\FGenetic.cpp.obj -c C:\Users\oussama.ben-ammar\CLionProjects\TEST\FGenetic.cpp
+
+CMakeFiles/untitled.dir/FGenetic.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/untitled.dir/FGenetic.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\oussama.ben-ammar\CLionProjects\TEST\FGenetic.cpp > CMakeFiles\untitled.dir\FGenetic.cpp.i
+
+CMakeFiles/untitled.dir/FGenetic.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/untitled.dir/FGenetic.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\oussama.ben-ammar\CLionProjects\TEST\FGenetic.cpp -o CMakeFiles\untitled.dir\FGenetic.cpp.s
+
 CMakeFiles/untitled.dir/main.cpp.obj: CMakeFiles/untitled.dir/flags.make
 CMakeFiles/untitled.dir/main.cpp.obj: CMakeFiles/untitled.dir/includes_CXX.rsp
 CMakeFiles/untitled.dir/main.cpp.obj: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\oussama.ben-ammar\CLionProjects\TEST\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/untitled.dir/main.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\oussama.ben-ammar\CLionProjects\TEST\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/untitled.dir/main.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\untitled.dir\main.cpp.obj -c C:\Users\oussama.ben-ammar\CLionProjects\TEST\main.cpp
 
 CMakeFiles/untitled.dir/main.cpp.i: cmake_force
@@ -132,6 +160,8 @@ untitled_OBJECTS = \
 "CMakeFiles/untitled.dir/GRASP.cpp.obj" \
 "CMakeFiles/untitled.dir/ModelQuantity.cpp.obj" \
 "CMakeFiles/untitled.dir/SubProblem.cpp.obj" \
+"CMakeFiles/untitled.dir/Solution.cpp.obj" \
+"CMakeFiles/untitled.dir/FGenetic.cpp.obj" \
 "CMakeFiles/untitled.dir/main.cpp.obj"
 
 # External object files for target untitled
@@ -141,13 +171,15 @@ untitled.exe: CMakeFiles/untitled.dir/Data.cpp.obj
 untitled.exe: CMakeFiles/untitled.dir/GRASP.cpp.obj
 untitled.exe: CMakeFiles/untitled.dir/ModelQuantity.cpp.obj
 untitled.exe: CMakeFiles/untitled.dir/SubProblem.cpp.obj
+untitled.exe: CMakeFiles/untitled.dir/Solution.cpp.obj
+untitled.exe: CMakeFiles/untitled.dir/FGenetic.cpp.obj
 untitled.exe: CMakeFiles/untitled.dir/main.cpp.obj
 untitled.exe: CMakeFiles/untitled.dir/build.make
 untitled.exe: C:/xpressmp/lib/xprs.lib
 untitled.exe: CMakeFiles/untitled.dir/linklibs.rsp
 untitled.exe: CMakeFiles/untitled.dir/objects1.rsp
 untitled.exe: CMakeFiles/untitled.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\oussama.ben-ammar\CLionProjects\TEST\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable untitled.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\oussama.ben-ammar\CLionProjects\TEST\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable untitled.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\untitled.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
