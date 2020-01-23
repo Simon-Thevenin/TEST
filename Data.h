@@ -13,37 +13,73 @@ using namespace std;
 
 class Data
 {
-	private:
-		double cb, ch;
+private:
 
-		// Nombre de suppliers
-		int NSup;
+    // Nombre de suppliers
+    int NSup;
 
-        // Nombre de Périodes
-		int NPer;
+    // Nombre de Périodes
+    int NPer;
 
-		string dataFile_;
+    // Backordering and holding costs
+    double cb, ch;
 
-	public:
-		Data(string dataFile);
-		virtual ~Data();
+    // Setup (odering) costs
+    double* cs;
 
-		void parseData(string file);
-		void ecriture(const char* nom_fichier, int* tab,int n);
-        double getch();
-        double getcb();
-		double getDemand(int t);
-		double getSetup(int s);
-		double getPrice(int s);
-		int getLMin(int s);
-		int getLMax(int s);
-        void setch(double value);
-        void setcb(double value);
-		int getNPer();
-		int getNSup();
-		static void print(string s);
-		static void print(string s, double d);
+    // Unit price
+    double* up;
+
+    //Demand
+    int* d;
+
+    // lead-times limits
+    int* LMax;
+    int* LMin;
+
+    // Imax
+    int Imax;
+
+
+    string dataFile_;
+
+public:
+    Data(int nbPeriods, int nbSuppliers, string dataFile);
+    virtual ~Data();
+
+    void parseData(string file);
+    void ecriture(string  nom_fichier, string c , double* tab,int n);
+    void ecriture(string  nom_fichier, string c , int* tab,int n);
+
+
+    int getNPer();
+    int getNSup();
+
+    double getch();
+    double getcb();
+
+
+    // Setup (odering) costs
+    double getSetup(int i);
+    double* getcs();
+
+    // Unit price
+    double getPrice(int i);
+
+    //Demand
+    int getDemand(int i);
+    int* getTabD();
+
+    // lead-times limits
+    int getLMax(int i);
+    int getLMin(int i);
+    int* getTabLMax();
+    int* getTabLMin();
+    static void print(string s);
+    static void print(string s, double d);
+
 };
+
 
 
 #endif /* DATA_HPP_ */

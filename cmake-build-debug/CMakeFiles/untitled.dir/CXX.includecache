@@ -18,21 +18,11 @@ fstream
 cstdlib
 -
 
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.cpp
-cstddef
--
-ModelQuantity.h
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
-iostream
--
-cmath
--
-
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
 xprb_cpp.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprb_cpp.h
 xprs.H
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.H
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.h
 xprm_mc.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprm_mc.h
 Data.h
@@ -41,10 +31,6 @@ SubProblem.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
 cmath
 -
-
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.cpp
-SubProblem.h
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
 
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
 cstddef
@@ -70,7 +56,7 @@ cstdlib
 xprb_cpp.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprb_cpp.h
 xprs.h
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.H
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.h
 ModelQuantity.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
 SubProblem.h
