@@ -262,7 +262,7 @@ int mainOussama() {
         /******************************************************************************/
         /** Lancement des iterations **************************************************/
         // 0 pour ne pas tourner l'Algo Gen
-        int goo=0;
+        int goo=1;
         if (goo==1)
         {
             //Initialiser le compteur CPU times
@@ -555,28 +555,6 @@ int mainOussama() {
             delete [] fils2;
             delete [] fils3;
         }
-
-        cout << "Create the model once:" << endl;
-        ModelQuantity *ModQ;
-        ModQ = new ModelQuantity(data, 3);
-        cout <<"ici !! "<<endl;
-        ModQ->BuildModel();
-
-
-        cout << "create a Y to try!!!" << endl;
-        int **givenY2 = new int *[data->getNSup()];
-        for (int s = 0; s < data->getNSup(); s++) {
-            givenY2[s] = new int[data->getNPer()];
-            for (int t = 0; t < data->getNPer(); t++) {
-                givenY2[s][t] = 1;
-            }
-        }
-
-        ModQ->Solve(true, givenY2, false);
-        cout << "Now with Y" << endl;
-        ModQ->Solve(false, nullptr, false);
-        int a;
-        cin >> a;
     }
         else
         {
@@ -585,6 +563,6 @@ int mainOussama() {
         return 0;
 }
 int main(int argc, char** argv){
-  //  mainOussama();
-    mainSimon();
+    mainOussama();
+    //  mainSimon();
 }
