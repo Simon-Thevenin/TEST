@@ -18,42 +18,101 @@ using namespace ::dashoptimization;
 // résoudee probleme nouv gen
 // penser  vider la mémoire partout
 
-//string pathfile = "C://Users//simon//CLionProjects//untitled//";
-string pathfile =  "C://Users//oussama.ben-ammar//CLionProjects//TEST//";
+string pathfile = "..//";
+//string pathfile =  "C://Users//oussama.ben-ammar//CLionProjects//TEST//";
 
-int mainSimon() {
-    string file = pathfile+"1.txt";
-    ifstream fichier( file, ios::in);  // on ouvre le fichier en lecture
-    //ifstream fichier(argv[1], ios::in);  // on ouvre le fichier en lecture
+void runExact(string file, int NbPeriod, int NbSupplier, double gamma)
+{
+    string Thefile = pathfile+file;
+    ifstream fichier( Thefile, ios::in);
+    Data *data = new Data(NbPeriod, NbSupplier, Thefile);
+    ModelQuantity* ModQ= new ModelQuantity(data, gamma);
+    ModQ->BuildModel();
 
-    if(true) {
-        int NbPeriod =21;
-        int NbSupplier =6;
-        Data *data = new Data(NbPeriod, NbSupplier, file);
-        cout << "Create the model once:" << endl;
-        ModelQuantity* ModQ= new ModelQuantity(data, 10);
-        ModQ->BuildModel();
-
-
-        cout<<"create a Y to try!!!"<<endl;
-        int** givenY2 = new int*[data->getNSup()];
-        for(int s=0; s<data->getNSup(); s++)
+    int** givenY2 = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        givenY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
         {
-            givenY2[s] =  new int[data->getNPer()];
-            for(int t=0; t<data->getNPer(); t++)
-            {
-                givenY2[s][t] =1;
-            }
+            givenY2[s][t] =1;
         }
-
-        //ModQ->Solve(true, givenY2, false, 0.01);
-        cout<<"Now with Y"<<endl;
-        //ModQ->Solve(false, nullptr, false, 0.01);
-
-        GRASP* g = new GRASP(data, 3);
-        g->solve();
     }
 
+    ModQ->Solve(true, givenY2, false, 0.01);
+    double cost = ModQ->Solve(false, nullptr, false, 0.001);
+    string FFile = pathfile + "resultat7.txt";
+    data->Affich_Results(FFile, givenY2, cost, ModQ->LastRunning, -1, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
+    cout<<"optimal cost::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
+    cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
+
+}
+
+void runGrasp(string file, int NbPeriod, int NbSupplier, double gamma)
+{
+    string Thefile = pathfile+file;
+    ifstream fichier( Thefile, ios::in);
+    Data *data = new Data(NbPeriod, NbSupplier, Thefile);
+    GRASP* g = new GRASP(data, gamma);
+    g->solve();
+}
+
+
+void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
+{
+    string Thefile = pathfile+file;
+    ifstream fichier( Thefile, ios::in);
+    Data *data = new Data(NbPeriod, NbSupplier, Thefile);
+    int* Lmean = new int[data->getNSup()+1];
+    for(int s= 1; s<=data->getNSup(); s++)
+    {
+        Lmean[s] = (int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
+    }
+    double*** delta = new double**[data->getNPer()+1];
+
+    for(int tau=1; tau<=data->getNPer(); tau++)
+    {
+        delta[tau] = new double*[data->getNPer()+1];
+        for(int t=1; t<=data->getNPer(); t++)
+        {
+            delta[tau][t] = new double[data->getNSup()+1];
+            for(int s=1; s<=data->getNSup(); s++)
+            {
+                if (tau <= t -Lmean[s])
+                    delta[tau][t][s] = 1;
+                else
+                    delta[tau][t][s] = 0;
+            }
+        }
+    }
+
+    ModelQuantity* mod = new ModelQuantity(data,-1 );
+    mod->BuildModel();
+    mod->AddScenario(delta);
+    mod->Solve(false, nullptr, true, 0.01);
+    /*************************EVALUATE THE COST****************************/
+    double ** associatedquantities =  mod->getQuantities();
+
+    SubProblem* ModSub = new SubProblem(data, gamma);
+
+    ModSub->BuildModel();
+
+
+
+    ModSub->getWorstCaseDelta(associatedquantities);
+    double cost=  ModSub->getAssociatedCost() +mod->totalsetupcosts + mod->GetPurshasingCosts();
+
+    cout<<"Deterministic cost::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
+    cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
+
+}
+
+int mainSimon() {
+    runExact("1.txt", 21, 6,3);
+    runGrasp("1.txt", 21, 6, 3);
+    runDeterministic("1.txt", 21, 6, 3);
 }
 
 double* fitness;
@@ -71,7 +130,7 @@ int echanger (const void *a, const void *b){
 }
 
 int mainOussama() {
-
+    int gamma = 3;
     int NbPeriod = 21;
     int NbSupplier =6;
     string file = pathfile + "1.txt";
@@ -102,7 +161,7 @@ int mainOussama() {
         Data *data = new Data(NbPeriod, NbSupplier, dataFile);
 
         // Appeler la classe Algo Gen
-        FGenetic ag(data);
+        FGenetic ag(data, gamma);
 
         // Ouverture fichier resultat pour écriture
         ofstream fichierS(pathfile+"resultat7.txt", ios::out | ios::app);
@@ -143,7 +202,7 @@ int mainOussama() {
         int nb_gen;
 
         // Time limit
-        int TimeLimit = 60;
+        int TimeLimit = data->getTimeLimite();
 
         // Nombre de generations
         nb_gen=10000;
@@ -495,8 +554,11 @@ int mainOussama() {
             }
             fichierS<<endl;
             fichierS <<fitness[0]<<" TcPU: "<<temps <<endl;*/
+             ag.ModQ->Solve(true, nouv_gen[0], false, 0.01);
+            double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
 
-            data->Affich_Results(FFile, nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1);
+            data->Affich_Results(FFile, nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder());
+
 
 
             /** Libérer un tableau alloué dynamiquement ******************************/

@@ -72,24 +72,7 @@ ModelQuantity::ModelQuantity( Data* d, int gamma)
 	  }
     }
 
-	int* Lmean = new int[this->D->getNSup()+1];
-	 for(int s= 1; s<=this->D->getNSup(); s++)
-	 {
-		 Lmean[s] = (int)((this->D->getLMax(s-1) + this->D->getLMin(s-1))/2);
-	 }
-	 for(int t=1; t<=this->D->getNPer(); t++)
-	 {
-		for(int tau=1; tau<=this->D->getNPer(); tau++)
-			{
-				for(int s=1; s<=this->D->getNSup(); s++)
-				{
-					if (tau < t - Lmean[s]) 
-						delta[1][tau][t][s] = 1;
-					else
-						delta[1][tau][t][s] = 0;
-				}
-		}
-	 }
+
 
 }
 
@@ -424,6 +407,53 @@ void ModelQuantity::DisplaySol(void)
 	cout<<"**************************************"<<endl;
 }
 
+double ModelQuantity::GetPurshasingCosts( ) {
+    double result = 0.0;
+     for(int t=1; t <= this->D->getNPer(); t++)
+    {
+
+        for(int s=1; s<=this->D->getNSup(); s++)
+        {
+            result+=this->Q[t][s].getSol() * this->D->getPrice(s-1);
+        }
+
+    }
+    return result;
+}
+
+double ModelQuantity::GetOrderingCosts( ) {
+    double result = 0.0;
+    for(int t=1; t <= this->D->getNPer(); t++)
+    {
+
+        for(int s=1; s<=this->D->getNSup(); s++)
+        {
+            result+=this->Y[t][s].getSol() * this->D->getSetup(s-1);
+        }
+
+    }
+    return result;
+}
+
+double ModelQuantity::GetInventoryCosts() {
+    this->ModSub->GetInventoryCosts();
+}
+
+
+double ModelQuantity::GetAvgInventory( )
+{
+    this->ModSub->GetInventoryCosts();
+}
+
+double ModelQuantity::GetBackorderCosts() {
+    this->ModSub->GetBackorderCosts();
+}
+
+
+double ModelQuantity::GetAvgtBackorder( )
+{
+    this->ModSub->GetAvgtBackorder();
+}
 
 
 double** ModelQuantity::getQuantities( )
@@ -464,7 +494,12 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	{
 		this->SetYBinary();
 	}
-	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1))
+
+    clock_t start, end;
+    start = clock();
+    double temps=0;
+
+	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
 		 nriteration++;
        // this->pbQ->exportProb(1,"lpq");
@@ -502,6 +537,11 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	
 		 //cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
+
+        end = clock();
+        temps = (double) (end-start)/ CLOCKS_PER_SEC;
+
 	}
+	this->LastRunning = temps;
 	return UB;
 }

@@ -131,7 +131,7 @@ void Data::ecriture(string nom_fichier,  string c , int* tab,int n){
 
     f.close();
 }
-void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int g, double BIIP, int IterBestSol){
+void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
 
     ofstream f(nom_fichier.c_str(), ios::out | ios::app);
     if (!f.is_open())
@@ -198,11 +198,15 @@ void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int
         }
 
         /*** à finir ********************************************************/
-        double inventoryTot=0;
-        double Avginventory=0;
-        double holding=0;
         double ordering =0;
-        double purchasing =0;
+        double inventoryTot=0;
+
+
+
+
+        double Avginventory=AvgInv;
+        double holding=InvCost;
+        double purchasing =PurshCost;
 
         /**inventoryTot = sum(t in T)(sum(tau in 1..t, s in S)getsol(Q(tau,s))-sum(tau in 1..t)d(tau))
         Avginventory := inventoryTot / Periods
@@ -211,7 +215,7 @@ void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int
         purchasing := sum(t in T, s in S)p(s)*getsol(Q(t,s))
         /*********************************************************************/
         f<<"'GA "<< RC<<" "<< "?" <<  " "<< "?" << " "<< t << " "<< "?"<< " "<<  "?"<< " "<< nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding<< " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
-        f<< bestminTBO <<" "<<bestmaxTBO<<" "<<g<<" "<<BIIP<<" "<<IterBestSol<<endl;
+        f<< bestminTBO <<" "<<bestmaxTBO<<" "<<g<<" "<<BIIP<<" "<<IterBestSol<<  backCost << AvgBavk<< endl;
     }
 
     f.close();
@@ -274,4 +278,9 @@ void Data::print(string s, double value)
 {
 	if(false)
 		cout<<s<<value<<endl; 
+}
+
+int Data::getTimeLimite()
+{
+    return 2;
 }

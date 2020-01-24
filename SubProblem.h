@@ -17,6 +17,7 @@ public:
     XPRBvar*** delta;
 	XPRBctr* InventoryConstraint;
 	double** Q;
+    XPRBvar* I;
 	double BigM1;
 	XPRBvar* B;
 public:
@@ -29,5 +30,9 @@ public:
 	void DisplaySol(void);
 	double***  getWorstCaseDelta(double** Q);
 	double  getAssociatedCost(void);
+    double GetInventoryCosts( );
+    double GetAvgInventory( );
+    double GetBackorderCosts( );
+    double GetAvgtBackorder( );
 };
 

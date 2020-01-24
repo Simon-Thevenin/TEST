@@ -18,11 +18,13 @@ GRASP::~GRASP(void)
 {
 }
 
+
+
 double GRASP::solve()
 {
     int**  Lt ;
     double*** delta ;
-    double temps;
+    double temps=0;
     double bestcost= XPRB_INFINITY;
     int** bestY=new int*[this->data->getNSup()];
     for(int s=0; s < this->data->getNSup(); s++) {
@@ -30,7 +32,7 @@ double GRASP::solve()
     }
     clock_t start, end;
     start = clock();
-    while(temps<=1200)
+    while(temps<=this->data->getTimeLimite())
     {
 
         do{
@@ -63,7 +65,9 @@ double GRASP::solve()
     ModelQuantity* mod = new ModelQuantity(this->data, this->gamma);
     mod->BuildModel();
     double cost = mod->Solve(true, bestY, false, 0.01);
-    cout<<"Final cost::::"<<cost<<" temps"<<temps<<endl;
+    cout<<"Grasp cost::::"<<cost<<" temps"<<temps<<endl;
+    cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
+    cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
     return cost;
 }
 

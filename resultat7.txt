@@ -1,0 +1,2 @@
+Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+'GA 3094.4 ? ? 5.064 ? ? 126 6 6 6 222 222 0 2727 3.83333 6.66667 1 2 -1 -1 -1106.412.6667

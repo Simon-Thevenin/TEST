@@ -59,7 +59,7 @@ void SubProblem::BuildModel(void){
 	
 	//I: array(T) of mpvar	! Inventory level at end of period t
 	
-	XPRBvar* I= new XPRBvar[this->data->getNPer()+1];
+	I= new XPRBvar[this->data->getNPer()+1];
 	for(int t=1; t<=this->data->getNPer(); t++)
 		I[t] = this->pbSub->newVar("I");
 
@@ -289,4 +289,40 @@ double  SubProblem::getAssociatedCost(void)
 }
 
 
+double SubProblem::GetInventoryCosts( ){
+    double result = 0.0;
+    for(int t=1; t <= this->data->getNPer(); t++)
+    {
+            result+=this->I[t].getSol() * this->data->getch();
+    }
+    return result;
 
+}
+double SubProblem::GetAvgInventory( ){
+    double result = 0.0;
+    for(int t=1; t <= this->data->getNPer(); t++)
+    {
+        result+=this->I[t].getSol();
+    }
+    return result/this->data->getNPer();
+
+}
+double SubProblem::GetBackorderCosts( ){
+    double result = 0.0;
+    for(int t=1; t <= this->data->getNPer(); t++)
+    {
+        result+=this->B[t].getSol() * this->data->getcb();
+    }
+    return result;
+
+
+}
+double SubProblem::GetAvgtBackorder( ){
+    double result = 0.0;
+    for(int t=1; t <= this->data->getNPer(); t++)
+    {
+        result+=this->B[t].getSol();
+    }
+    return result/this->data->getNPer();
+
+}

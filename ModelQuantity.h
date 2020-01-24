@@ -19,6 +19,7 @@ public:
     int W;
 	int S;
 	double **** delta;
+	double LastRunning;
 	//int ** givenY;
 	XPRBvar** Q;
 	XPRBvar** Y;
@@ -41,5 +42,11 @@ public:
 	void AddScenario(double*** givendelta);
 	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap);
 	void SetYBinary();
+    double GetPurshasingCosts( );
+    double GetOrderingCosts( );
+    double GetInventoryCosts( );
+    double GetAvgInventory( );
+    double GetBackorderCosts( );
+    double GetAvgtBackorder( );
 };
 

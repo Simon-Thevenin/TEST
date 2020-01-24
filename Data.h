@@ -55,7 +55,9 @@ public:
     void ecriture(string  nom_fichier, string c , double* tab,int n);
     void ecriture(string  nom_fichier, string c , int* tab,int n);
 
-    void Affich_Results(string nom_fichier,  int** X, double RC, double t, int g, double BIIP, int IterBestSol);
+    void Affich_Results(string nom_fichier,  int** X, double RC, double t, int g, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk );
+
+
     int getNPer();
     int getNSup();
 
@@ -87,6 +89,7 @@ public:
 
     static void print(string s);
     static void print(string s, double d);
+    int getTimeLimite();
 
 };
 
