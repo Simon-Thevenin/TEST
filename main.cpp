@@ -440,7 +440,7 @@ int mainOussama() {
                         }
                         fichierS<<endl;
                     }}
-                /*fichierS<<"Meilleure_solution a la generation: "<<gen<<endl;
+                fichierS<<"Meilleure_solution a la generation: "<<gen<<endl;
                 for(int j=0;j<data->getNSup();j++)
                     {
                         for(int k=0;k< data->getNPer() ; k++)
@@ -450,7 +450,7 @@ int mainOussama() {
                         fichierS<<endl;
                     }
                 fichierS <<"fitness: ---------------------> "<<fitness[0]<<endl;
-                fichierS<<endl;*/
+                fichierS<<endl;
             }
             // arreter compteur temps
             end = clock();
