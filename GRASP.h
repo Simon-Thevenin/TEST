@@ -13,6 +13,6 @@ class GRASP
 		double solve();
 		double*** translateLeadTime(int** L);
 		int** generateLeadTime();
-		bool CheckLeadTimeInBudget(int** L);
+        bool CheckLeadTimeInBudget(double*** delta);
 };
 

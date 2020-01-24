@@ -46,12 +46,12 @@ int mainSimon() {
             }
         }
 
-        ModQ->Solve(true, givenY2, false, 0.01);
+        //ModQ->Solve(true, givenY2, false, 0.01);
         cout<<"Now with Y"<<endl;
-        ModQ->Solve(false, nullptr, false, 0.01);
+        //ModQ->Solve(false, nullptr, false, 0.01);
 
-         //GRASP* g = new GRASP(data, 3);
-//         g->solve();
+        GRASP* g = new GRASP(data, 3);
+        g->solve();
     }
 
 }
@@ -553,6 +553,6 @@ int mainOussama() {
         return 0;
 }
 int main(int argc, char** argv){
-    mainOussama();
-    //mainSimon();
+    //mainOussama();
+    mainSimon();
 }
