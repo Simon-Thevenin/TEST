@@ -467,7 +467,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1))
 	{
 		 nriteration++;
-        this->pbQ->exportProb(1,"lpq");
+       // this->pbQ->exportProb(1,"lpq");
         bool status=false;
         if(givenY) {
             this->pbQ->lpOptimise();
@@ -476,7 +476,6 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         else{
              this->pbQ->mipOptimise();
              status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4 ;
-             cout<<status<<endl;
         }
 
          if(!status)

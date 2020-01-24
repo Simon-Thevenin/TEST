@@ -50,8 +50,8 @@ int mainSimon() {
         cout<<"Now with Y"<<endl;
         ModQ->Solve(false, nullptr, false, 0.01);
 
-         GRASP* g = new GRASP(data, 3);
-         g->solve();
+         //GRASP* g = new GRASP(data, 3);
+//         g->solve();
     }
 
 }
