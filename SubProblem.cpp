@@ -13,9 +13,10 @@ SubProblem::SubProblem(void)
 
 SubProblem::SubProblem(Data* d, int gam)
 {
-	Data::print("Start Sub Prob",this->data->getNPer() );
+
 	this->Gamma = gam;
 	this->data=d;
+    Data::print("Start Sub Prob",this->data->getNPer() );
 	this->pbSub = new XPRBprob("SubProb");
 	this->pbSub->setMsgLevel(0);
 
@@ -82,7 +83,7 @@ void SubProblem::BuildModel(void){
 	BigM1 = 0; 
 	for(int t=1; t<=this->data->getNPer(); t++)
 	{
-		BigM1+=this->data->getDemand(t);
+		BigM1+=this->data->getDemand(t-1);
 	}
 	 
 
@@ -107,7 +108,7 @@ void SubProblem::BuildModel(void){
 			{
 				cumulativeQty[t] += delta[tau][t][s] * Q[tau][s];
 			}
-			cumulativeQty[t] += -this->data->getDemand(tau);
+			cumulativeQty[t] += -this->data->getDemand(tau-1);
 		
 		}
 	}
@@ -135,8 +136,8 @@ void SubProblem::BuildModel(void){
 	//	end-if
 	double maxL =0; 
 	for(int s= 1; s<=this->data->getNSup(); s++)
-		if(this->data->getLMax(s) >= maxL)
-			maxL = this->data->getLMax(s);
+		if(this->data->getLMax(s-1) >= maxL)
+			maxL = this->data->getLMax(s-1);
 
 	
 	
@@ -146,7 +147,9 @@ void SubProblem::BuildModel(void){
 		cumulativeDelta[t] = *new XPRBexpr();
 		for(int s =1; s<=this->data->getNSup(); s++)
 		{
-			cumulativeDelta[t] += delta[t-this->data->getLMin(s)][t][s];
+		    if(t> this->data->getLMin(s-1)) {
+                cumulativeDelta[t] += delta[t - this->data->getLMin(s-1)][t][s];
+            }
 		}
 	}
 	for(int t=1; t<this->data->getNPer(); t++)
@@ -165,12 +168,12 @@ void SubProblem::BuildModel(void){
 	for(int t=1; t<=this->data->getNPer(); t++)
 		for(int tau=1; tau<=this->data->getNPer(); tau++)
 			for(int s= 1; s<=this->data->getNSup(); s++)
-			{	if(t>tau+this->data->getLMax(s))
+			{	if(t>tau+this->data->getLMax(s-1))
 				{
 					this->pbSub->newCtr(XPRBnewname("Constraintdelta3%d%d%d", tau, t, s),
 								delta[tau][t][s] == 1);
 				}
-			    if(t<tau-this->data->getLMin(s))
+			    if(t<tau-this->data->getLMin(s-1))
 				{
 					this->pbSub->newCtr(XPRBnewname("Constraintdelta4%d%d%d", tau, t, s),
 								delta[tau][t][s] == 0);

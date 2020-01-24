@@ -18,6 +18,7 @@ Data::~Data()
 void Data::parseData(string file){
 
    FILE *fichier = fopen(file.c_str(), "r");
+   cout<<file<<endl;
     if(fichier)
     {
         /** Si on ouvre le fichier correctement, on déclare et on importe**/
@@ -152,11 +153,11 @@ int* Data::getTabLMin(){
 }
 void Data::print(string s)
 {
-	if(true)
+	if(false)
 		cout<<s<<endl; 
 }
 void Data::print(string s, double value)
 {
-	if(true)
+	if(false)
 		cout<<s<<value<<endl; 
 }

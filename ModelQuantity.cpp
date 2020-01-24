@@ -20,11 +20,12 @@ ModelQuantity::ModelQuantity(void)
 	cout<<"Not Implemented: DO NOT USE" <<endl;
 }
 
-ModelQuantity::ModelQuantity(Data* d, int gamma)
+ModelQuantity::ModelQuantity( Data* d, int gamma)
 {
-    this->ModSub = new SubProblem(this->D, gamma);
+	 this->ModSub = new SubProblem(d, gamma);
 	 
 	 ModSub->BuildModel();
+	 this->D=d;
 	 Data::print("start");
 	 pbQ = new XPRBprob("MyProb");
 	 pbQ->setMsgLevel(0);
@@ -57,7 +58,7 @@ ModelQuantity::ModelQuantity(Data* d, int gamma)
 	  Q[t] = new XPRBvar[this->D->getNSup()+1];
 	  for(int s= 1; s<=this->D->getNSup(); s++)
 	  {
-		Q[t][s] = this->pbQ->newVar("Q"); //XPRB_BV
+		Q[t][s] = this->pbQ->newVar("Q",XPRB_PL,0.0,XPRB_INFINITY); //XPRB_BV
 	  }
     }
 
@@ -67,14 +68,14 @@ ModelQuantity::ModelQuantity(Data* d, int gamma)
 	  Y[t] = new XPRBvar[this->D->getNSup()+1];
 	  for(int s= 1; s<=this->D->getNSup(); s++)
 	  {
-		Y[t][s] = this->pbQ->newVar("Y"); //XPRB_BV
+		Y[t][s] = this->pbQ->newVar("Y",XPRB_PL,0.0,1.0); //XPRB_BV
 	  }
     }
 
-	int* Lmean = new int[this->D->getNSup()];
+	int* Lmean = new int[this->D->getNSup()+1];
 	 for(int s= 1; s<=this->D->getNSup(); s++)
 	 {
-		 Lmean[s] = (int)((this->D->getLMax(s) + this->D->getLMin(s))/2);
+		 Lmean[s] = (int)((this->D->getLMax(s-1) + this->D->getLMin(s-1))/2);
 	 }
 	 for(int t=1; t<=this->D->getNPer(); t++)
 	 {
@@ -121,7 +122,7 @@ void ModelQuantity::BuildModel(void){
 	XPRBvar* I= new XPRBvar[this->D->getNPer()+1];
 	for(int t=1; t<=this->D->getNPer(); t++)
 	{
-		I[t] = this->pbQ->newVar("I"); //XPRB_BV
+		I[t] = this->pbQ->newVar("I",XPRB_PL,0.0,XPRB_INFINITY);  //XPRB_BV
 	}
 
 	//Cw: array(WMax) of mpvar	! The worst case scenario cost.
@@ -131,7 +132,7 @@ void ModelQuantity::BuildModel(void){
 			Cw[w] = this->pbQ->newVar("Cw"); //XPRB_BV
 		}*/
 	//C: mpvar	! The worst case scenario cost.
-	this->C =  this->pbQ->newVar("C");
+	this->C =  this->pbQ->newVar("C",XPRB_PL,0.0,XPRB_INFINITY);
 	
 
 	double BigM = 0; 
@@ -247,7 +248,7 @@ void ModelQuantity::BuildModel(void){
 		cumulativeDemand[t] = *new XPRBexpr();
 		  for(int tau = 1; tau <= t; tau++)
         {
-            cumulativeDemand[t] += this->D->getDemand(tau);
+            cumulativeDemand[t] += this->D->getDemand(tau-1);
         }
 	}
 	Data::print("MeetDemand");
@@ -267,7 +268,7 @@ void ModelQuantity::BuildModel(void){
 	lobj += C;
 	for(int t = 1; t<= this->D->getNPer(); t++)
 		for(int s= 1; s<=this->D->getNSup(); s++)
-			lobj += ( Q[t][s]*this->D->getPrice(s) + this->Y[t][s]*this->D->getSetup(s));
+			lobj += ( Q[t][s]*this->D->getPrice(s-1) + this->Y[t][s]*this->D->getSetup(s-1));
 	
 
 	this->pbQ->setObj(this->pbQ->newCtr("OBJ", lobj));
@@ -284,7 +285,7 @@ void ModelQuantity::SetYToValue(int** givenY)
 	  {
 		  this->Y[t][s].setLB(givenY[s-1][t-1]);
 		  this->Y[t][s].setUB(givenY[s-1][t-1]);
-		  this->totalsetupcosts += this->D->getSetup(s)*givenY[s-1][t-1];
+		  this->totalsetupcosts += this->D->getSetup(s-1)*givenY[s-1][t-1];
 	  }
 	}
 }
@@ -314,19 +315,19 @@ void ModelQuantity::AddScenario(double*** givendelta)
     XPRBvar* c= new XPRBvar[this->D->getNPer()+1];
 	for(int t=1; t<=this->D->getNPer(); t++)
 	{
-		c[t]  = this->pbQ->newVar("c"); //XPRB_BV
+		c[t]  = this->pbQ->newVar("c",XPRB_PL,0.0,XPRB_INFINITY);  //XPRB_BV
 		
 	}
 	
 	//Cw: array(WMax) of mpvar	! The worst case scenario cost.
-	XPRBvar Cw= this->pbQ->newVar("Cw"); //XPRB_BV
+	XPRBvar Cw= this->pbQ->newVar("Cw",XPRB_PL,0.0,XPRB_INFINITY); //XPRB_BV
 		
 
 
 	double BigM = 0; 
 	for(int t=1; t<=this->D->getNPer(); t++)
 	{
-		BigM+=this->D->getDemand(t);
+		BigM+=this->D->getDemand(t-1);
 	}
 	
 	Data::print("Define Constraints");
@@ -355,7 +356,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 		cumulativeDemand[t] = *new XPRBexpr();
 		  for(int tau = 1; tau <= t; tau++)
         {
-            cumulativeDemand[t] += this->D->getDemand(tau);
+            cumulativeDemand[t] += this->D->getDemand(tau-1);
         }
 	}
 	Data::print("ConstraintHoldin");
@@ -429,7 +430,7 @@ double** ModelQuantity::getQuantities( )
 		
 		for(int s=1; s<=this->D->getNSup(); s++)
 			{sol_Q[t][s] = this->Q[t][s].getSol();
-			this->totalsetupcosts+=this->Y[t][s].getSol() * this->D->getSetup(s);
+			this->totalsetupcosts+=this->Y[t][s].getSol() * this->D->getSetup(s-1);
 			}
 			
 	  }
@@ -457,8 +458,10 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 	while((UB-LB)/UB>0.01 && (!fastUB || nriteration<1))
 	{
 		 nriteration++;
-		 double ** associatedquantities =  this ->getQuantities();
-		 this->pbQ->mipOptimize();
+        //this->pbQ->exportProb(1,"lpq");
+        this->pbQ->lpOptimise();
+        this->pbQ->mipOptimise();
+		 double ** associatedquantities =  this->getQuantities();
 		 LB = this->getCost();
 		 Data::print("get the associated costs", this->getCost());
 		 double totprice = 0.0;
@@ -466,7 +469,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 		 {
 			 for(int t=1; t<=this->D->getNPer(); t++)
 			  {
-				  totprice+=associatedquantities[t][s]*this->D->getPrice(s);
+				  totprice+=associatedquantities[t][s]*this->D->getPrice(s-1);
 			  }
 		  }
 
@@ -477,7 +480,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 		double*** worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
 		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
 	
-		 cout<<"LB: " << LB << " UB:"<<UB<<endl;
+		 cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
 	}
 	return UB;
