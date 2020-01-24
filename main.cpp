@@ -18,8 +18,8 @@ using namespace ::dashoptimization;
 // résoudee probleme nouv gen
 // penser  vider la mémoire partout
 
-string pathfile = "C://Users//simon//CLionProjects//untitled//";
-//string pathfile =  "C://Users//oussama.ben-ammar//CLionProjects//TEST//";
+//string pathfile = "C://Users//simon//CLionProjects//untitled//";
+string pathfile =  "C://Users//oussama.ben-ammar//CLionProjects//TEST//";
 
 int mainSimon() {
     string file = pathfile+"1.txt";
@@ -141,7 +141,7 @@ int mainOussama() {
         int nb_gen;
 
         // Nombre de generations
-        nb_gen=1;
+        nb_gen=10;
 
         // Taux de mutation et de croisement
         pc = 90;
@@ -525,7 +525,7 @@ int mainOussama() {
                 }
             }
             delete [] nouv_gen1;
-            //delete [] nouv_gen2;
+            delete [] nouv_gen2;
 
             delete[] fitness;
             delete[] fitness2;

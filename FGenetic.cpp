@@ -40,8 +40,8 @@ void FGenetic::PopInit(int nb_c, int*** g, double* fit, Data *data){
 
     //ofstream fichierS("resultat7.txt", ios::out | ios::app);
 
-    // On g�n�re nb_c chromosomes (individus)
-	for(int i=0;i<nb_c;i++)
+    // On genere nb_c chromosomes (individus)
+	/*for(int i=0;i<nb_c;i++)
         {
             for(int j=0;j<data->getNSup();j++)
             {
@@ -55,7 +55,36 @@ void FGenetic::PopInit(int nb_c, int*** g, double* fit, Data *data){
             // Je calcule la fitnesse
             fit[i]=RCOST(g, i, data);
             //fichierS<<" fitness: "<<fit[i]<<endl;
+        }*/
+
+	// On Fixe le nombre de commande
+	// On génére aléatoirement où les placer !!!!
+	int NbrOrders;
+	NbrOrders=5;
+    // On genere nb_c chromosomes (individus)
+    for(int i=0;i<nb_c;i++)
+    {
+        for(int j=0;j<data->getNSup();j++)
+        {
+            for(int k=0;k< data->getNPer() ; k++)
+            {
+                g[i][j][k]=0;
+                //fichierS<<g[i][j][k]<<" ";
+            }
+            //fichierS<<endl;
         }
+        // On genere aléatoirement on veut mettre cette commande
+        for(int j=0;j<NbrOrders;j++)
+        {
+            g[i][val_rand(0,data->getNSup()-1)][val_rand(0,data->getNPer()-1)]=1;
+        }
+
+
+        fit[i]=RCOST(g, i, data);
+        //fichierS<<" fitness: "<<fit[i]<<endl;
+    }
+
+
 }
 void FGenetic::Cross(int *_nbcc0, int _pc, int*** f1, int s_2, int nb_c, int ***par_p, double* f_cross, Data *data){
 
