@@ -39,7 +39,7 @@ public:
 	double getCost();
 	double** getQuantities();
 	void AddScenario(double*** givendelta);
-	double Solve(bool givenY, int** givenY2, bool fastUB);
+	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap);
 	void SetYBinary();
 };
 

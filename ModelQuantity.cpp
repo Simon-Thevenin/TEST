@@ -251,11 +251,11 @@ void ModelQuantity::BuildModel(void){
             cumulativeDemand[t] += this->D->getDemand(tau-1);
         }
 	}
-/*	Data::print("MeetDemand");
+	Data::print("MeetDemand");
 	this->pbQ->newCtr(XPRBnewname("MeetDemand"),
 						   *cumulativeQuantityTot >= cumulativeDemand[this->D->getNPer()] );
 
-*/
+
    
 	for(int w =1; w<=this->W; w++)
 	{
@@ -451,7 +451,7 @@ double ModelQuantity::getCost()
 }
 
 
-double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
+double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double stopatgap)
 {
 	double UB= 9999999999.0; 
 	double LB= 0.0; 
@@ -464,12 +464,24 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 	{
 		this->SetYBinary();
 	}
-	while((UB-LB)/UB>0.01 && (!fastUB || nriteration<1))
+	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1))
 	{
 		 nriteration++;
         this->pbQ->exportProb(1,"lpq");
-        this->pbQ->lpOptimise();
-       // this->pbQ->mipOptimise();
+        bool status=false;
+        if(givenY) {
+            this->pbQ->lpOptimise();
+            status = this->pbQ->getLPStat() == 1;
+        }
+        else{
+             this->pbQ->mipOptimise();
+             status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4 ;
+             cout<<status<<endl;
+        }
+
+         if(!status)
+         { return XPRB_INFINITY;}
+
 		 double ** associatedquantities =  this->getQuantities();
 		 LB = this->getCost();
 		 Data::print("get the associated costs", this->getCost());
@@ -489,7 +501,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 		double*** worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
 		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
 	
-		// cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+		 //cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
 	}
 	return UB;

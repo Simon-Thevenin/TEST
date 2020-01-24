@@ -6,9 +6,10 @@ GRASP::GRASP(void)
 }
 
 
-GRASP::GRASP(Data* d)
+GRASP::GRASP(Data* d, int  _gamma)
 {
 	this->data = d;
+	this->gamma = _gamma;
 }
 
 

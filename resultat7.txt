@@ -526,3 +526,71 @@ fitness: ---------------------> 1249.4
 1 0 0 0 0 1 0 0 0 0 0 1 1 1 0 0 1 0 0 0 0 
 
 1249.4 TcPU: 15.105
+Nombre de suppliers: 6
+Nombre de periods: 21
+Setup costs1 : 11 13 11 14 12 12 
+Holding cost: 0.2
+Backlogging cost: 0.4
+Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
+Lmax : 7 7 7 7 11 5 
+Lmin : 1 0 1 1 1 0 
+Meilleure_solution a la generation: 0
+1 0 1 0 1 0 1 0 0 1 1 0 0 0 0 1 0 0 1 1 0 
+0 1 1 0 0 0 0 0 1 0 1 1 1 0 0 0 1 1 1 0 0 
+0 0 0 1 0 0 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 1 1 1 0 0 
+0 1 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 
+0 1 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 1 1 0 0 
+fitness: ---------------------> 1148.4
+
+--------------> Meilleure_solution finale: 
+1 0 1 0 1 0 1 0 0 1 1 0 0 0 0 1 0 0 1 1 0 
+0 1 1 0 0 0 0 0 1 0 1 1 1 0 0 0 1 1 1 0 0 
+0 0 0 1 0 0 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 
+0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 1 1 1 0 0 
+0 1 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 
+0 1 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 1 1 0 0 
+
+1148.4 TcPU: 23.413
+Nombre de suppliers: 6
+Nombre de periods: 21
+Setup costs1 : 11 13 11 14 12 12 
+Holding cost: 0.2
+Backlogging cost: 0.4
+Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
+Lmax : 7 7 7 7 11 5 
+Lmin : 1 0 1 1 1 0 
+Nombre de suppliers: 6
+Nombre de periods: 21
+Setup costs1 : 11 13 11 14 12 12 
+Holding cost: 0.2
+Backlogging cost: 0.4
+Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
+Lmax : 7 7 7 7 11 5 
+Lmin : 1 0 1 1 1 0 
+Nombre de suppliers: 6
+Nombre de periods: 21
+Setup costs1 : 11 13 11 14 12 12 
+Holding cost: 0.2
+Backlogging cost: 0.4
+Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
+Lmax : 7 7 7 7 11 5 
+Lmin : 1 0 1 1 1 0 
+Meilleure_solution a la generation: 0
+1 1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1 1 0 
+1 1 1 0 1 1 0 0 0 1 1 1 0 0 1 0 0 1 0 0 1 
+0 0 0 0 0 0 0 1 0 0 0 0 1 1 0 1 1 1 0 1 0 
+0 1 1 0 1 0 1 1 0 0 0 0 0 1 0 0 0 1 0 1 0 
+0 1 0 0 0 0 1 0 1 0 0 1 1 0 0 0 1 0 1 0 0 
+0 0 1 0 0 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0 0 
+fitness: ---------------------> 3622.7
+
+--------------> Meilleure_solution finale: 
+1 1 0 1 1 1 0 0 1 0 1 1 0 0 0 0 1 1 1 1 0 
+1 1 1 0 1 1 0 0 0 1 1 1 0 0 1 0 0 1 0 0 1 
+0 0 0 0 0 0 0 1 0 0 0 0 1 1 0 1 1 1 0 1 0 
+0 1 1 0 1 0 1 1 0 0 0 0 0 1 0 0 0 1 0 1 0 
+0 1 0 0 0 0 1 0 1 0 0 1 1 0 0 0 1 0 1 0 0 
+0 0 1 0 0 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0 0 
+
+3622.7 TcPU: 262.06
