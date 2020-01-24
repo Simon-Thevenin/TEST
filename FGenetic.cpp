@@ -22,13 +22,12 @@ double FGenetic::RCOST(int*** X, int a, Data *data)
 {
 
     double tempE = 100000;
-    /*Solution *sol = new Solution(X, a, data);
-    tempE = sol->solve(X, a);
-    delete sol;*/
-
 
     /** Xpress ***************/
     tempE=this->ModQ->Solve(true, X[a], false, 0.01);
+
+    //si fastUB = true : il va donner une évaluation approchée avec des quantités approchées
+    // stopgap : tant que le gap est plus grand que 0.01 on continue de tourner
     /*************************/
 
     return tempE;
@@ -60,7 +59,7 @@ void FGenetic::PopInit(int nb_c, int*** g, double* fit, Data *data){
 	// On Fixe le nombre de commande
 	// On génére aléatoirement où les placer !!!!
 	int NbrOrders;
-	NbrOrders=5;
+	NbrOrders=val_rand(data->getMinTBO(),data->getMaxTBO());
     // On genere nb_c chromosomes (individus)
     for(int i=0;i<nb_c;i++)
     {

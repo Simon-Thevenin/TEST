@@ -40,6 +40,10 @@ private:
     // Imax
     int Imax;
 
+    // TBO
+    int bestmaxTBO;
+    int bestminTBO;
+
 
     string dataFile_;
 
@@ -75,6 +79,12 @@ public:
     int getLMin(int i);
     int* getTabLMax();
     int* getTabLMin();
+
+    // TBO
+    int getMinTBO();
+    int getMaxTBO();
+
+
     static void print(string s);
     static void print(string s, double d);
 

@@ -18,12 +18,6 @@ fstream
 cstdlib
 -
 
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.cpp
-FGenetic.h
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
-ctime
--
-
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
 iostream
 -
@@ -41,6 +35,10 @@ Solution.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/Solution.h
 ModelQuantity.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
+
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/GRASP.h
+Data.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
 
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
 xprb_cpp.h
@@ -79,6 +77,32 @@ xprm_mc.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprm_mc.h
 Data.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
+
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/main.cpp
+iostream
+-
+time.h
+-
+fstream
+-
+cstdlib
+-
+xprb_cpp.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprb_cpp.h
+xprs.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.h
+ModelQuantity.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
+SubProblem.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/SubProblem.h
+Data.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
+FGenetic.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
+Solution.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/Solution.h
+GRASP.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/GRASP.h
 
 C:/xpressmp/include/mosel_mc.h
 mosel_rt.h

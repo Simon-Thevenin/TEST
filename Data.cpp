@@ -1,4 +1,5 @@
 #include "Data.h"
+#include <math.h>
 Data::Data(int nbPeriods, int nbSuppliers, string dataFile)
 {
     dataFile_ = dataFile;
@@ -65,6 +66,26 @@ void Data::parseData(string file){
         {
             fscanf(fichier, "%d ", &LMin[i]);
         }
+
+        // Calculer le TBO
+        double MeanD=0;
+        for(int i = 0; i < NPer; i++)
+        {
+            MeanD+=d[i];
+        }
+        MeanD=MeanD/(NPer-11);
+        bestmaxTBO=0;
+        bestminTBO=50;
+        for(int i=0 ; i<NSup; i++)
+        {
+            cout <<"TBO("<<i<<"): "<<(int)(sqrt(2*cs[i]/(MeanD*ch))) <<" vs. "<<(int)(sqrt(2*cs[i]/(MeanD*ch))*sqrt((ch+cb)/cb))<<endl;
+            if (bestminTBO>(int)(sqrt(2*cs[i]/(MeanD*ch))))
+                bestminTBO=(int)(sqrt(2*cs[i]/(MeanD*ch)));
+            if (bestmaxTBO<(int)(sqrt(2*cs[i]/(MeanD*ch))*sqrt((ch+cb)/cb)))
+                bestmaxTBO=(int)(sqrt(2*cs[i]/(MeanD*ch))*sqrt((ch+cb)/cb));
+        }
+        cout << " TBO entre :"<<bestminTBO<<"  et  "<<bestmaxTBO<<endl;
+
 
         fclose(fichier);
 
@@ -150,6 +171,13 @@ int* Data::getTabLMax(){
 }
 int* Data::getTabLMin(){
     return LMin;
+}
+
+int Data::getMinTBO(){
+    return bestminTBO;
+}
+int Data::getMaxTBO(){
+    return bestmaxTBO;
 }
 void Data::print(string s)
 {
