@@ -18,21 +18,11 @@ fstream
 cstdlib
 -
 
-C:/Users/simon/CLionProjects/untitled/FGenetic.h
-iostream
+C:/Users/simon/CLionProjects/untitled/GRASP.cpp
+GRASP.h
+C:/Users/simon/CLionProjects/untitled/GRASP.h
+stdlib.h
 -
-string
--
-time.h
--
-fstream
--
-cstdlib
--
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-Solution.h
-C:/Users/simon/CLionProjects/untitled/Solution.h
 ModelQuantity.h
 C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
 
@@ -54,18 +44,6 @@ C:/Users/simon/CLionProjects/untitled/SubProblem.h
 cmath
 -
 
-C:/Users/simon/CLionProjects/untitled/Solution.h
-iostream
--
-string
--
-time.h
--
-fstream
--
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-
 C:/Users/simon/CLionProjects/untitled/SubProblem.h
 cstddef
 -
@@ -77,32 +55,6 @@ xprm_mc.h
 C:/Users/simon/CLionProjects/untitled/xprm_mc.h
 Data.h
 C:/Users/simon/CLionProjects/untitled/Data.h
-
-C:/Users/simon/CLionProjects/untitled/main.cpp
-iostream
--
-time.h
--
-fstream
--
-cstdlib
--
-xprb_cpp.h
-C:/Users/simon/CLionProjects/untitled/xprb_cpp.h
-xprs.h
-C:/Users/simon/CLionProjects/untitled/xprs.h
-ModelQuantity.h
-C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
-SubProblem.h
-C:/Users/simon/CLionProjects/untitled/SubProblem.h
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-FGenetic.h
-C:/Users/simon/CLionProjects/untitled/FGenetic.h
-Solution.h
-C:/Users/simon/CLionProjects/untitled/Solution.h
-GRASP.h
-C:/Users/simon/CLionProjects/untitled/GRASP.h
 
 C:/xpressmp/include/mosel_mc.h
 mosel_rt.h
