@@ -18,9 +18,11 @@ using namespace ::dashoptimization;
 // résoudee probleme nouv gen
 // penser  vider la mémoire partout
 
+string pathfile = "C://Users//simon//CLionProjects//untitled//";
+//string pathfile =  "C://Users//oussama.ben-ammar//CLionProjects//TEST//";
 
 int mainSimon() {
-    string file = "C://Users//simon//CLionProjects//untitled//1.txt";
+    string file = pathfile+"1.txt";
     ifstream fichier( file, ios::in);  // on ouvre le fichier en lecture
     //ifstream fichier(argv[1], ios::in);  // on ouvre le fichier en lecture
 
@@ -68,17 +70,17 @@ int echanger (const void *a, const void *b){
 int mainOussama() {
 
     cout << "Hello, World!!" << endl;
-    int NbPeriod =21;
+    int NbPeriod = 21;
     int NbSupplier =6;
-
-    ifstream fichier("C://Users//oussama.ben-ammar//CLionProjects//TEST//1.txt", ios::in);  // on ouvre le fichier en lecture
+    string file = pathfile + "1.txt";
+    ifstream fichier(file, ios::in);  // on ouvre le fichier en lecture
     //ifstream fichier(argv[1], ios::in);  // on ouvre le fichier en lecture
 
     if(fichier) {
 // Files
 
         // Files
-        string dataFile = "C://Users//oussama.ben-ammar//CLionProjects//TEST//1.txt";
+        string dataFile =file;
         //string dataFile = argv[1];
 
         //NbPeriod = atoi(argv[2]) + 11;
@@ -101,10 +103,10 @@ int mainOussama() {
         FGenetic ag(data);
 
         // Ouverture fichier resultat pour écriture
-        ofstream fichierS("C://Users//oussama.ben-ammar//CLionProjects//TEST//resultat7.txt", ios::out | ios::app);
+        ofstream fichierS(pathfile+"resultat7.txt", ios::out | ios::app);
         //ofstream fichierS(argv[4], ios::out | ios::app);
 
-        string FFile = "C://Users//oussama.ben-ammar//CLionProjects//TEST//resultat7.txt";
+        string FFile = pathfile + "resultat7.txt";
         //string FFile = argv[4];
 
         fichierS << "Nombre de suppliers: " << data->getNSup() << endl;

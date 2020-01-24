@@ -138,7 +138,7 @@ void ModelQuantity::BuildModel(void){
 	double BigM = 0; 
 	for(int t=1; t<=this->D->getNPer(); t++)
 	{
-		BigM+=this->D->getDemand(t);
+		BigM+=this->D->getDemand(t-1);
 	}
 	
 	Data::print("Define Constraints");
@@ -251,11 +251,11 @@ void ModelQuantity::BuildModel(void){
             cumulativeDemand[t] += this->D->getDemand(tau-1);
         }
 	}
-	Data::print("MeetDemand");
+/*	Data::print("MeetDemand");
 	this->pbQ->newCtr(XPRBnewname("MeetDemand"),
 						   *cumulativeQuantityTot >= cumulativeDemand[this->D->getNPer()] );
 
-
+*/
    
 	for(int w =1; w<=this->W; w++)
 	{
@@ -278,13 +278,22 @@ void ModelQuantity::BuildModel(void){
 void ModelQuantity::SetYToValue(int** givenY)
 {
 	Data::print("update constraint");
-	this->totalsetupcosts = 0;
+   this->totalsetupcosts = 0;
 	for(int t = 1; t<= this->D->getNPer(); t++)
 	{
 	  for(int s= 1; s<=this->D->getNSup(); s++)
 	  {
-		  this->Y[t][s].setLB(givenY[s-1][t-1]);
-		  this->Y[t][s].setUB(givenY[s-1][t-1]);
+          if(givenY[s-1][t-1] == 0)
+          {
+              this->Y[t][s].setLB(1.0* givenY[s-1][t-1]);
+              this->Y[t][s].setUB(1.0* givenY[s-1][t-1]);
+          } else{
+              this->Y[t][s].setUB(1.0* givenY[s-1][t-1]);
+              this->Y[t][s].setLB(1.0* givenY[s-1][t-1]);
+
+          }
+
+
 		  this->totalsetupcosts += this->D->getSetup(s-1)*givenY[s-1][t-1];
 	  }
 	}
@@ -458,9 +467,9 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 	while((UB-LB)/UB>0.01 && (!fastUB || nriteration<1))
 	{
 		 nriteration++;
-        //this->pbQ->exportProb(1,"lpq");
+        this->pbQ->exportProb(1,"lpq");
         this->pbQ->lpOptimise();
-        this->pbQ->mipOptimise();
+       // this->pbQ->mipOptimise();
 		 double ** associatedquantities =  this->getQuantities();
 		 LB = this->getCost();
 		 Data::print("get the associated costs", this->getCost());
@@ -480,7 +489,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB)
 		double*** worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
 		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
 	
-		 cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+		// cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
 	}
 	return UB;

@@ -28,7 +28,6 @@ double FGenetic::RCOST(int*** X, int a, Data *data)
 
 
     /** Xpress ***************/
-
     tempE=this->ModQ->Solve(true, X[a], false);
     /*************************/
 

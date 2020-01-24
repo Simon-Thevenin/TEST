@@ -14,3 +14,515 @@ Backlogging cost: 0.4
 Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
 Lmax : 7 7 7 7 11 5 
 Lmin : 1 0 1 1 1 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 648
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+648 TcPU: 2.115
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 1 
+0 0 
+fitness: ---------------------> 648
+
+--------------> Meilleure_solution finale: 
+0 1 
+0 0 
+
+648 TcPU: 1.97
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+1 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+1 0 
+0 0 
+
+384 TcPU: 2.024
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 1.673
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 2.74
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 1.344
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 1.599
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 1.593
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 1.055
+Nombre de suppliers: 2
+Nombre de periods: 2
+Setup costs1 : 11 13 
+Holding cost: 12
+Backlogging cost: 12
+Demand : 9 14 
+Lmax : 20 10 
+Lmin : 19 0 
+Meilleure_solution a la generation: 0
+0 0 
+0 0 
+fitness: ---------------------> 384
+
+--------------> Meilleure_solution finale: 
+0 0 
+0 0 
+
+384 TcPU: 0.956
+Nombre de suppliers: 6
+Nombre de periods: 21
+Setup costs1 : 11 13 11 14 12 12 
+Holding cost: 0.2
+Backlogging cost: 0.4
+Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
+Lmax : 7 7 7 7 11 5 
+Lmin : 1 0 1 1 1 0 
+Meilleure_solution a la generation: 0
+1 0 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1 0 1 1 1 
+0 1 0 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 1 1 1 
+0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 1 0 
+0 1 0 0 1 1 1 1 0 1 0 0 1 1 0 0 0 0 0 1 0 
+1 0 1 1 1 1 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 
+0 1 0 1 0 0 1 1 0 0 1 0 0 0 1 0 1 0 1 1 1 
+fitness: ---------------------> 1277.4
+
+--------------> Meilleure_solution finale: 
+1 0 0 0 0 0 1 0 1 1 1 0 0 1 0 0 1 0 1 1 1 
+0 1 0 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 1 1 1 
+0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 1 0 
+0 1 0 0 1 1 1 1 0 1 0 0 1 1 0 0 0 0 0 1 0 
+1 0 1 1 1 1 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 
+0 1 0 1 0 0 1 1 0 0 1 0 0 0 1 0 1 0 1 1 1 
+
+1277.4 TcPU: 18.229
+Nombre de suppliers: 6
+Nombre de periods: 21
+Setup costs1 : 11 13 11 14 12 12 
+Holding cost: 0.2
+Backlogging cost: 0.4
+Demand : 0 0 0 0 0 0 0 0 0 0 0 36 23 29 29 38 35 28 28 33 24 
+Lmax : 7 7 7 7 11 5 
+Lmin : 1 0 1 1 1 0 
+Meilleure_solution a la generation: 0
+0 0 1 0 1 1 1 0 0 0 0 1 1 0 0 1 1 1 0 1 1 
+0 1 1 0 0 0 0 0 0 1 0 0 1 1 0 1 1 0 0 0 0 
+0 1 0 1 0 0 1 0 1 0 1 1 0 0 1 0 0 0 0 0 0 
+1 0 1 0 0 1 1 0 0 0 1 1 1 1 1 0 0 0 1 0 0 
+0 0 0 0 1 0 0 0 1 1 0 0 0 1 0 0 1 0 0 0 1 
+1 0 0 0 0 1 0 0 0 0 0 1 1 1 0 0 1 0 0 0 0 
+fitness: ---------------------> 1249.4
+
+--------------> Meilleure_solution finale: 
+0 0 1 0 1 1 1 0 0 0 0 1 1 0 0 1 1 1 0 1 1 
+0 1 1 0 0 0 0 0 0 1 0 0 1 1 0 1 1 0 0 0 0 
+0 1 0 1 0 0 1 0 1 0 1 1 0 0 1 0 0 0 0 0 0 
+1 0 1 0 0 1 1 0 0 0 1 1 1 1 1 0 0 0 1 0 0 
+0 0 0 0 1 0 0 0 1 1 0 0 0 1 0 0 1 0 0 0 1 
+1 0 0 0 0 1 0 0 0 0 0 1 1 1 0 0 1 0 0 0 0 
+
+1249.4 TcPU: 15.105
