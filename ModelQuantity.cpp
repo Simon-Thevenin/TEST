@@ -20,9 +20,9 @@ ModelQuantity::ModelQuantity(void)
 	cout<<"Not Implemented: DO NOT USE" <<endl;
 }
 
-ModelQuantity::ModelQuantity( Data* d, int gamma)
+ModelQuantity::ModelQuantity(Data* d, int gamma)
 {
-	 this->ModSub = new SubProblem(this->D, gamma);
+    this->ModSub = new SubProblem(this->D, gamma);
 	 
 	 ModSub->BuildModel();
 	 Data::print("start");

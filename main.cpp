@@ -224,7 +224,7 @@ int mainOussama() {
         /******************************************************************************/
         /** Lancement des iterations **************************************************/
         // 0 pour ne pas tourner l'Algo Gen
-        int goo=1;
+        int goo=0;
         if (goo==1)
         {
             //Initialiser le compteur CPU times
@@ -519,7 +519,9 @@ int mainOussama() {
         }
 
         cout << "Create the model once:" << endl;
-        ModelQuantity *ModQ = new ModelQuantity(data, 3);
+        ModelQuantity *ModQ;
+        ModQ = new ModelQuantity(data, 3);
+        cout <<"ici !! "<<endl;
         ModQ->BuildModel();
 
 
