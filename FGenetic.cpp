@@ -7,6 +7,8 @@ using namespace std;
 FGenetic::FGenetic(Data *data)
 {
     //ctor
+    this->ModQ= new ModelQuantity(data, 3);
+    this->ModQ->BuildModel();
 }
 
 FGenetic::~FGenetic()
@@ -15,23 +17,31 @@ FGenetic::~FGenetic()
 }
 
 
+// Fonction fitness
 double FGenetic::RCOST(int*** X, int a, Data *data)
 {
-	double c = 0;
-    // Un exemple simple -> une fonction fitness qui calcule la somme des valeurs du tab
-    for(int i=0;i<data->getNSup();i++)
-        for(int j=0;j<data->getNPer();j++)
-            c += X[a][i][j];
-	//cout <<"robust cost: "<<c<<endl;
 
-	return c;
+    double tempE = 100000;
+    /*Solution *sol = new Solution(X, a, data);
+    tempE = sol->solve(X, a);
+    delete sol;*/
+
+
+    /** Xpress ***************/
+
+    tempE=this->ModQ->Solve(true, X[a], false);
+    /*************************/
+
+    return tempE;
+
+    //return c;
 }
 
 void FGenetic::PopInit(int nb_c, int*** g, double* fit, Data *data){
 
     //ofstream fichierS("resultat7.txt", ios::out | ios::app);
 
-    // On génére nb_c chromosomes (individus)
+    // On gï¿½nï¿½re nb_c chromosomes (individus)
 	for(int i=0;i<nb_c;i++)
         {
             for(int j=0;j<data->getNSup();j++)
@@ -74,7 +84,7 @@ void FGenetic::Cross(int *_nbcc0, int _pc, int*** f1, int s_2, int nb_c, int ***
 			}
 		}
 
-    // on sélectionne N/4 couple d'une manière aléatoire
+    // on sï¿½lectionne N/4 couple d'une maniï¿½re alï¿½atoire
     _nbcc=0;
     for(int i=0 ; i<nb_c/4; i++)
         {
@@ -143,7 +153,7 @@ void FGenetic::Cross(int *_nbcc0, int _pc, int*** f1, int s_2, int nb_c, int ***
 void FGenetic::Mutation(int *_nbcm0, int _pm, int*** f2, int s_2, int nb_c, int*** g, int* i1, Data *data){
 
         int p;
-        int _nbcm=0;
+        int _nbcm;
         int muta;
         int r1, r2, p2, rl, rc, randl, randc, ligne, colonne;
 
@@ -155,7 +165,8 @@ void FGenetic::Mutation(int *_nbcm0, int _pm, int*** f2, int s_2, int nb_c, int*
             tabM[i] = new int [data->getNPer()];
         }
 
-
+        // Initialiser compteur de nombr'indiv mutÃ©s
+        _nbcm=0;
         for( int i=0 ; i<s_2; i++)
         {
             muta = 0;
@@ -170,7 +181,7 @@ void FGenetic::Mutation(int *_nbcm0, int _pm, int*** f2, int s_2, int nb_c, int*
             {
                 for(int k=0;k< data->getNPer() ; k++)
                 {
-                    p=val_rand(0,100); // la probabilité de mutation
+                    p=val_rand(0,100); // la probabilitï¿½ de mutation
                     if (p<=_pm)
                         {
                             if (g[i1[i]][j][k]==0)
@@ -184,7 +195,7 @@ void FGenetic::Mutation(int *_nbcm0, int _pm, int*** f2, int s_2, int nb_c, int*
                                 ligne=0;
                                 colonne =0;
                                 p2=val_rand(0,100);
-                                // on l'affecte à un autre fournisseur à une utre période
+                                // on l'affecte ï¿½ un autre fournisseur ï¿½ une utre pï¿½riode
                                 if (p2>95)
                                 {
                                     rl = val_rand(0,data->getNSup()-1);
@@ -278,7 +289,7 @@ void FGenetic::Mutation(int *_nbcm0, int _pm, int*** f2, int s_2, int nb_c, int*
                         }
                 }
             }
-            // pour compter le nombre d'individus mutés
+            // pour compter le nombre d'individus mutï¿½s
             if (muta==1)
             {
                 //if (Affich_Mut==1)fichierS<<"oui on mute:"<<muta<<" "<<_nbcm<<endl;
