@@ -18,6 +18,12 @@ fstream
 cstdlib
 -
 
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.cpp
+FGenetic.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
+ctime
+-
+
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/FGenetic.h
 iostream
 -
@@ -33,6 +39,8 @@ Data.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/Data.h
 Solution.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/Solution.h
+ModelQuantity.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
 
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/GRASP.h
 Data.h
@@ -88,7 +96,7 @@ cstdlib
 xprb_cpp.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprb_cpp.h
 xprs.h
-C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.h
+C:/Users/oussama.ben-ammar/CLionProjects/TEST/xprs.H
 ModelQuantity.h
 C:/Users/oussama.ben-ammar/CLionProjects/TEST/ModelQuantity.h
 SubProblem.h

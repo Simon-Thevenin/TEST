@@ -10,6 +10,7 @@
 
 #include "Data.h"
 #include "Solution.h"
+#include "ModelQuantity.h"
 
 class FGenetic
 {
@@ -21,6 +22,8 @@ class FGenetic
     public:
         FGenetic(Data *data);
         virtual ~FGenetic();
+
+         ModelQuantity* ModQ;
 
         double RCOST(int*** X, int a, Data *data);
         void PopInit(int nb_c, int*** n_g, double* fit, Data *data);

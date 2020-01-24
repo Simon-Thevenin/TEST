@@ -15,6 +15,8 @@
 using namespace std;
 using namespace ::dashoptimization;
 
+// résoudee probleme nouv gen
+// penser  vider la mémoire partout
 
 
 int mainSimon() {
@@ -62,19 +64,6 @@ int echanger (const void *a, const void *b){
     else return 1;
 
 }
-// Fonction fitness
-double RCOST(int*** X, int a, Data *data)
-{
-
-    double tempE = 100000;
-    Solution *sol = new Solution(X, a, data);
-    tempE = sol->solve(X, a);
-    delete sol;
-    return tempE;
-
-    //return c;
-}
-
 
 int mainOussama() {
 
@@ -141,7 +130,7 @@ int mainOussama() {
 
         /** Paramètres de l'AG*****************************/
         // Nombre de chromosomes
-        int nb_chr=120;
+        int nb_chr=60;
 
         // Tx croisement et mutation
         int pc,pm;
@@ -150,7 +139,7 @@ int mainOussama() {
         int nb_gen;
 
         // Nombre de generations
-        nb_gen=2000;
+        nb_gen=1;
 
         // Taux de mutation et de croisement
         pc = 90;
@@ -399,7 +388,7 @@ int mainOussama() {
                 //#pragma omp parallel for private(i) schedule(dynamic) reduction(+:solopt)
                 for(int i=nb_chr ; i<nbcm+nb_chr ; i++)
                 {
-                    fitness[i]=RCOST(nouv_gen1, i, data);
+                    fitness[i]=ag.RCOST(nouv_gen1, i, data);
                 }
                 for ( int i=0; i<nbcm+nb_chr+nbcc*2 ; i++)
                 {
@@ -530,11 +519,11 @@ int mainOussama() {
                 for(int j=0;j<NbS;j++)
                 {
                     delete nouv_gen1[i][j];
-                    delete nouv_gen2[i][j];
+                    //delete nouv_gen2[i][j];
                 }
             }
             delete [] nouv_gen1;
-            delete [] nouv_gen2;
+            //delete [] nouv_gen2;
 
             delete[] fitness;
             delete[] fitness2;
