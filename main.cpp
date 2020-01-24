@@ -23,7 +23,9 @@ int mainSimon() {
     //ifstream fichier(argv[1], ios::in);  // on ouvre le fichier en lecture
 
     if(true) {
-        Data *data = new Data(21, 6, file);
+        int NbPeriod =21;
+        int NbSupplier =6;
+        Data *data = new Data(NbPeriod, NbSupplier, file);
         cout << "Create the model once:" << endl;
         ModelQuantity* ModQ= new ModelQuantity(data, 3);
         ModQ->BuildModel();
