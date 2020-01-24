@@ -349,4 +349,11 @@ int c;
 
 	return c;
 }
+double FGenetic::my_min1double (double* T, int n){
+
+    int i;
+    double inf = T[0];
+    for(i=0; i<n; i++){ if (inf>T[i]) inf = T[i];}
+    return inf;
+}
 

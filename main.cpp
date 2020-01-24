@@ -72,7 +72,6 @@ int echanger (const void *a, const void *b){
 
 int mainOussama() {
 
-    cout << "Hello, World!!" << endl;
     int NbPeriod = 21;
     int NbSupplier =6;
     string file = pathfile + "1.txt";
@@ -112,7 +111,7 @@ int mainOussama() {
         string FFile = pathfile + "resultat7.txt";
         //string FFile = argv[4];
 
-        fichierS << "Nombre de suppliers: " << data->getNSup() << endl;
+        /*fichierS << "Nombre de suppliers: " << data->getNSup() << endl;
         fichierS << "Nombre de periods: " << data->getNPer() << endl;
 
         message = "Setup costs1 : ";
@@ -128,7 +127,7 @@ int mainOussama() {
         data->ecriture(FFile, message, data->getTabLMax(), data->getNSup());
 
         message = "Lmin : ";
-        data->ecriture(FFile, message, data->getTabLMin(), data->getNSup());
+        data->ecriture(FFile, message, data->getTabLMin(), data->getNSup());*/
 
 /** ALGO GEN ******************************************************************************************/
 
@@ -143,8 +142,11 @@ int mainOussama() {
         // Nombre de générations
         int nb_gen;
 
+        // Time limit
+        int TimeLimit = 60;
+
         // Nombre de generations
-        nb_gen=10;
+        nb_gen=10000;
 
         // Taux de mutation et de croisement
         pc = 90;
@@ -170,6 +172,9 @@ int mainOussama() {
 
         int* indices1;
         int* indices2;
+        double MeillsolPopIni;
+        double CoutIter=0;
+        int Iteration=0;
 
         // Nombre d'individus qui ont subi du croisement
         int nbcc;
@@ -257,240 +262,229 @@ int mainOussama() {
         /** Lancement des iterations **************************************************/
         // 0 pour ne pas tourner l'Algo Gen
         int goo=1;
-        if (goo==1)
-        {
+        if (goo==1) {
             //Initialiser le compteur CPU times
             start = clock();
-            srand ( time(NULL) );
+            srand(time(NULL));
+            temps = 0;
 
             /** Générer la population initial et l'évaluer    **/
             ag.PopInit(nb_chr, nouv_gen, fitness, data);
 
             /** On lance l'AG   **/
-            for( int gen=0 ; gen<nb_gen; gen++)
-            {
+             int gen=0;
+
+             // meilleur indiv population initiale
+            MeillsolPopIni= ag.my_min1double(fitness, nb_chr);
+
+
+             while ((temps < TimeLimit) && (gen<nb_gen)){
                 //----------------------- selection de (selection_2) meilleurs chromosomes: parents --------------------
                 // Un trie selon les fitness
-                for (int i=0; i<nb_chr; i++)
-                {
-                    indices1[i]=i;
+                for (int i = 0; i < nb_chr; i++) {
+                    indices1[i] = i;
                 }
-                qsort (indices1, nb_chr, sizeof(int), echanger);
+                qsort(indices1, nb_chr, sizeof(int), echanger);
 
                 // On les récupère
                 //----------------------- Parents --------------------
-                for( int i=0 ; i<selection_2; i++)
-                {
-                    for( int j=0 ; j<NbS ; j++)
-                    {
-                        for( int k=0 ; k<NbP ; k++)
-                        {
+                for (int i = 0; i < selection_2; i++) {
+                    for (int j = 0; j < NbS; j++) {
+                        for (int k = 0; k < NbP; k++) {
                             essai = nouv_gen[indices1[i]][j][k];
                             par_pop[i][j][k] = essai;
                         }
                     }
                 }
                 //Affichage meilleurs parents:
-                if (AffichAG==0){fichierS<<gen<<" Meilleurs (nchr/2) parents ds nouv_gen " << endl;
-                    for( int i=0 ; i<selection_2; i++)
-                    {
-                        for( int j=0 ; j<NbS ; j++)
-                        {
-                            for( int k=0 ; k<NbP ; k++)
-                            {
-                                fichierS << par_pop[i][j][k] <<" ";
+                if (AffichAG == 0) {
+                    fichierS << gen << " Meilleurs (nchr/2) parents ds nouv_gen " << endl;
+                    for (int i = 0; i < selection_2; i++) {
+                        for (int j = 0; j < NbS; j++) {
+                            for (int k = 0; k < NbP; k++) {
+                                fichierS << par_pop[i][j][k] << " ";
                             }
-                            fichierS<<endl;
+                            fichierS << endl;
                         }
-                        fichierS<<" fitness: "<<fitness[indices1[i]]<<endl;
-                    }}
+                        fichierS << " fitness: " << fitness[indices1[i]] << endl;
+                    }
+                }
                 //----------------------- generation des (selection_2) valeurs distinctes--
                 ag.Cross(&nbcc, pc, fils1, selection_2, nb_chr, par_pop, fitness_croismut, data);
 
                 // On génére nb_c chromosomes (individus)
-                if (AffichAG==0){fichierS<<"Nombre de fils issus du croisement: "<<nbcc*2<<endl;
-                    for(int i=0;i<nbcc+1;i++)
-                    {
-                        for(int j=0;j<data->getNSup();j++)
-                        {
-                            for(int k=0;k< data->getNPer() ; k++)
-                            {
-                                fichierS<<fils1[i][j][k]<<" ";
+                if (AffichAG == 0) {
+                    fichierS << "Nombre de fils issus du croisement: " << nbcc * 2 << endl;
+                    for (int i = 0; i < nbcc + 1; i++) {
+                        for (int j = 0; j < data->getNSup(); j++) {
+                            for (int k = 0; k < data->getNPer(); k++) {
+                                fichierS << fils1[i][j][k] << " ";
                             }
-                            fichierS<<endl;
+                            fichierS << endl;
                         }
-                        fichierS<<" fitness: "<<fitness_croismut[i]<<endl;
-                    }}
+                        fichierS << " fitness: " << fitness_croismut[i] << endl;
+                    }
+                }
                 //+++++++++++++++++++++++++++++++++++++++MUTATION+++++++++++++++++++++++++++++++++++
                 // Mutation sur les commandes
                 ag.Mutation(&nbcm, pm, fils2, selection_2, nb_chr, nouv_gen, indices1, data);
 
-                if (AffichAG==0){fichierS << "nombre dindiv mutes: "<<nbcm<<endl;
-                    for(int i=0;i<nbcm;i++)
-                    {
-                        for(int j=0;j<data->getNSup();j++)
-                        {
-                            for(int k=0;k< data->getNPer() ; k++)
-                            {
-                                fichierS<<fils2[i][j][k]<<" ";
+                if (AffichAG == 0) {
+                    fichierS << "nombre dindiv mutes: " << nbcm << endl;
+                    for (int i = 0; i < nbcm; i++) {
+                        for (int j = 0; j < data->getNSup(); j++) {
+                            for (int k = 0; k < data->getNPer(); k++) {
+                                fichierS << fils2[i][j][k] << " ";
                             }
-                            fichierS<<endl;
+                            fichierS << endl;
                         }
-                        fichierS<<endl;
-                    }}
+                        fichierS << endl;
+                    }
+                }
                 //+++++++++++++++++++++++++++++++++++++++SELECTION NOUVELLE GENERATION+++++++++++++++++++++++++++++++++++
                 // on récupère la génération initiale
-                for( int i=0 ; i<nb_chr; i++)
-                {
-                    for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                        {
-                            nouv_gen1[i][j][k]=nouv_gen[i][j][k];
+                for (int i = 0; i < nb_chr; i++) {
+                    for (int j = 0; j < data->getNSup(); j++) {
+                        for (int k = 0; k < data->getNPer(); k++) {
+                            nouv_gen1[i][j][k] = nouv_gen[i][j][k];
                         }
                     }
                 }
                 // on rajoute N/2 individus à la population choisie: 3N/2
-                for( int i=nb_chr ; i<nbcm+nb_chr; i++)
-                {
-                    for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                        {
-                            nouv_gen1[i][j][k]=fils2[i-nb_chr][j][k];
+                for (int i = nb_chr; i < nbcm + nb_chr; i++) {
+                    for (int j = 0; j < data->getNSup(); j++) {
+                        for (int k = 0; k < data->getNPer(); k++) {
+                            nouv_gen1[i][j][k] = fils2[i - nb_chr][j][k];
                         }
                     }
                 }
 
-                for( int i=0 ; i<nbcc*2; i++)
-                {
-                    for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                        {
-                            fils3[i][j][k] =fils1[i][j][k];
-                            nouv_gen1[i+nbcm+nb_chr][j][k]=fils3[i][j][k];
+                for (int i = 0; i < nbcc * 2; i++) {
+                    for (int j = 0; j < data->getNSup(); j++) {
+                        for (int k = 0; k < data->getNPer(); k++) {
+                            fils3[i][j][k] = fils1[i][j][k];
+                            nouv_gen1[i + nbcm + nb_chr][j][k] = fils3[i][j][k];
                         }
                     }
-                    fitness[i+nbcm+nb_chr]=fitness_croismut[i];
+                    fitness[i + nbcm + nb_chr] = fitness_croismut[i];
                 }
 
-                if (AffichAG==0){fichierS << "Toute la population: "<<nbcm+nb_chr+nbcc*2<<endl;
-                    for(int i=0;i<nbcm+nb_chr+nbcc*2;i++)
-                    {
-                        for(int j=0;j<data->getNSup();j++)
-                        {
-                            for(int k=0;k< data->getNPer() ; k++)
-                            {
-                                fichierS<<nouv_gen1[i][j][k]<<" ";
+                if (AffichAG == 0) {
+                    fichierS << "Toute la population: " << nbcm + nb_chr + nbcc * 2 << endl;
+                    for (int i = 0; i < nbcm + nb_chr + nbcc * 2; i++) {
+                        for (int j = 0; j < data->getNSup(); j++) {
+                            for (int k = 0; k < data->getNPer(); k++) {
+                                fichierS << nouv_gen1[i][j][k] << " ";
                             }
-                            fichierS<<endl;
+                            fichierS << endl;
                         }
-                        fichierS<<endl;
-                    }}
+                        fichierS << endl;
+                    }
+                }
 
                 // on évolue les fils issus de la mutation //
                 //#pragma omp parallel for private(i) schedule(dynamic) reduction(+:solopt)
-                for(int i=nb_chr ; i<nbcm+nb_chr ; i++)
-                {
-                    fitness[i]=ag.RCOST(nouv_gen1, i, data);
+                for (int i = nb_chr; i < nbcm + nb_chr; i++) {
+                    fitness[i] = ag.RCOST(nouv_gen1, i, data);
                 }
-                for ( int i=0; i<nbcm+nb_chr+nbcc*2 ; i++)
-                {
-                    indices2[i]=i;
+                for (int i = 0; i < nbcm + nb_chr + nbcc * 2; i++) {
+                    indices2[i] = i;
                 }
-                qsort (indices2,nbcm+nb_chr+nbcc*2 , sizeof(int), echanger);
+                qsort(indices2, nbcm + nb_chr + nbcc * 2, sizeof(int), echanger);
 
-                for( int i=0 ; i<nbcm+nb_chr+nbcc*2 ; i++)
-                {
+                for (int i = 0; i < nbcm + nb_chr + nbcc * 2; i++) {
                     nouv_gen2[i] = nouv_gen1[indices2[i]];
                 }
-                for( int i=0 ; i<nbcm+nb_chr+nbcc*2; i++)
-                {
-                    fitness2[i]= fitness[indices2[i]] ;
+                for (int i = 0; i < nbcm + nb_chr + nbcc * 2; i++) {
+                    fitness2[i] = fitness[indices2[i]];
                 }
-                for( int i=0 ; i<nbcm+nb_chr+nbcc*2; i++)
-                {
-                    fitness[i]=fitness2[i];
+                for (int i = 0; i < nbcm + nb_chr + nbcc * 2; i++) {
+                    fitness[i] = fitness2[i];
                 }
 
-                for( int i=0 ; i<nb_chr; i++)
-                {
-                    for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                        {
-                            nouv_gen3[i][j][k]=nouv_gen2[i][j][k];
-                            nouv_gen[i][j][k]= nouv_gen3[i][j][k];
+                for (int i = 0; i < nb_chr; i++) {
+                    for (int j = 0; j < data->getNSup(); j++) {
+                        for (int k = 0; k < data->getNPer(); k++) {
+                            nouv_gen3[i][j][k] = nouv_gen2[i][j][k];
+                            nouv_gen[i][j][k] = nouv_gen3[i][j][k];
                         }
                     }
                 }
 
-                if (AffichAG==0){fichierS << "Toute la population !!: "<<nb_chr<<endl;
-                    for(int i=0;i<nb_chr;i++)
-                    {
-                        for(int j=0;j<data->getNSup();j++)
-                        {
-                            for(int k=0;k< data->getNPer() ; k++)
-                            {
-                                fichierS<<nouv_gen[i][j][k]<<" ";
+                if (AffichAG == 0) {
+                    fichierS << "Toute la population !!: " << nb_chr << endl;
+                    for (int i = 0; i < nb_chr; i++) {
+                        for (int j = 0; j < data->getNSup(); j++) {
+                            for (int k = 0; k < data->getNPer(); k++) {
+                                fichierS << nouv_gen[i][j][k] << " ";
                             }
-                            fichierS<<endl;
+                            fichierS << endl;
                         }
-                        fichierS<<endl;
-                    }}
-                for( int i=0 ; i<nb_chr; i++)
-                {
-                    for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                        {
-                            nouv_gen2[i][j][k]=0 ;
+                        fichierS << endl;
+                    }
+                }
+                for (int i = 0; i < nb_chr; i++) {
+                    for (int j = 0; j < data->getNSup(); j++) {
+                        for (int k = 0; k < data->getNPer(); k++) {
+                            nouv_gen2[i][j][k] = 0;
                         }
                     }
                 }
-                for( int i=0 ; i<nb_chr*2; i++)
-                {
-                    for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                        {
-                            nouv_gen1[i][j][k]=0 ;
+                for (int i = 0; i < nb_chr * 2; i++) {
+                    for (int j = 0; j < data->getNSup(); j++) {
+                        for (int k = 0; k < data->getNPer(); k++) {
+                            nouv_gen1[i][j][k] = 0;
                         }
                     }
                 }
-                if (AffichAG==0){fichierS << "Toute la population !?!: "<<nb_chr<<endl;
-                    for(int i=0;i<nb_chr;i++)
-                    {
-                        for(int j=0;j<data->getNSup();j++)
-                        {
-                            for(int k=0;k< data->getNPer() ; k++)
-                            {
-                                fichierS<<nouv_gen[i][j][k]<<" ";
+                if (AffichAG == 0) {
+                    fichierS << "Toute la population !?!: " << nb_chr << endl;
+                    for (int i = 0; i < nb_chr; i++) {
+                        for (int j = 0; j < data->getNSup(); j++) {
+                            for (int k = 0; k < data->getNPer(); k++) {
+                                fichierS << nouv_gen[i][j][k] << " ";
                             }
-                            fichierS<<endl;
+                            fichierS << endl;
                         }
-                        fichierS<<endl;
-                    }}
-                fichierS<<"Meilleure_solution a la generation: "<<gen<<endl;
-                for(int j=0;j<data->getNSup();j++)
-                    {
-                        for(int k=0;k< data->getNPer() ; k++)
-                            {
-                                fichierS<<nouv_gen[0][j][k]<<" " ;
-                            }
-                        fichierS<<endl;
+                        fichierS << endl;
                     }
-                fichierS <<"fitness: ---------------------> "<<fitness[0]<<endl;
-                fichierS<<endl;
+                }
+
+                 // iteration de la meilleure solution
+                 if (gen==0)
+                 {
+
+                     CoutIter=fitness[0];
+                 }
+                 if (CoutIter > fitness[0])
+                 {
+                     //fichierS<<"yes ! "<<CoutIter<<" "<<fitness[0]<<" ";
+                     CoutIter=fitness[0];
+                     Iteration=gen;
+                 }
+
+                /*fichierS << "Meilleure_solution a la generation: " << gen << endl;
+                for (int j = 0; j < data->getNSup(); j++) {
+                    for (int k = 0; k < data->getNPer(); k++) {
+                        fichierS << nouv_gen[0][j][k] << " ";
+                    }
+                    fichierS << endl;
+                }
+                fichierS << "fitness: ---------------------> " << fitness[0] << endl;
+                fichierS << endl;*/
+
+
+                // arreter compteur temps
+                end = clock();
+                // Calculer temps de calcul
+                temps = (double) (end - start) / CLOCKS_PER_SEC;
+                gen++;
             }
-            // arreter compteur temps
-            end = clock();
             // Calculer temps de calcul
             temps = (double) (end-start)/ CLOCKS_PER_SEC;
 
             // Afficher meilleure solution
-            fichierS<<"--------------> Meilleure_solution finale: "<<endl;
+            /*fichierS<<"--------------> Meilleure_solution finale: "<<endl;
             for(int j=0;j<data->getNSup();j++)
             {
                 for(int k=0;k< data->getNPer() ; k++)
@@ -500,7 +494,9 @@ int mainOussama() {
                 fichierS<<endl;
             }
             fichierS<<endl;
-            fichierS <<fitness[0]<<" TcPU: "<<temps <<endl;
+            fichierS <<fitness[0]<<" TcPU: "<<temps <<endl;*/
+
+            data->Affich_Results(FFile, nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1);
 
 
             /** Libérer un tableau alloué dynamiquement ******************************/

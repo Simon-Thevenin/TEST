@@ -55,7 +55,7 @@ public:
     void ecriture(string  nom_fichier, string c , double* tab,int n);
     void ecriture(string  nom_fichier, string c , int* tab,int n);
 
-
+    void Affich_Results(string nom_fichier,  int** X, double RC, double t, int g, double BIIP, int IterBestSol);
     int getNPer();
     int getNSup();
 
