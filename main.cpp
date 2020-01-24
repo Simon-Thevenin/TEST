@@ -31,7 +31,7 @@ int mainSimon() {
         int NbSupplier =6;
         Data *data = new Data(NbPeriod, NbSupplier, file);
         cout << "Create the model once:" << endl;
-        ModelQuantity* ModQ= new ModelQuantity(data, 3);
+        ModelQuantity* ModQ= new ModelQuantity(data, 10);
         ModQ->BuildModel();
 
 
@@ -46,9 +46,12 @@ int mainSimon() {
             }
         }
 
-        ModQ->Solve(true, givenY2, false);
+        ModQ->Solve(true, givenY2, false, 0.01);
         cout<<"Now with Y"<<endl;
-        ModQ->Solve(false, nullptr, false);
+        ModQ->Solve(false, nullptr, false, 0.01);
+
+         GRASP* g = new GRASP(data, 3);
+         g->solve();
     }
 
 }
@@ -555,5 +558,5 @@ int mainOussama() {
 }
 int main(int argc, char** argv){
     mainOussama();
-    //  mainSimon();
+    //mainSimon();
 }
