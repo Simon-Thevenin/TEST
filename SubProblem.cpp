@@ -18,6 +18,9 @@ SubProblem::SubProblem(Data* d, int gam)
 	this->data=d;
     Data::print("Start Sub Prob",this->data->getNPer() );
 	this->pbSub = new XPRBprob("SubProb");
+    XPRSprob opt_prob =  this->pbSub->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->data->getTimeLimite());
+    XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
 	this->pbSub->setMsgLevel(0);
 
 	Q = new double*[this->data->getNPer()+1];

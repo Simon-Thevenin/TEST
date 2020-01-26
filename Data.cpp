@@ -131,14 +131,14 @@ void Data::ecriture(string nom_fichier,  string c , int* tab,int n){
 
     f.close();
 }
-void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
+void Data::Affich_Results(string nom_fichier,  int gamma,  string method, int** X, double RC, double t, int g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
 
     ofstream f(nom_fichier.c_str(), ios::out | ios::app);
     if (!f.is_open())
         cout << "Impossible d'ouvrir le fichier en écriture !" << endl;
     else
     {
-        f <<"Method  Sol status LB CPU Gap Nodes #Setups ";
+        f <<" instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups ";
         f<<"Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl";
         f<<" minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution"<<endl;
 
@@ -200,10 +200,6 @@ void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int
         /*** à finir ********************************************************/
         double ordering =0;
         double inventoryTot=0;
-
-
-
-
         double Avginventory=AvgInv;
         double holding=InvCost;
         double purchasing =PurshCost;
@@ -214,8 +210,8 @@ void Data::Affich_Results(string nom_fichier,  int** X, double RC, double t, int
         ordering := sum(t in T, s in S)o(s)*getsol(Y(t,s))
         purchasing := sum(t in T, s in S)p(s)*getsol(Q(t,s))
         /*********************************************************************/
-        f<<"'GA "<< RC<<" "<< "?" <<  " "<< "?" << " "<< t << " "<< "?"<< " "<<  "?"<< " "<< nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding<< " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
-        f<< bestminTBO <<" "<<bestmaxTBO<<" "<<g<<" "<<BIIP<<" "<<IterBestSol<<  backCost << AvgBavk<< endl;
+        f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma<< " "<<method <<" "<< RC<<" "<< "?" <<  " "<< "?" << " "<< t << " "<< "?"<< " "<<  "?"<< " "<< nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding<< " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
+        f<< bestminTBO <<" "<<bestmaxTBO<<" "<<g<<" "<<BIIP<<" "<<IterBestSol<< " "<< backCost << " "<< AvgBavk<< endl;
     }
 
     f.close();
@@ -282,5 +278,5 @@ void Data::print(string s, double value)
 
 int Data::getTimeLimite()
 {
-    return 2;
+    return 1200;
 }

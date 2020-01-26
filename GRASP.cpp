@@ -65,6 +65,19 @@ double GRASP::solve()
     ModelQuantity* mod = new ModelQuantity(this->data, this->gamma);
     mod->BuildModel();
     double cost = mod->Solve(true, bestY, false, 0.01);
+    int** obtainedY2 = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        obtainedY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            obtainedY2[s][t] =mod->Y[t+1][s+1].getSol();
+        }
+    }
+
+    string FFile = "..//resultat7.txt";
+    data->Affich_Results(FFile,  gamma, "Grasp", obtainedY2, cost, temps, -1, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder());
+
     cout<<"Grasp cost::::"<<cost<<" temps"<<temps<<endl;
     cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;

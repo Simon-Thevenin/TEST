@@ -1,6 +1,6 @@
 #pragma once
 #include "xprb_cpp.h"
-#include "xprs.H"
+#include "xprs.h"
 #include "xprm_mc.h"
 #include "Data.h"
 #include "SubProblem.h"

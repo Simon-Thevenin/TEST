@@ -28,6 +28,9 @@ ModelQuantity::ModelQuantity( Data* d, int gamma)
 	 this->D=d;
 	 Data::print("start");
 	 pbQ = new XPRBprob("MyProb");
+    XPRSprob opt_prob =  this->pbQ->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->D->getTimeLimite());
+    XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
 	 pbQ->setMsgLevel(0);
 	 W= 1;
 	 delta = new double***[this->W+1]; 

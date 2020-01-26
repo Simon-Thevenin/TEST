@@ -5,6 +5,7 @@
 #include "xprb_cpp.h"
 #include "xprs.h"
 #include "ModelQuantity.h"
+#include "ModelRobust.h"
 #include "SubProblem.h"
 #include "Data.h"
 #include "FGenetic.h"
@@ -18,14 +19,24 @@ using namespace ::dashoptimization;
 // résoudee probleme nouv gen
 // penser  vider la mémoire partout
 
-string pathfile = "..//";
+string pathfile = "../";
 //string pathfile =  "C://Users//oussama.ben-ammar//CLionProjects//TEST//";
 
-void runExact(string file, int NbPeriod, int NbSupplier, double gamma)
+Data * getData(string file, int NbPeriod, int NbSupplier)
 {
     string Thefile = pathfile+file;
     ifstream fichier( Thefile, ios::in);
+    cout<<Thefile<<endl;
     Data *data = new Data(NbPeriod, NbSupplier, Thefile);
+    return data;
+
+}
+
+
+
+void runExact(string file, int NbPeriod, int NbSupplier, double gamma)
+{
+    Data *data = getData(file, NbPeriod, NbSupplier);
     ModelQuantity* ModQ= new ModelQuantity(data, gamma);
     ModQ->BuildModel();
 
@@ -40,12 +51,51 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma)
     }
 
     ModQ->Solve(true, givenY2, false, 0.01);
-    double cost = ModQ->Solve(false, nullptr, false, 0.001);
+    double cost = ModQ->Solve(false, nullptr, false, 0.0001);
+    int** obtainedY2 = new int*[data->getNSup()+1];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        obtainedY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            obtainedY2[s][t] =ModQ->Y[t+1][s+1].getSol();
+        }
+    }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile, givenY2, cost, ModQ->LastRunning, -1, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma, "Exact", obtainedY2, cost, ModQ->LastRunning, -1, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
+
+}
+
+void runRobust(string file, int NbPeriod, int NbSupplier, double gamma)
+{
+    Data *data = getData(file, NbPeriod, NbSupplier);
+    ModelRobust* ModR= new ModelRobust(data, gamma);
+    ModR->Solve();
+    /*************************EVALUATE THE COST****************************/
+    double ** associatedquantities =  ModR->getQuantities();
+    SubProblem* ModSub = new SubProblem(data, gamma);
+    ModSub->BuildModel();
+    ModSub->getWorstCaseDelta(associatedquantities);
+    double cost=  ModSub->getAssociatedCost() +ModR->GetSetupCost() + ModR->GetPurshasingCosts();
+
+    int** obtainedY2 = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        obtainedY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            obtainedY2[s][t] =ModR->Y[t+1][s+1].getSol();
+
+        }
+    }
+    string FFile = pathfile + "resultat7.txt";
+    data->Affich_Results(FFile,   gamma, "Robust", obtainedY2, cost, ModR->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+    cout<<"robust cost::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
+    cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
 
 }
 
@@ -90,6 +140,8 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
     ModelQuantity* mod = new ModelQuantity(data,-1 );
     mod->BuildModel();
     mod->AddScenario(delta);
+    XPRSprob opt_prob =  mod->pbQ->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_MAXTIME, data->getTimeLimite());
     mod->Solve(false, nullptr, true, 0.01);
     /*************************EVALUATE THE COST****************************/
     double ** associatedquantities =  mod->getQuantities();
@@ -103,16 +155,30 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
     ModSub->getWorstCaseDelta(associatedquantities);
     double cost=  ModSub->getAssociatedCost() +mod->totalsetupcosts + mod->GetPurshasingCosts();
 
+    int** obtainedY2 = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        obtainedY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            obtainedY2[s][t] =mod->Y[t+1][s+1].getSol();
+        }
+    }
+    string FFile = pathfile + "resultat7.txt";
+    data->Affich_Results(FFile,   gamma, "determinist", obtainedY2, cost, mod->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+
     cout<<"Deterministic cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
 
 }
 
-int mainSimon() {
-    runExact("1.txt", 21, 6,3);
-    runGrasp("1.txt", 21, 6, 3);
-    runDeterministic("1.txt", 21, 6, 3);
+int mainSimon(string file, int nbp, int nbs, int gamma) {
+    runRobust(file, 21, 6,3);
+    runExact(file, 21, 6,3);
+    runGrasp(file, 21, 6, 3);
+    runDeterministic(file, 21, 6, 3);
+
 }
 
 double* fitness;
@@ -129,19 +195,19 @@ int echanger (const void *a, const void *b){
 
 }
 
-int mainOussama() {
-    int gamma = 3;
-    int NbPeriod = 21;
-    int NbSupplier =6;
-    string file = pathfile + "1.txt";
-    ifstream fichier(file, ios::in);  // on ouvre le fichier en lecture
+int mainOussama(string file, int nbp, int nbs, int gamma_)  {
+    int gamma = gamma_;
+    int NbPeriod = nbp;
+    int NbSupplier =nbs;
+   // string file = pathfile + "1.txt";
+  //  ifstream fichier(file, ios::in);  // on ouvre le fichier en lecture
     //ifstream fichier(argv[1], ios::in);  // on ouvre le fichier en lecture
 
-    if(fichier) {
+    if(true) {
 // Files
 
         // Files
-        string dataFile =file;
+     //   string dataFile =file;
         //string dataFile = argv[1];
 
         //NbPeriod = atoi(argv[2]) + 11;
@@ -158,7 +224,8 @@ int mainOussama() {
         clock_t start, end;
 
         //Create Data
-        Data *data = new Data(NbPeriod, NbSupplier, dataFile);
+        Data *data = getData(file, NbPeriod, NbSupplier);
+      //  Data *data = new Data(NbPeriod, NbSupplier, dataFile);
 
         // Appeler la classe Algo Gen
         FGenetic ag(data, gamma);
@@ -557,7 +624,7 @@ int mainOussama() {
              ag.ModQ->Solve(true, nouv_gen[0], false, 0.01);
             double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
 
-            data->Affich_Results(FFile, nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder());
+            data->Affich_Results(FFile, gamma, "GA", nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder());
 
 
 
@@ -615,6 +682,7 @@ int mainOussama() {
         return 0;
 }
 int main(int argc, char** argv){
-    //mainOussama();
-    mainSimon();
+    mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
+    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
+
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include <cstddef>
 #include "xprb_cpp.h"
-#include "xprs.H"
+#include "xprs.h"
 #include "xprm_mc.h"
 #include "Data.h"
 

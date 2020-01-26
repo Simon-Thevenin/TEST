@@ -230,6 +230,33 @@ ModelQuantity.cpp.s:
 	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/ModelQuantity.cpp.s
 .PHONY : ModelQuantity.cpp.s
 
+ModelRobust.obj: ModelRobust.cpp.obj
+
+.PHONY : ModelRobust.obj
+
+# target to build an object file
+ModelRobust.cpp.obj:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/ModelRobust.cpp.obj
+.PHONY : ModelRobust.cpp.obj
+
+ModelRobust.i: ModelRobust.cpp.i
+
+.PHONY : ModelRobust.i
+
+# target to preprocess a source file
+ModelRobust.cpp.i:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/ModelRobust.cpp.i
+.PHONY : ModelRobust.cpp.i
+
+ModelRobust.s: ModelRobust.cpp.s
+
+.PHONY : ModelRobust.s
+
+# target to generate assembly for a file
+ModelRobust.cpp.s:
+	$(MAKE) -f CMakeFiles\untitled.dir\build.make CMakeFiles/untitled.dir/ModelRobust.cpp.s
+.PHONY : ModelRobust.cpp.s
+
 Solution.obj: Solution.cpp.obj
 
 .PHONY : Solution.obj
@@ -332,6 +359,9 @@ help:
 	@echo ... ModelQuantity.obj
 	@echo ... ModelQuantity.i
 	@echo ... ModelQuantity.s
+	@echo ... ModelRobust.obj
+	@echo ... ModelRobust.i
+	@echo ... ModelRobust.s
 	@echo ... Solution.obj
 	@echo ... Solution.i
 	@echo ... Solution.s
