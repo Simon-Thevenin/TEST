@@ -300,6 +300,43 @@ void ModelQuantity::SetYBinary()
 	}
 }
 
+void ModelQuantity::UpdateLastScenario(double*** givendelta)
+{
+
+    int**  cumulativeQuantity=new int*[this->D->getNPer()+1];
+    for(int t = 1; t<= this->D->getNPer(); t++)
+    {
+        cumulativeQuantity[t] = new int[this->D->getNSup()+1];
+        for(int s= 1; s<=this->D->getNSup(); s++)
+        {
+            for(int tau = 1; tau <= t; tau++)
+            {
+                cumulativeQuantity[t][s] += givendelta[tau][t][s];
+            }
+        }
+
+    }
+
+
+
+    for(int t=1; t<=this->D->getNPer(); t++)
+    {
+          for(int s =1; s<=this->D->getNSup(); s++)
+            {
+                this->HoldingConstraint[t].setTerm(this->Q[t][s], -this->D->getch() * cumulativeQuantity[t][s]);
+                this->BackorderConstraint[t].setTerm(this->Q[t][s], +this->D->getcb() * cumulativeQuantity[t][s]);
+            }
+
+    }
+
+    for(int t = 1; t<= this->D->getNPer(); t++) {
+        delete[] cumulativeQuantity[t];
+    }
+    delete[] cumulativeQuantity;
+
+
+}
+
 void ModelQuantity::AddScenario(double*** givendelta)
 {
 
@@ -354,20 +391,21 @@ void ModelQuantity::AddScenario(double*** givendelta)
             cumulativeDemand[t] += this->D->getDemand(tau-1);
         }
 	}
+     this->HoldingConstraint = new XPRBctr[this->D->getNPer()+1];
 	Data::print("ConstraintHoldin");
 		for(int t =1; t<= this->D->getNPer(); t++)
 		{
-			this->pbQ->newCtr(XPRBnewname("ConstraintHolding%d",t),
+            this->HoldingConstraint[t] = this->pbQ->newCtr(XPRBnewname("ConstraintHolding%d",t),
 								c[t] >= this->D->getch()  * (cumulativeQuantity[t] - cumulativeDemand[t] )   );
 	
 		}
 //forall(t in T, w in W)
 //	ConstraintBackorder(t,w) := c(t, w) >= -b*(sum(tau in 1..t, s in S) delta(tau,t,s,w) * Q(tau,s)-sum(tau in 1..t)d(tau))
 	Data::print("ConstraintBacklog");
-		
+    this->BackorderConstraint = new XPRBctr[this->D->getNPer()+1];
 		for(int t =1; t<= this->D->getNPer(); t++)
 		{
-			this->pbQ->newCtr(XPRBnewname("ConstraintBacklog%d",t),
+            BackorderConstraint[t]=this->pbQ->newCtr(XPRBnewname("ConstraintBacklog%d",t),
 										c[t] >= -this->D->getcb() * (cumulativeQuantity[t] - cumulativeDemand[t] ) );
 		}
    //forall(w in W)
@@ -546,5 +584,6 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 
 	}
 	this->LastRunning = temps;
+    this->LastGap = (UB-LB)/UB;
 	return UB;
 }

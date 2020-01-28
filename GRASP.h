@@ -5,14 +5,16 @@ class GRASP
 {
 	Data* data;
 	int gamma;
+    int** LT;
+    double*** delta;
 
-	public:
+public:
 		GRASP(void);
         GRASP(Data* d, int  _gamma);
 		~GRASP(void);
 		double solve();
-		double*** translateLeadTime(int** L);
-		int** generateLeadTime();
-        bool CheckLeadTimeInBudget(double*** delta);
+		void translateLeadTime();
+		void generateLeadTime();
+        bool CheckLeadTimeInBudget();
 };
 

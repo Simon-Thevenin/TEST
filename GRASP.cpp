@@ -11,6 +11,18 @@ GRASP::GRASP(Data* d, int  _gamma)
 {
 	this->data = d;
 	this->gamma = _gamma;
+    LT = new int*[this->data->getNPer()+1];
+    for(int t=1; t<=data->getNPer(); t++) {
+        LT[t] = new int[this->data->getNSup() + 1];
+    }
+  delta = new double**[this->data->getNPer()+1];
+
+    for(int tau=1; tau<=this->data->getNPer(); tau++) {
+        delta[tau] = new double *[this->data->getNPer() + 1];
+        for (int t = 1; t <= this->data->getNPer(); t++) {
+            delta[tau][t] = new double[this->data->getNSup() + 1];
+        }
+    }
 }
 
 
@@ -30,20 +42,25 @@ double GRASP::solve()
     for(int s=0; s < this->data->getNSup(); s++) {
         bestY[s] = new int[this->data->getNPer() ];
     }
+    ModelQuantity* mod = new ModelQuantity(this->data, this->gamma);
+    mod->BuildModel();
+
     clock_t start, end;
     start = clock();
+    int iter = 0;
     while(temps<=this->data->getTimeLimite())
     {
 
+        iter++;
         do{
-            Lt = this->generateLeadTime();
-            delta = this->translateLeadTime(Lt);
+           this->generateLeadTime();
+            this->translateLeadTime();
         }
-        while(this->CheckLeadTimeInBudget(delta));
+        while(this->CheckLeadTimeInBudget());
 
-        ModelQuantity* mod = new ModelQuantity(this->data, this->gamma);
-        mod->BuildModel();
-        mod->AddScenario(delta);
+
+        mod->UpdateLastScenario(this->delta);
+
         double cost = mod->Solve(false, nullptr, true, 0.01);
 
         if(cost< bestcost)
@@ -62,21 +79,21 @@ double GRASP::solve()
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
     }
 
-    ModelQuantity* mod = new ModelQuantity(this->data, this->gamma);
-    mod->BuildModel();
-    double cost = mod->Solve(true, bestY, false, 0.01);
+    ModelQuantity* mod2 = new ModelQuantity(this->data, this->gamma);
+    mod2->BuildModel();
+    double cost = mod2->Solve(true, bestY, false, 0.001);
     int** obtainedY2 = new int*[data->getNSup()];
     for(int s=0; s<data->getNSup(); s++)
     {
         obtainedY2[s] =  new int[data->getNPer()];
         for(int t=0; t<data->getNPer(); t++)
         {
-            obtainedY2[s][t] =mod->Y[t+1][s+1].getSol();
+            obtainedY2[s][t] =mod2->Y[t+1][s+1].getSol();
         }
     }
 
     string FFile = "..//resultat7.txt";
-    data->Affich_Results(FFile,  gamma, "Grasp", obtainedY2, cost, temps, -1, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder());
+    data->Affich_Results(FFile,  gamma, "Grasp", obtainedY2, cost, temps, -1, -1, -1,mod2->GetInventoryCosts(), mod2->GetAvgInventory(), mod2->GetPurshasingCosts(), mod2->GetBackorderCosts(), mod2->GetAvgtBackorder());
 
     cout<<"Grasp cost::::"<<cost<<" temps"<<temps<<endl;
     cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
@@ -84,20 +101,17 @@ double GRASP::solve()
     return cost;
 }
 
-double*** GRASP::translateLeadTime(int** L)
+void GRASP::translateLeadTime()
 {
 
-    double*** delta = new double**[this->data->getNPer()+1];
 
         for(int tau=1; tau<=this->data->getNPer(); tau++)
         {
-            delta[tau] = new double*[this->data->getNPer()+1];
-            for(int t=1; t<=this->data->getNPer(); t++)
+             for(int t=1; t<=this->data->getNPer(); t++)
             {
-                delta[tau][t] = new double[this->data->getNSup()+1];
                 for(int s=1; s<=this->data->getNSup(); s++)
                 {
-                    if (tau <= t - L[tau][s])
+                    if (tau <= t - this->LT[tau][s])
                         delta[tau][t][s] = 1;
                     else
                         delta[tau][t][s] = 0;
@@ -105,27 +119,22 @@ double*** GRASP::translateLeadTime(int** L)
             }
         }
 
-
-    return delta;
 }
 
 
-int** GRASP::generateLeadTime()
+void GRASP::generateLeadTime()
 {
-	int** LT = new int*[this->data->getNPer()+1];
 	 for(int t=1; t<=data->getNPer(); t++)
 	{
-        LT[t] = new int[this->data->getNSup()+1];
-			for(int s=1; s<=data->getNSup(); s++)
+      		for(int s=1; s<=data->getNSup(); s++)
 			{
 				LT[t][s] =(int)(this->data->getLMin(s-1) + ((double) rand() / (RAND_MAX)) * (this->data->getLMax(s-1) - this->data->getLMin(s-1)));
 		    }
 	 }
-    return LT;
 }
 
 
-bool GRASP::CheckLeadTimeInBudget(double*** delta)
+bool GRASP::CheckLeadTimeInBudget()
 {
     for(int t=1; t<=data->getNPer(); t++)
     {
@@ -133,7 +142,7 @@ bool GRASP::CheckLeadTimeInBudget(double*** delta)
         for(int s=1; s<=data->getNSup(); s++)
         {
             if(t-this->data->getLMin(s-1)>0)
-                sum = sum + delta[t-this->data->getLMin(s-1)][t][s];
+                sum = sum + this->delta[t-this->data->getLMin(s-1)][t][s];
         }
        if(sum >= this->data->getNSup() - this->gamma)
            return false;

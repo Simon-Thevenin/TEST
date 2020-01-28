@@ -20,11 +20,14 @@ public:
 	int S;
 	double **** delta;
 	double LastRunning;
+    double LastGap;
 	//int ** givenY;
 	XPRBvar** Q;
 	XPRBvar** Y;
 	XPRBvar C;
 	XPRBctr** BigMConstraints;
+    XPRBctr* HoldingConstraint;
+    XPRBctr* BackorderConstraint;
 	Data* D;
 	double totalsetupcosts;
 
@@ -41,6 +44,7 @@ public:
 	double** getQuantities();
 	void AddScenario(double*** givendelta);
 	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap);
+    void UpdateLastScenario(double*** givendelta);
 	void SetYBinary();
     double GetPurshasingCosts( );
     double GetOrderingCosts( );

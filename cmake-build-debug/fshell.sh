@@ -8,7 +8,7 @@ do
 	do
 		for bh in '2' #'8' '12'
 		do
-			for TBO in '2' # '4' '6'
+			for TBO in '4' #2'  '4' '6'
 			do
 						k=1
 						while [ $k -le 2 ]

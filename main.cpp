@@ -62,7 +62,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma)
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma, "Exact", obtainedY2, cost, ModQ->LastRunning, -1, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma, "Exact", obtainedY2, cost, ModQ->LastRunning, ModQ->LastGap, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
@@ -174,10 +174,10 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma) {
-    runRobust(file, 21, 6,3);
-    runExact(file, 21, 6,3);
-    runGrasp(file, 21, 6, 3);
-    runDeterministic(file, 21, 6, 3);
+     runRobust(file, nbp, nbs,gamma);
+    runExact(file, nbp, nbs,gamma);
+    runGrasp(file, nbp, nbs,gamma);
+    runDeterministic(file, nbp, nbs,gamma);
 
 }
 
