@@ -13,20 +13,19 @@ do
 						k=1
 						while [ $k -le 2 ]
 						do
-						  for gamma in '1' '3' '5'
-			        do
+
 							echo  ./Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma
 							> Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
-							./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S 1 Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
-							./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S 3 Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt  &
-							./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S 5 Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
-							./untitled.exe Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T 12 1 Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt &
-							./untitled.exe Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T 12 3 Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt  &
-							./untitled.exe Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T "12" 5 Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt &
+							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "1" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
+							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "3" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt  &
+							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "5" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
+							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T "12" "1" Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt &
+							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T "12" "3" Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt  &
+							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T "12" "5" Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt &
 							 wait
 
 							let k=1+$k
-							done
+
 						done
 			done
 		done
