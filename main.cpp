@@ -10,7 +10,7 @@
 #include "Data.h"
 #include "FGenetic.h"
 #include "Solution.h"
-#define AffichAG 1
+#define AffichAG 0
 #include "GRASP.h"
 
 using namespace std;
