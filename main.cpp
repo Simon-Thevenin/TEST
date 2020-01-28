@@ -10,7 +10,7 @@
 #include "Data.h"
 #include "FGenetic.h"
 #include "Solution.h"
-#define AffichAG 0
+#define AffichAG 1
 #include "GRASP.h"
 
 using namespace std;
@@ -260,7 +260,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
 
         /** Paramètres de l'AG*****************************/
         // Nombre de chromosomes
-        int nb_chr=10;
+        int nb_chr=60;
 
         // Tx croisement et mutation
         int pc,pm;

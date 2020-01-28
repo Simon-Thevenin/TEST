@@ -100,18 +100,16 @@ void FGenetic::Cross(int *_nbcc0, int _pc, int*** f1, int s_2, int nb_c, int ***
 	for ( int i=1;i<s_2;i++)
 		{
             valeur[i] = val_rand(0,s_2-1);
-			start2:
+			//start2:
 			for (int j=0;j<i;j++)
 			{
 				if(	valeur[i]==valeur[j])
 				{
-				    cout<<"yo"<<endl;
 					valeur[i] = val_rand(0,s_2-1);
-					goto start2;
+			//		goto start2;
 				}
 			}
 		}
-    cout<<"da"<<endl;
     // on s�lectionne N/4 couple d'une mani�re al�atoire
     _nbcc=0;
     for(int i=0 ; i<nb_c/4; i++)
@@ -174,7 +172,6 @@ void FGenetic::Cross(int *_nbcc0, int _pc, int*** f1, int s_2, int nb_c, int ***
                     }
                 }
             }
-    cout<<"bou"<<endl;
     *_nbcc0=_nbcc;
     delete[] valeur;
 }
