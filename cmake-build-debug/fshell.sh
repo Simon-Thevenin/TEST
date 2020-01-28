@@ -17,7 +17,8 @@ do
 			        do
 							echo  ./Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma
 							> Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
-							./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
+							./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S 1 Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt && ./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S 3 Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt  && ./untitled.exe Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S 5 Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt && ./untitled.exe Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T 12 1 Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt && ./untitled.exe Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T 12 3 Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt  && ./untitled.exe Data/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt $T "12" 5 Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt
+
 							let k=1+$k
 							done
 						done
