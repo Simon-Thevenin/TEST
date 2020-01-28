@@ -231,7 +231,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
         FGenetic ag(data, gamma);
 
         // Ouverture fichier resultat pour écriture
-        ofstream fichierS(pathfile+"resultat7.txt", ios::out | ios::app);
+        ofstream fichierS(pathfile+"resultat8.txt", ios::out | ios::app);
         //ofstream fichierS(argv[4], ios::out | ios::app);
 
         string FFile = pathfile + "resultat7.txt";
@@ -260,7 +260,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
 
         /** Paramètres de l'AG*****************************/
         // Nombre de chromosomes
-        int nb_chr=60;
+        int nb_chr=10;
 
         // Tx croisement et mutation
         int pc,pm;
