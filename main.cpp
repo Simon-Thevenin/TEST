@@ -683,6 +683,6 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
 }
 int main(int argc, char** argv){
     mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
-    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
+   // mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
 
 }

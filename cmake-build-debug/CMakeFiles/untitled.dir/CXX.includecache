@@ -6,12 +6,6 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/simon/CLionProjects/untitled/Data.cpp
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-math.h
--
-
 C:/Users/simon/CLionProjects/untitled/Data.h
 iostream
 -
@@ -48,28 +42,6 @@ C:/Users/simon/CLionProjects/untitled/Solution.h
 ModelQuantity.h
 C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
 
-C:/Users/simon/CLionProjects/untitled/GRASP.cpp
-GRASP.h
-C:/Users/simon/CLionProjects/untitled/GRASP.h
-stdlib.h
--
-ModelQuantity.h
-C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
-
-C:/Users/simon/CLionProjects/untitled/GRASP.h
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-
-C:/Users/simon/CLionProjects/untitled/ModelQuantity.cpp
-cstddef
--
-ModelQuantity.h
-C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
-iostream
--
-cmath
--
-
 C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
 xprb_cpp.h
 C:/Users/simon/CLionProjects/untitled/xprb_cpp.h
@@ -83,26 +55,6 @@ SubProblem.h
 C:/Users/simon/CLionProjects/untitled/SubProblem.h
 cmath
 -
-
-C:/Users/simon/CLionProjects/untitled/ModelRobust.cpp
-cstddef
--
-ModelRobust.h
-C:/Users/simon/CLionProjects/untitled/ModelRobust.h
-
-C:/Users/simon/CLionProjects/untitled/ModelRobust.h
-xprb_cpp.h
-C:/Users/simon/CLionProjects/untitled/xprb_cpp.h
-xprs.h
-C:/Users/simon/CLionProjects/untitled/xprs.h
-xprm_mc.h
-C:/Users/simon/CLionProjects/untitled/xprm_mc.h
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-
-C:/Users/simon/CLionProjects/untitled/Solution.cpp
-Solution.h
-C:/Users/simon/CLionProjects/untitled/Solution.h
 
 C:/Users/simon/CLionProjects/untitled/Solution.h
 iostream
@@ -116,10 +68,6 @@ fstream
 Data.h
 C:/Users/simon/CLionProjects/untitled/Data.h
 
-C:/Users/simon/CLionProjects/untitled/SubProblem.cpp
-SubProblem.h
-C:/Users/simon/CLionProjects/untitled/SubProblem.h
-
 C:/Users/simon/CLionProjects/untitled/SubProblem.h
 cstddef
 -
@@ -131,34 +79,6 @@ xprm_mc.h
 C:/Users/simon/CLionProjects/untitled/xprm_mc.h
 Data.h
 C:/Users/simon/CLionProjects/untitled/Data.h
-
-C:/Users/simon/CLionProjects/untitled/main.cpp
-iostream
--
-time.h
--
-fstream
--
-cstdlib
--
-xprb_cpp.h
-C:/Users/simon/CLionProjects/untitled/xprb_cpp.h
-xprs.h
-C:/Users/simon/CLionProjects/untitled/xprs.h
-ModelQuantity.h
-C:/Users/simon/CLionProjects/untitled/ModelQuantity.h
-ModelRobust.h
-C:/Users/simon/CLionProjects/untitled/ModelRobust.h
-SubProblem.h
-C:/Users/simon/CLionProjects/untitled/SubProblem.h
-Data.h
-C:/Users/simon/CLionProjects/untitled/Data.h
-FGenetic.h
-C:/Users/simon/CLionProjects/untitled/FGenetic.h
-Solution.h
-C:/Users/simon/CLionProjects/untitled/Solution.h
-GRASP.h
-C:/Users/simon/CLionProjects/untitled/GRASP.h
 
 C:/xpressmp/include/mosel_mc.h
 mosel_rt.h
