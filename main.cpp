@@ -174,7 +174,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma) {
-     runRobust(file, nbp, nbs,gamma);
+    runRobust(file, nbp, nbs,gamma);
     runExact(file, nbp, nbs,gamma);
     runGrasp(file, nbp, nbs,gamma);
     runDeterministic(file, nbp, nbs,gamma);

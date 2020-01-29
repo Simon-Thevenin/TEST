@@ -58,15 +58,15 @@ double GRASP::solve()
         }
         while(this->CheckLeadTimeInBudget());
 
-
+        this->PushDelta();
         mod->UpdateLastScenario(this->delta);
 
         double cost = mod->Solve(false, nullptr, true, 0.01);
-        cout<<cost<<endl;
+
         if(cost< bestcost)
         {
             bestcost = cost;
-
+            cout<<cost<<endl;
             for(int t=1; t <= this->data->getNPer(); t++)
             {
                 for(int s=1; s<=this->data->getNSup(); s++)
@@ -128,7 +128,7 @@ void GRASP::generateLeadTime()
 	{
       		for(int s=1; s<=data->getNSup(); s++)
 			{
-				LT[t][s] =(int)(this->data->getLMin(s-1) + ((double) rand() / (RAND_MAX)) * (this->data->getLMax(s-1) - this->data->getLMin(s-1)));
+				LT[t][s] =this->data->getLMin(s-1); //(int)(this->data->getLMin(s-1) + ((double) rand() / (RAND_MAX)) * (this->data->getLMax(s-1) - this->data->getLMin(s-1)));
 		    }
 	 }
 }
@@ -148,4 +148,20 @@ bool GRASP::CheckLeadTimeInBudget()
            return false;
     }
     return true;
+}
+
+bool GRASP::PushDelta()
+{
+    for(int k = 0; k <= 1000; k++) {
+        int s = (int) (1) + ((double) rand() / (RAND_MAX)) * (this->data->getNSup() - 1);
+        int t = (int) (1) + ((double) rand() / (RAND_MAX)) * (this->data->getNPer() - 1);
+
+        LT[t][s] += 1;
+        this->translateLeadTime();
+        if (!CheckLeadTimeInBudget()) {
+            LT[t][s] -= 1;
+        }
+
+    }
+
 }

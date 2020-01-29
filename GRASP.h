@@ -16,5 +16,6 @@ public:
 		void translateLeadTime();
 		void generateLeadTime();
         bool CheckLeadTimeInBudget();
+        bool PushDelta();
 };
 
