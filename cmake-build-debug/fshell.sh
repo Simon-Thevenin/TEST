@@ -1,7 +1,7 @@
 #!/bin/csh
 
 mkdir Results
-for T in '10' '20' '30' '40'
+for T in '10' #'20' '30' '40'
 do
 	mkdir Results/$T
 	for S in '6' #'12' '18'
@@ -11,7 +11,7 @@ do
 			for TBO in '4' #2'  '4' '6'
 			do
 						k=1
-						while [ $k -le 1 ]
+						while [ $k -le 2 ]
 						do
 
 							echo  ./Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma
