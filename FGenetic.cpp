@@ -103,7 +103,9 @@ void FGenetic::Cross(int *_nbcc0, int _pc, int*** f1, int s_2, int nb_c, int ***
 		    bool theyareequal =true;
             while(theyareequal) {
                 theyareequal =false;
-                valeur[i] = val_rand(0, s_2 - 1);
+                valeur[i] = (int)(0 + ((double) rand() / (RAND_MAX)) * (s_2));
+
+
                 //start2:
                 for (int j = 0; j < i; j++) {
                     if (valeur[i] == valeur[j]) {
