@@ -11,8 +11,8 @@ do
 			for TBO in '4' #2'  '4' '6'
 			do
 						k=1
-						while [ $k -le 2 ]
-						do
+						#while [ $k -le 2 ]
+					#	do
 
 							echo  ./Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma
 							T2=$T+10
@@ -28,9 +28,9 @@ do
 							#env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T3"_12_"$TBO"_"$bh"_"$k.txt $T "12" "1" Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt [${k}] &
 							#env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T3"_12_"$TBO"_"$bh"_"$k.txt $T "12" "3" Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt [${l}]  &
 
-							k = $k+1
+					#		k = $k+1
 
-						done
+				#		done
 			done
 		done
 	done
