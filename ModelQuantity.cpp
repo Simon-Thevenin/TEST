@@ -584,6 +584,6 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 
 	}
 	this->LastRunning = temps;
-    this->LastGap = (UB-LB)/UB;
+    this->LastGap = (UB-LB)/LB;
 	return UB;
 }
