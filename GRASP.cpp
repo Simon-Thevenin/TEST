@@ -62,7 +62,7 @@ double GRASP::solve()
         mod->UpdateLastScenario(this->delta);
 
         double cost = mod->Solve(false, nullptr, true, 0.01);
-
+        cout<<cost<<endl;
         if(cost< bestcost)
         {
             bestcost = cost;
@@ -144,7 +144,7 @@ bool GRASP::CheckLeadTimeInBudget()
             if(t-this->data->getLMin(s-1)>0)
                 sum = sum + this->delta[t-this->data->getLMin(s-1)][t][s];
         }
-       if(sum >= this->data->getNSup() - this->gamma)
+       if(sum >= this->data->getNSup()+1 - this->gamma)
            return false;
     }
     return true;

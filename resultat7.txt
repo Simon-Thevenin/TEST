@@ -164,3 +164,49 @@
  ../Data/10/D_10_6_4_2_1.txt 6 21 3 determinist 1745.07 ? ? 0.801 ? ? 2 1 1 1 1.95831e-16 8.2249e-16 0 1415 2 2 3 5 -1 -1 -1 232.067 27.627
  instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
  ../Data/10/D_10_6_4_2_1.txt 6 21 3 GA 1709.2 ? ? 6.501 ? ? 1 1 1 1 4.4 4.4 0 1415 2 2 3 5 15 1805.2 4 254.8 30.3333
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 Robust 1681.8 ? ? 0.393 ? ? 2 1 1 1 40.1905 168.8 0 1415 2 2 3 5 -1 -1 -1 2.84217e-15 3.38354e-16
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 Exact 1679.05 ? ? 3.103 ? ? 2 1 1 1 93.65 93.65 0 1415 2 2 3 5 0 -1 -1 72.4 8.61905
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 Grasp 1709.2 ? ? 4.256 ? ? 1 1 1 1 245.2 245.2 0 1415 2 2 3 5 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 determinist 1745.07 ? ? 0.688 ? ? 2 1 1 1 1.95831e-16 8.2249e-16 0 1415 2 2 3 5 -1 -1 -1 232.067 27.627
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 Robust 1681.8 ? ? 0.579 ? ? 2 1 1 1 40.1905 168.8 0 1415 2 2 3 5 -1 -1 -1 2.84217e-15 3.38354e-16
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 Exact 1679.05 ? ? 3.428 ? ? 2 1 1 1 93.65 93.65 0 1415 2 2 3 5 0 -1 -1 72.4 8.61905
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 Grasp 1765.8 ? ? 2.252 ? ? 1 1 1 1 301.8 301.8 0 1415 2 2 3 5 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_6_4_2_1.txt 6 21 3 determinist 1745.07 ? ? 0.686 ? ? 2 1 1 1 1.95831e-16 8.2249e-16 0 1415 2 2 3 5 -1 -1 -1 232.067 27.627
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Robust 2233 ? ? 0.102 ? ? 1 1 1 1 0 0 0 2184 6.40164e+08 -1.28033e+09 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Exact 2498.82 ? ? 3.542 ? ? 3 1 1 1 103.417 103.417 0 2184 0 1 4 7 0 -1 -1 64.4 5.03125
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Grasp 2765.6 ? ? 2.902 ? ? 1 1 1 1 532.6 532.6 0 2184 0 1 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 determinist 2331 ? ? 1.728 ? ? 3 1 1 1 0 0 0 2184 3 -5 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 GA 2281 ? ? 5.503 ? ? 2 1 2 1 0 0 0 2184 10 -19 4 7 1 2366 1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Robust 2233 ? ? 0.094 ? ? 1 1 1 1 0 0 0 2184 6.40164e+08 -1.28033e+09 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Exact 2498.82 ? ? 3.685 ? ? 3 1 1 1 103.417 103.417 0 2184 0 1 4 7 0 -1 -1 64.4 5.03125
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Grasp 2765.6 ? ? 2.903 ? ? 1 1 1 1 532.6 532.6 0 2184 0 1 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 determinist 2282 ? ? 1.735 ? ? 2 1 1 1 0 0 0 2184 12 -23 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 GA 2324 ? ? 5.624 ? ? 3 1 3 1 0 0 0 2184 3 -4.33333 4 7 1 2364 1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Robust 2233 ? ? 0.222 ? ? 1 1 1 1 0 0 0 2184 6.40164e+08 -1.28033e+09 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Exact 2498.82 ? ? 3.474 ? ? 3 1 1 1 103.417 103.417 0 2184 0 1 4 7 0.00334825 -1 -1 64.4 5.03125
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 Grasp 2692.8 ? ? 2.895 ? ? 1 1 1 1 459.8 459.8 0 2184 0 1 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 determinist 2331 ? ? 1.671 ? ? 3 1 1 1 0 0 0 2184 5 -9 4 7 -1 -1 -1 0 0
+ instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution
+ ../Data/10/D_10_12_4_2_1.txt 12 32 5 GA 2233 ? ? 6.015 ? ? 1 1 1 1 0 0 0 2184 10 -18 4 7 1 2329 1 0 0

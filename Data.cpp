@@ -131,7 +131,7 @@ void Data::ecriture(string nom_fichier,  string c , int* tab,int n){
 
     f.close();
 }
-void Data::Affich_Results(string nom_fichier,  int gamma,  string method, int** X, double RC, double t, int g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
+void Data::Affich_Results(string nom_fichier,  int gamma,  string method, int** X, double RC, double t, double g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
 
     ofstream f(nom_fichier.c_str(), ios::out | ios::app);
     if (!f.is_open())
@@ -278,5 +278,5 @@ void Data::print(string s, double value)
 
 int Data::getTimeLimite()
 {
-    return 600;
+    return 2;
 }
