@@ -238,7 +238,7 @@ double Data::getcb(){
     return cb;
 }
 double Data::getSetup(int i){
-    return cs[i];
+    return cs[i]*25;
 }
 double* Data::getcs(){
     return cs;

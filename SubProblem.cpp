@@ -44,7 +44,7 @@ SubProblem::SubProblem(Data* d, int gam)
 			this->delta[t][tau]= new XPRBvar[this->data->getNSup()+1];
 			for(int s=1; s<=this->data->getNSup(); s++)
 			{
-				this->delta[t][tau][s] = this->pbSub->newVar("delta");
+				this->delta[t][tau][s] = this->pbSub->newVar("delta", XPRB_BV);
 			}
 		}
 	}
