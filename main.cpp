@@ -198,7 +198,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
     runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
+   // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
    // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
     //runGrasp(file, nbp, nbs,gamma);
     runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3);
@@ -714,6 +714,6 @@ int main(int argc, char** argv){
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
    // mainSimon(string(argv[1]), atoi(argv[2])+1, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
-    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+    //mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }
