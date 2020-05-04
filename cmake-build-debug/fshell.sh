@@ -4,11 +4,11 @@ mkdir Results
 for T in '10' '20' '30' '40'
 do
 	mkdir Results/$T
-	for S in '10' # '6' '12' '18'
+	for S in '10' # '5' '15'
 	do
-		for bh in '2' #'8' # '12'
+		for bh in '2' #'8'
 		do
-			for TBO in '4' #'2'  #'4' '6'
+			for TBO in '4' #'2'  #'4' '6'  //2, 4 pour T=10, 4,10,20 pour 30 et 50
 			do
 						k=1
 						#while [ $k -le 2 ]

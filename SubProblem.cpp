@@ -288,7 +288,9 @@ double***  SubProblem::getWorstCaseDelta(double** Q)
 {
 	Data::print("Compute worst case delta");
     this->UpdateConstrains(Q);
-	this->pbSub->exportProb(1,"lps");
+	//this->pbSub->exportProb(1,"lps");
+    XPRSprob opt_prob =  this->pbSub->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
 	this->pbSub->mipOptimize();
 	double*** soldelta = new double**[this->data->getNPer()+1]; 
     for(int t=1; t<=this->data->getNPer(); t++)

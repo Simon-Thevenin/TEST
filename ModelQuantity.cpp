@@ -549,7 +549,9 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
 		 nriteration++;
-        this->pbQ->exportProb(1,"lpq");
+        //this->pbQ->exportProb(1,"lpq");
+        XPRSprob opt_prob =  this->pbQ->getXPRSprob();
+        XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
         bool status=false;
         if(givenY) {
             this->pbQ->lpOptimise();
