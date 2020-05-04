@@ -305,5 +305,5 @@ void Data::print(string s, double value)
 
 int Data::getTimeLimite()
 {
-    return 10;
+    return 600;
 }
