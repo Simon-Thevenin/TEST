@@ -11,10 +11,12 @@ SubProblem::SubProblem(void)
 {
 }
 
-SubProblem::SubProblem(Data* d, int gam)
+SubProblem::SubProblem(Data* d, int gam1, int gam2, int gam3)
 {
 
-	this->Gamma = gam;
+	this->Gamma1 = gam1;
+    this->Gamma2 = gam2;
+    this->Gamma3 = gam3;
 	this->data=d;
     Data::print("Start Sub Prob",this->data->getNPer() );
 	this->pbSub = new XPRBprob("SubProb");
@@ -137,32 +139,53 @@ void SubProblem::BuildModel(void){
 	//	if t > maxL  then
 	//		Constraintdelta2(t) :=  sum(s in S) delta(t-Lmin(s),t,s) >= -Gamma + Suppliers
 	//	end-if
-	double maxL =0; 
+	double minL =0;
 	for(int s= 1; s<=this->data->getNSup(); s++)
-		if(this->data->getLMax(s-1) >= maxL)
-			maxL = this->data->getLMax(s-1);
+		if(this->data->getLMin(s-1) >= minL)
+            minL = this->data->getLMin(s-1);
 
 	
-	
-	XPRBexpr* cumulativeDelta=new XPRBexpr[this->data->getNPer()+1];
-	for(int t=1; t<this->data->getNPer(); t++)
-	{
-		cumulativeDelta[t] = *new XPRBexpr();
-		for(int s =1; s<=this->data->getNSup(); s++)
-		{
-		    if(t> this->data->getLMin(s-1)) {
-                cumulativeDelta[t] += delta[t - this->data->getLMin(s-1)][t][s];
+
+        XPRBexpr *cumulativeDelta = new XPRBexpr[this->data->getNPer() + 1];
+        for (int t = 1; t <= this->data->getNPer(); t++) {
+            cumulativeDelta[t] = *new XPRBexpr();
+            for (int s = 1; s <= this->data->getNSup(); s++) {
+                if (t > this->data->getLMin(s - 1)) {
+                    cumulativeDelta[t] += delta[t - this->data->getLMin(s - 1)][t][s];
+                }
             }
-		}
-	}
-	for(int t=1; t<this->data->getNPer(); t++)
-	{
-		if( t> maxL)
-		{
-		 this->pbSub->newCtr(XPRBnewname("Constraintdeltat%d",t),
-			 cumulativeDelta[t] >= -this->Gamma + this->data->getNSup() );
-		}					
-	}
+        }
+
+        for (int t = 1; t <= this->data->getNPer(); t++) {
+            if (t > minL) {
+
+                this->pbSub->newCtr(XPRBnewname("Constraintdeltat%d", t),
+                                    cumulativeDelta[t] >= -this->Gamma1 + this->data->getNSup());
+            }
+        }
+
+        XPRBexpr cumulativeDeltagamma2 = *new XPRBexpr();
+        XPRBexpr cumulativeDeltagamma3 = *new XPRBexpr();
+        int constantgamma2 =0;
+        int constantgamma3 =0;
+            for (int s = 1; s <= this->data->getNSup(); s++) {
+                for (int t = 1; t <= this->data->getNPer(); t++) {
+                    if (t > this->data->getLMin(s - 1)) {
+                        cumulativeDeltagamma2 += delta[t - this->data->getLMin(s - 1)][t][s];
+                        constantgamma2 += 1;
+                    }
+                    for (int tau = 1; tau <= t-this->data->getLMin(s -1); tau++) {
+                        cumulativeDeltagamma3+= delta[tau][t][s];
+                        constantgamma3 += 1;
+                }
+            }
+        }
+            this->pbSub->newCtr(XPRBnewname("Constraintdeltat2%d"),
+                                    -cumulativeDeltagamma2 <= this->Gamma2 - constantgamma2);
+        this->pbSub->newCtr(XPRBnewname("Constraintdeltat3%d"),
+                            -cumulativeDeltagamma3 <= this->Gamma3 - constantgamma3);
+
+
 
 	//forall(tau in T, t in T, s in S) do
 	//if t >tau+Lmax(s) then
@@ -171,12 +194,12 @@ void SubProblem::BuildModel(void){
 	for(int t=1; t<=this->data->getNPer(); t++)
 		for(int tau=1; tau<=this->data->getNPer(); tau++)
 			for(int s= 1; s<=this->data->getNSup(); s++)
-			{	if(t>tau+this->data->getLMax(s-1))
+			{	if(t>=tau+this->data->getLMax(s-1))
 				{
 					this->pbSub->newCtr(XPRBnewname("Constraintdelta3%d%d%d", tau, t, s),
 								delta[tau][t][s] == 1);
 				}
-			    if(t<tau-this->data->getLMin(s-1))
+			    if(t<tau+this->data->getLMin(s-1))
 				{
 					this->pbSub->newCtr(XPRBnewname("Constraintdelta4%d%d%d", tau, t, s),
 								delta[tau][t][s] == 0);
@@ -251,7 +274,7 @@ void SubProblem::DisplaySol(void)
 		for(int tau=1; tau<=this->data->getNPer(); tau++)
 		{
 			for(int s=1; s<=this->data->getNSup(); s++)
-				cout << this->delta[t][tau][s].getName() << ":" <<this->delta[t][tau][s].getSol() << " ";  
+				cout << this->delta[t][tau][s].getName() << ":" <<this->delta[t][tau][s].getSol() << " ";
 		}
 	}
 
@@ -263,9 +286,9 @@ void SubProblem::DisplaySol(void)
 
 double***  SubProblem::getWorstCaseDelta(double** Q)
 {
-	Data::print("Compute worst case delta"); 
-	this->UpdateConstrains(Q);
-	//this->pbSub->exportProb(1,"lps");
+	Data::print("Compute worst case delta");
+    this->UpdateConstrains(Q);
+	this->pbSub->exportProb(1,"lps");
 	this->pbSub->mipOptimize();
 	double*** soldelta = new double**[this->data->getNPer()+1]; 
     for(int t=1; t<=this->data->getNPer(); t++)
@@ -274,12 +297,11 @@ double***  SubProblem::getWorstCaseDelta(double** Q)
 		soldelta[t] = new double*[this->data->getNPer()+1];
 		for(int tau=1; tau<=this->data->getNPer(); tau++)
 		{
-			soldelta[t][tau] = new double[this->data->getNSup()+1];
+            soldelta[t][tau] = new double[this->data->getNSup()+1];
 			for(int s=1; s<=this->data->getNSup(); s++)
 				{
 					soldelta[t][tau][s] = (this->delta[t][tau][s].getSol());
 				}
-			
 		 }
 	  }
 	return soldelta;
@@ -297,6 +319,8 @@ double SubProblem::GetInventoryCosts( ){
     for(int t=1; t <= this->data->getNPer(); t++)
     {
             result+=this->I[t].getSol() * this->data->getch();
+            //cout<<"t"<<t<<" I "<<this->I[t].getSol()<<" B "<<this->B[t].getSol()<<endl;
+
     }
     return result;
 
@@ -315,6 +339,7 @@ double SubProblem::GetBackorderCosts( ){
     for(int t=1; t <= this->data->getNPer(); t++)
     {
         result+=this->B[t].getSol() * this->data->getcb();
+
     }
     return result;
 

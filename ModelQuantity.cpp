@@ -20,9 +20,9 @@ ModelQuantity::ModelQuantity(void)
 	cout<<"Not Implemented: DO NOT USE" <<endl;
 }
 
-ModelQuantity::ModelQuantity( Data* d, int gamma)
+ModelQuantity::ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 )
 {
-	 this->ModSub = new SubProblem(d, gamma);
+	 this->ModSub = new SubProblem(d, gamma1, gamma2, gamma3 );
 	 
 	 ModSub->BuildModel();
 	 this->D=d;
@@ -33,18 +33,22 @@ ModelQuantity::ModelQuantity( Data* d, int gamma)
     XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
 	 pbQ->setMsgLevel(0);
 	 W= 1;
-	 delta = new double***[this->W+1]; 
+	 delta = new double***[this->W+1];
 	 for(int w=1; w<=W; w++)
 	 {
 		 delta[w]= new double**[this->D->getNPer()+1]; 
-		 for(int t=1; t<=this->D->getNPer(); t++)
+		 for(int tau=1; tau<=this->D->getNPer(); tau++)
 		 {
-			delta[w][t] = new double*[this->D->getNPer()+1];
-			for(int tau=1; tau<=this->D->getNPer(); tau++)
+			delta[w][tau] = new double*[this->D->getNPer()+1];
+			for(int t=1; t<=this->D->getNPer(); t++)
 			{
-				delta[w][t][tau] = new double[this->D->getNSup()+1];
-				for(int s=1; s<=this->D->getNSup(); s++)
-					delta[w][t][tau][s] = 1;
+				delta[w][tau][t] = new double[this->D->getNSup()+1];
+				for(int s=1; s<=this->D->getNSup(); s++) {
+                    if (tau > t - this->D->getLMin(s - 1))
+                        delta[w][tau][t][s] = 0;
+                    else
+                        delta[w][tau][t][s] = 1;
+                }
 			}
 		 }
 	  }
@@ -377,6 +381,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 			for(int tau = 1; tau <= t; tau++)
 			{
 				cumulativeQuantity[t] += givendelta[tau][t][s]*Q[tau][s];
+
 			}
 		  }
 		
@@ -470,6 +475,7 @@ double ModelQuantity::GetOrderingCosts( ) {
         for(int s=1; s<=this->D->getNSup(); s++)
         {
             result+=this->Y[t][s].getSol() * this->D->getSetup(s-1);
+            //cout<<this->Y[t][s].getSol() <<"__"<< this->D->getSetup(s-1)<<endl;
         }
 
     }
@@ -543,7 +549,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
 		 nriteration++;
-       // this->pbQ->exportProb(1,"lpq");
+        this->pbQ->exportProb(1,"lpq");
         bool status=false;
         if(givenY) {
             this->pbQ->lpOptimise();
@@ -574,9 +580,10 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 		int gamma = 3;
 	
 		double*** worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
+        //this->ModSub->DisplaySol();
 		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
 	
-		 //cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+		//cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
 
         end = clock();
@@ -585,5 +592,9 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	}
 	this->LastRunning = temps;
     this->LastGap = (UB-LB)/LB;
-	return UB;
+    //cout<<"optimization cost"<<UB<<endl;
+   // cout<<"Inv Cost:"<<this->GetInventoryCosts()<<" Avg Inv:"<<this->GetAvgInventory()<<" Order Cost:"<<this->GetOrderingCosts()<<endl;
+   // cout<<"Back Cost:"<<this->GetBackorderCosts()<<" Avg Back:"<<this->GetAvgtBackorder()<<" Pursh cost:"<<this->GetPurshasingCosts()<<endl;
+
+    return UB;
 }

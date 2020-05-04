@@ -20,7 +20,7 @@ class FGenetic
         Data *_data;
 
     public:
-        FGenetic(Data *data, int gamma);
+        FGenetic(Data *data,  int gamma1,  int gamma2,  int gamma3);
         virtual ~FGenetic();
 
          ModelQuantity* ModQ;

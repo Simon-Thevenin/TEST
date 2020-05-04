@@ -6,7 +6,6 @@ Data::Data(int nbPeriods, int nbSuppliers, string dataFile)
 
     NPer = nbPeriods;
     NSup = nbSuppliers;
-
     parseData(dataFile_);
 
 }
@@ -35,36 +34,55 @@ void Data::parseData(string file){
         // lead-times limits
         LMax= new int[NSup];
         LMin= new int[NSup];
-
+        char str[600];
+        fgets(str, 600, fichier);
+        fgets(str, 600, fichier);
         // Importer Setup costs
         for(int i = 0; i < NSup; i++)
         {
             fscanf(fichier, "%lf ", &cs[i]);
+
         }
+
+        fgets(str, 600, fichier);
         // Importer Unit prices
         for(int i = 0; i < NSup; i++)
         {
             fscanf(fichier, "%lf ", &up[i]);
         }
+        fgets(str, 600, fichier);
         // Importer cb ch et Imax
-        fscanf (fichier, "%lf", &ch);
-        fscanf (fichier, "%lf", &cb);
-        fscanf (fichier, "%d", &Imax);
+        fscanf (fichier, "%lf ", &ch);
 
+        fgets(str, 600, fichier);
+
+        fscanf (fichier, "%lf ", &cb);
+
+        fgets(str, 600, fichier);
+        fscanf (fichier, "%d ", &Imax);
+
+        fgets(str, 600, fichier);
+        fgets(str, 600, fichier);
         // Importer Demand
+
         for(int i = 0; i < NPer; i++)
         {
             fscanf(fichier, "%d ", &d[i]);
+
         }
+        fgets(str, 600, fichier);
         // Importer Demand
         for(int i = 0; i < NSup; i++)
         {
             fscanf(fichier, "%d ", &LMax[i]);
         }
+        fgets(str, 600, fichier);
         // Importer Demand
         for(int i = 0; i < NSup; i++)
         {
+
             fscanf(fichier, "%d ", &LMin[i]);
+
         }
 
         // Calculer le TBO
@@ -94,6 +112,12 @@ void Data::parseData(string file){
     {
         cerr << "Impossible d'ouvrir le fichier !!?" << endl;
     }
+}
+
+string Data::getTypeOfBudget()
+{
+    return TypeOfBudget;
+
 }
 
 
@@ -131,7 +155,7 @@ void Data::ecriture(string nom_fichier,  string c , int* tab,int n){
 
     f.close();
 }
-void Data::Affich_Results(string nom_fichier,  int gamma,  string method, int** X, double RC, double t, double g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
+void Data::Affich_Results(string nom_fichier,  int gamma1,  int gamma2, int gamma3, string method, int** X, double RC, double t, double g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
 
     ofstream f(nom_fichier.c_str(), ios::out | ios::app);
     if (!f.is_open())
@@ -210,7 +234,7 @@ void Data::Affich_Results(string nom_fichier,  int gamma,  string method, int** 
         ordering := sum(t in T, s in S)o(s)*getsol(Y(t,s))
         purchasing := sum(t in T, s in S)p(s)*getsol(Q(t,s))
         /*********************************************************************/
-        f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma<< " "<<method <<" "<< RC<<" "<< "?" <<  " "<< "?" << " "<< t << " "<< "?"<< " "<<  "?"<< " "<< nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding<< " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
+        f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma1<< " "<<gamma2<< " "<<gamma3<< " "<<method <<" "<< RC<<" "<<  "?" <<  " "<< "?" << " "<< t <<" "<<g<< " "<< "?"<< " "<<  "?"<< " "<< nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding<< " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
         f<< bestminTBO <<" "<<bestmaxTBO<<" "<<g<<" "<<BIIP<<" "<<IterBestSol<< " "<< backCost << " "<< AvgBavk<< endl;
     }
 
@@ -238,7 +262,7 @@ double Data::getcb(){
     return cb;
 }
 double Data::getSetup(int i){
-    return cs[i]*25;
+    return cs[i];//*25;
 }
 double* Data::getcs(){
     return cs;
@@ -247,9 +271,12 @@ double Data::getPrice(int i){
     return up[i];
 }
 int Data::getLMax(int i){
+
     return LMax[i];
+
 }
 int Data::getLMin(int i){
+
     return LMin[i];
 }
 int* Data::getTabLMax(){
@@ -278,5 +305,5 @@ void Data::print(string s, double value)
 
 int Data::getTimeLimite()
 {
-    return 600;
+    return 10;
 }

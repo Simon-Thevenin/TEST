@@ -46,6 +46,7 @@ private:
 
 
     string dataFile_;
+    string TypeOfBudget;
 
 public:
     Data(int nbPeriods, int nbSuppliers, string dataFile);
@@ -55,7 +56,7 @@ public:
     void ecriture(string  nom_fichier, string c , double* tab,int n);
     void ecriture(string  nom_fichier, string c , int* tab,int n);
 
-    void Affich_Results(string nom_fichier,   int gamma,   string method, int** X, double RC, double t, double g, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk );
+    void Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamma3,  string method, int** X, double RC, double t, double g, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk );
 
 
     int getNPer();
@@ -64,6 +65,8 @@ public:
     double getch();
     double getcb();
 
+
+    string getTypeOfBudget();
 
     // Setup (odering) costs
     double getSetup(int i);

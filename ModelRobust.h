@@ -18,7 +18,9 @@ class ModelRobust {
 public:
     XPRBprob* pbRob;
     Data* data;
-    int gamma;
+    int gamma1;
+    int gamma2;
+    int gamma3;
    // I: array(T) of mpvar	! Inventory level at end of period t
    XPRBvar* I;
    // Q: array(T, S) of mpvar ! Qtty ordered from    !supplier s in period t
@@ -30,7 +32,9 @@ public:
     // c: array(T) of mpvar	! total holding or backordering cost
     XPRBvar* c;
     //rho: array(T) of mpvar ! dualvariables
-    XPRBvar* rho;
+    XPRBvar* rho1;
+    XPRBvar* rho2;
+    XPRBvar* rho3;
     // xhi: array(T,  T, S) of mpvar ! dualvariables
     XPRBvar*** xhi;
     // lambda: array(T,  T, S) of mpvar ! dualvariables
@@ -38,7 +42,9 @@ public:
     // psi: array(T,  T, S) of mpvar ! dualvariables
     XPRBvar*** psi;
     // rhob: array(T) of mpvar ! dualvariables
-    XPRBvar* rhob;
+    XPRBvar* rhob1;
+    XPRBvar* rhob2;
+    XPRBvar* rhob3;
     // xhib: array(T,  T, S) of mpvar ! dualvariables
     XPRBvar*** xhib;
     // lambdab: array(T,  T, S) of mpvar ! dualvariables
@@ -50,7 +56,7 @@ public:
 
 public:
     ModelRobust( void );
-    ModelRobust( Data* d, int gamma);
+    ModelRobust( Data* d, int gamma1, int gamma2, int gamma3);
     double** getQuantities( );
     ~ModelRobust(void);
     void Solve(void);

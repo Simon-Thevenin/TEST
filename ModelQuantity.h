@@ -34,7 +34,7 @@ public:
 public:
 	
 	ModelQuantity( void );
-	ModelQuantity( Data* d, int gamma);
+	ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 );
 	~ModelQuantity(void);
 	void BuildModel(void); 
 	void SetYToValue(int** Y);

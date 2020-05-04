@@ -12,7 +12,9 @@ class SubProblem
 {
 public: 
 	Data* data;
-	int Gamma;
+	int Gamma1;
+	int Gamma2;
+	int Gamma3;
 	XPRBprob* pbSub;
     XPRBvar*** delta;
 	XPRBctr* InventoryConstraint;
@@ -22,7 +24,7 @@ public:
 	XPRBvar* B;
 public:
 	SubProblem(void);
-	SubProblem(Data* d, int gam);
+	SubProblem(Data* d, int gam1, int gam2, int gam3);
 	~SubProblem(void);
 	void BuildModel(void); 
 	void UpdateConstrains(double** givenQ);

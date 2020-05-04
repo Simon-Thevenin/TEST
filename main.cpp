@@ -34,10 +34,10 @@ Data * getData(string file, int NbPeriod, int NbSupplier)
 
 
 
-void runExact(string file, int NbPeriod, int NbSupplier, double gamma, bool warmstart)
+void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3, bool warmstart)
 {
     Data *data = getData(file, NbPeriod, NbSupplier);
-    ModelQuantity* ModQ= new ModelQuantity(data, gamma);
+    ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
     ModQ->BuildModel();
     string name= "ExactNoWarmStart";
     if(warmstart) {
@@ -65,21 +65,31 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma, bool warm
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma, name, obtainedY2, cost, ModQ->LastRunning, ModQ->LastGap, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, name, obtainedY2, cost, ModQ->LastRunning, ModQ->LastGap, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
 
 }
 
-void runRobust(string file, int NbPeriod, int NbSupplier, double gamma)
+void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double gamma2, double gamma3)
 {
     Data *data = getData(file, NbPeriod, NbSupplier);
-    ModelRobust* ModR= new ModelRobust(data, gamma);
+    ModelRobust* ModR= new ModelRobust(data, gamma1, gamma2, gamma3);
     ModR->Solve();
+/*
+   for(int s=0; s<data->getNSup(); s++) {
+        for (int t = 0; t < data->getNPer(); t++) {
+            cout << " Y[" << t << "][" << s << "]=" << ModR->Y[t + 1][s + 1].getSol();
+            cout << " Q[" << t << "][" << s << "]=" << ModR->Q[t + 1][s + 1].getSol();
+            //  cout<<" I["<<t<<"]["<<s<<"]="<<mod->I[t+1][s+1].getSol();
+            //  cout<<" B["<<t<<"]["<<s<<"]="<<mod->B[t+1][s+1].getSol();
+        }
+        cout << endl;
+    }*/
     /*************************EVALUATE THE COST****************************/
     double ** associatedquantities =  ModR->getQuantities();
-    SubProblem* ModSub = new SubProblem(data, gamma);
+    SubProblem* ModSub = new SubProblem(data, gamma1, gamma2, gamma3);
     ModSub->BuildModel();
     ModSub->getWorstCaseDelta(associatedquantities);
     double cost=  ModSub->getAssociatedCost() +ModR->GetSetupCost() + ModR->GetPurshasingCosts();
@@ -95,24 +105,24 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma)
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma, "Robust", obtainedY2, cost, ModR->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"Robust", obtainedY2, cost, ModR->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
     cout<<"robust cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
 
 }
 
-void runGrasp(string file, int NbPeriod, int NbSupplier, double gamma)
+/*void runGrasp(string file, int NbPeriod, int NbSupplier, double gamma, string TypeOfBudget)
 {
     string Thefile = pathfile+file;
     ifstream fichier( Thefile, ios::in);
-    Data *data = new Data(NbPeriod, NbSupplier, Thefile);
+    Data *data = new Data(NbPeriod, NbSupplier, Thefile, TypeOfBudget);
     GRASP* g = new GRASP(data, gamma);
     g->solve();
-}
+}*/
 
 
-void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
+void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3)
 {
     string Thefile = pathfile+file;
     ifstream fichier( Thefile, ios::in);
@@ -120,7 +130,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
     int* Lmean = new int[data->getNSup()+1];
     for(int s= 1; s<=data->getNSup(); s++)
     {
-        Lmean[s] = (int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
+        Lmean[s] = data->getLMin(s-1); //(int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
     }
     double*** delta = new double**[data->getNPer()+1];
 
@@ -136,20 +146,25 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
                     delta[tau][t][s] = 1;
                 else
                     delta[tau][t][s] = 0;
+
+                //cout<<Lmean[s]<<endl;
+               // cout<< delta[tau][t][s];
             }
         }
     }
 
-    ModelQuantity* mod = new ModelQuantity(data,-1 );
+    ModelQuantity* mod = new ModelQuantity(data,0, 0, 0 );
     mod->BuildModel();
     mod->AddScenario(delta);
     XPRSprob opt_prob =  mod->pbQ->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_MAXTIME, data->getTimeLimite());
     mod->Solve(false, nullptr, true, 0.01);
+
+
     /*************************EVALUATE THE COST****************************/
     double ** associatedquantities =  mod->getQuantities();
 
-    SubProblem* ModSub = new SubProblem(data, gamma);
+    SubProblem* ModSub = new SubProblem(data, gamma1, gamma2, gamma3);
 
     ModSub->BuildModel();
 
@@ -165,10 +180,15 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
         for(int t=0; t<data->getNPer(); t++)
         {
             obtainedY2[s][t] =mod->Y[t+1][s+1].getSol();
+        //    cout<<" Y["<<t<<"]["<<s<<"]="<<mod->Y[t+1][s+1].getSol();
+         //   cout<<" Q["<<t<<"]["<<s<<"]="<<mod->Q[t+1][s+1].getSol();
+          //  cout<<" I["<<t<<"]["<<s<<"]="<<mod->I[t+1][s+1].getSol();
+          //  cout<<" B["<<t<<"]["<<s<<"]="<<mod->B[t+1][s+1].getSol();
         }
+       // cout<<endl;
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma, "determinist", obtainedY2, cost, mod->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "determinist", obtainedY2, cost, mod->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
 
     cout<<"Deterministic cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
@@ -176,12 +196,12 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma)
 
 }
 
-int mainSimon(string file, int nbp, int nbs, int gamma) {
-    runRobust(file, nbp, nbs,gamma);
-    runExact(file, nbp, nbs,gamma, true);
-   // runExact(file, nbp, nbs,gamma, false);
+int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
+    runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
+   // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
     //runGrasp(file, nbp, nbs,gamma);
-    runDeterministic(file, nbp, nbs,gamma);
+    runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3);
 
 }
 
@@ -199,8 +219,10 @@ int echanger (const void *a, const void *b){
 
 }
 
-int mainOussama(string file, int nbp, int nbs, int gamma_)  {
-    int gamma = gamma_;
+int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int gamma3_)  {
+    int gamma1 = gamma1_;
+    int gamma2 = gamma2_;
+    int gamma3 = gamma3_;
     int NbPeriod = nbp;
     int NbSupplier =nbs;
    // string file = pathfile + "1.txt";
@@ -232,7 +254,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
       //  Data *data = new Data(NbPeriod, NbSupplier, dataFile);
 
         // Appeler la classe Algo Gen
-        FGenetic ag(data, gamma);
+        FGenetic ag(data,  gamma1,   gamma2,   gamma3);
 
         // Ouverture fichier resultat pour écriture
         ofstream fichierS(pathfile+"resultat8.txt", ios::out | ios::app);
@@ -628,7 +650,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
              ag.ModQ->Solve(true, nouv_gen[0], false, 0.01);
             double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
 
-            data->Affich_Results(FFile, gamma, "GA", nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder());
+            data->Affich_Results(FFile, gamma1, gamma2, gamma3, "GA", nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder());
 
 
 
@@ -686,7 +708,12 @@ int mainOussama(string file, int nbp, int nbs, int gamma_)  {
         return 0;
 }
 int main(int argc, char** argv){
-    mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
-   // mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]));
+
+
+    mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+
+    //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+   // mainSimon(string(argv[1]), atoi(argv[2])+1, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
+    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }

@@ -4,10 +4,10 @@
 using namespace std;
 
 
-FGenetic::FGenetic(Data *data, int gamma)
+FGenetic::FGenetic(Data *data, int gamma1,  int gamma2,  int gamma3)
 {
     //ctor
-    this->ModQ= new ModelQuantity(data, gamma);
+    this->ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
     this->ModQ->BuildModel();
 }
 

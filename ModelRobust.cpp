@@ -7,9 +7,11 @@ using namespace ::dashoptimization;
 
 using namespace std;
 
-ModelRobust::ModelRobust( Data* d, int gamma_) {
+ModelRobust::ModelRobust( Data* d, int gamma1_, int gamma2_, int gamma3_) {
     data = d;
-    this->gamma = gamma;
+    this->gamma1 = gamma1_;
+    this->gamma2 = gamma2_;
+    this->gamma3 = gamma3_;
     pbRob = new XPRBprob("MyProb");
     pbRob->setMsgLevel(0);
     // I: array(T) of mpvar	! Inventory level at end of period t
@@ -64,10 +66,26 @@ ModelRobust::ModelRobust( Data* d, int gamma_) {
     }
 
     //rho: array(T) of mpvar ! dualvariables
-    rho= new XPRBvar[this->data->getNPer()+1];
+    rho1= new XPRBvar[this->data->getNPer()+1];
     for(int t=1; t<=this->data->getNPer(); t++)
     {
-        rho[t] = this->pbRob->newVar("rho",XPRB_PL,0.0,XPRB_INFINITY);
+        rho1[t] = this->pbRob->newVar(XPRBnewname("rho1_%d", t),XPRB_PL,0.0,XPRB_INFINITY);
+
+    }
+
+    //rho: array(T) of mpvar ! dualvariables
+    rho2= new XPRBvar[this->data->getNPer()+1];
+    for(int t=1; t<=this->data->getNPer(); t++)
+    {
+
+        rho2[t] = this->pbRob->newVar(XPRBnewname("rho2_%d", t),XPRB_PL,0.0,XPRB_INFINITY);
+
+    }
+
+    rho3= new XPRBvar[this->data->getNPer()+1];
+    for(int t=1; t<=this->data->getNPer(); t++)
+    {
+        rho3[t] = this->pbRob->newVar(XPRBnewname("rho3_%d", t),XPRB_PL,0.0,XPRB_INFINITY);
 
     }
 
@@ -115,10 +133,22 @@ ModelRobust::ModelRobust( Data* d, int gamma_) {
         }
     }
 // rhob: array(T) of mpvar ! dualvariables
-    rhob= new XPRBvar[this->data->getNPer()+1];
+    rhob1= new XPRBvar[this->data->getNPer()+1];
     for(int t=1; t<=this->data->getNPer(); t++)
     {
-        rhob[t] = this->pbRob->newVar("rhob",XPRB_PL,0.0,XPRB_INFINITY);
+        rhob1[t] = this->pbRob->newVar(XPRBnewname("rhob1_%d", t),XPRB_PL,0.0,XPRB_INFINITY);
+    }
+
+    rhob2= new XPRBvar[this->data->getNPer()+1];
+    for(int t=1; t<=this->data->getNPer(); t++)
+    {
+        rhob2[t] = this->pbRob->newVar(XPRBnewname("rhob2_%d", t),XPRB_PL,0.0,XPRB_INFINITY);
+    }
+
+    rhob3= new XPRBvar[this->data->getNPer()+1];
+    for(int t=1; t<=this->data->getNPer(); t++)
+    {
+        rhob3[t] = this->pbRob->newVar(XPRBnewname("rhob3_%d", t),XPRB_PL,0.0,XPRB_INFINITY);
     }
 
     // xhib: array(T,  T, S) of mpvar ! dualvariables
@@ -232,17 +262,35 @@ ModelRobust::ModelRobust( Data* d, int gamma_) {
 
         }
     }
-    Data::print("ConstraintHoldin");
-    for(int t =1; t<= this->data->getNPer(); t++)
-    {/*this->data->getNSup()) \*/
-        this->pbRob->newCtr(XPRBnewname("ConstraintHolding%d",t),
-                          c[t] >= this->rho[t]*(gamma-this->data->getNSup()) \
-                          + cumulativexi[t] \
-                          + cumulativepsi[t] \
-                          - this->data->getch()*  cumulativeDemand[t] );
 
+    int*  constantgamma2 = new int[this->data->getNPer()+1];;
+    int*  constantgamma3 = new int[this->data->getNPer()+1];;
+    for (int t = 1; t <= this->data->getNPer(); t++) {
+        constantgamma2 [t] = 0;
+        constantgamma3 [t] = 0;
+        for (int s = 1; s <= this->data->getNSup(); s++) {
+           // for (int t = 1; t < this->data->getNPer(); t++) {
+                for (int tau = 1; tau <= t-this->data->getLMin(s -1); tau++) {
+                    constantgamma2[t] += 1;
+                    constantgamma3 [t] += t-tau-this->data->getLMin(s -1) +1;
+                }
+          //  }
+        }
+       // cout<<constantgamma3[t]<<endl;
     }
 
+    Data::print("ConstraintHoldin");
+        //cout<< this->gamma<<"ouch???"<<constant<<endl;
+        for (int t = 1; t <= this->data->getNPer(); t++) {/*this->data->getNSup()) \*/
+            this->pbRob->newCtr(XPRBnewname("ConstraintHolding%d", t),
+                                c[t] >= this->rho1[t] * ( this->gamma1 - this->data->getNSup()) \
+                                         + this->rho2[t] * ( this->gamma2 - constantgamma2[t]) \
+                                         + this->rho3[t] * ( this->gamma3 -  constantgamma3 [t]) \
+                                            + cumulativexi[t] \
+                                            + cumulativepsi[t] \
+                                            - this->data->getch() * cumulativeDemand[t]);
+
+        }
 
 
  //   forall(t in T)
@@ -267,15 +315,19 @@ ModelRobust::ModelRobust( Data* d, int gamma_) {
     }
 
     Data::print("ConstraintBacklog");
-    for(int t =1; t<= this->data->getNPer(); t++)
-    {
-        this->pbRob->newCtr(XPRBnewname("ConstraintBacklog%d",t),
-                            c[t] >=  this->rhob[t]*(this->gamma-this->data->getNSup()) \
-                                    + cumulativexib[t] \
-                                    + cumulativepsib[t] \
-                                    + this->data->getcb()*  cumulativeDemand[t]  );
+        for (int t = 1; t <= this->data->getNPer(); t++) {
+            this->pbRob->newCtr(XPRBnewname("ConstraintBacklog%d", t),
+                                c[t] >= this->rhob1[t] * ( this->gamma1 - this->data->getNSup()) \
+                                         + this->rhob2[t] * ( this->gamma2 - constantgamma2[t]) \
+                                         + this->rhob3[t] * ( this->gamma3 -  constantgamma3 [t]) \
+                                            + cumulativexib[t] \
+                                            + cumulativepsib[t] \
+                                            + this->data->getcb() * cumulativeDemand[t]);
 
-    }
+        }
+
+
+
 
 
    //  forall(t in T, s in S)
@@ -312,62 +364,72 @@ ModelRobust::ModelRobust( Data* d, int gamma_) {
    // forall(t in T, tau in T, s in S) do
     for(int t = 1; t<= this->data->getNPer(); t++)
     {
+
+
         for(int tau = 1; tau<= this->data->getNPer(); tau++) {
 
             for(int s= 1; s<=this->data->getNSup(); s++) {
-                if(tau > t- this->data->getLMax(s-1) && tau <= t - this->data->getLMin(s-1)) {
-                    //     if (tau > t -Lmax(s) and (tau<= t-Lmin(s))) then
 
-                    if(tau==t-this->data->getLMin(s-1)){
-                        //if tau = t - Lmin(s) then
-                        //ConstraintUncertaintySet1(tau, t, s) := psib(tau, t, s) - rhob( t) >= -b * Q(tau,s)
-                        this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet1%d%d%d",tau,t,s),
-                                            this->psib[tau][t][s] - this->rhob[t] >= -this->data->getcb() * this->Q[tau][s]);
-                        //ConstraintUncertaintySet2(tau, t, s) := psi(tau, t, s) - rho( t) >= h * Q(tau,s)
-                        this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet2%d%d%d",tau,t,s),
-                                            this->psi[tau][t][s] - this->rho[t] >= this->data->getch() * this->Q[tau][s]);
-                    }
-                    else{
-                        //else
-                        //ConstraintUncertaintySet1(tau, t, s) := psib(tau, t, s)  >= -b * Q(tau,s)
-                        this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet1%d%d%d",tau,t,s),
-                                            this->psib[tau][t][s]  >= - this->data->getcb() * this->Q[tau][s]);
-                        //ConstraintUncertaintySet2(tau, t, s) := psi(tau, t, s)  >= h * Q(tau,s)
-                        this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet2%d%d%d",tau,t,s),
-                                            this->psi[tau][t][s]  >= this->data->getch() * this->Q[tau][s]);
-                        //end-if
-                    }
+                if (true) {
+                    if (tau > t - this->data->getLMax(s - 1) && tau <= t - this->data->getLMin(s - 1)) {
+                        //     if (tau > t -Lmax(s) and (tau<= t-Lmin(s))) then
 
-                }
-                else {
-                    if(tau >t-this->data->getLMin(s-1))
-                    {
-                        //    elif (tau > t -Lmin(s)) then
-                        //ConstraintUncertaintySet3(tau, t, s) := psib(tau, t, s) +lambdab(tau, t, s) >= -b * Q(tau,s)
-                        this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet3%d%d%d",tau,t,s),
-                                            this->psib[tau][t][s] + this->lambdab[tau][t][s] >= -this->data->getcb() * this->Q[tau][s]);
-                        //ConstraintUncertaintySet4(tau, t, s) := psi(tau, t, s)  +lambda(tau, t, s) >= h * Q(tau,s)
-                        this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet4%d%d%d",tau,t,s),
-                                            this->psi[tau][t][s] + this->lambda[tau][t][s] >= this->data->getch() * this->Q[tau][s]);
+                        if (tau == t - this->data->getLMin(s - 1)) {
+                            //if tau = t - Lmin(s) then
+                            //ConstraintUncertaintySet1(tau, t, s) := psib(tau, t, s) - rhob( t) >= -b * Q(tau,s)
+                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet1%d%d%d", tau, t, s),
+                                                this->psib[tau][t][s] - this->rhob1[t] - this->rhob2[t] - (t-tau- this->data->getLMin(s - 1) +1) * this->rhob3[t] >=
+                                                -this->data->getcb() * this->Q[tau][s]);
+                            //ConstraintUncertaintySet2(tau, t, s) := psi(tau, t, s) - rho( t) >= h * Q(tau,s)
+                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet2%d%d%d", tau, t, s),
+                                                this->psi[tau][t][s] - this->rho1[t] - this->rho2[t] - (t-tau- this->data->getLMin(s - 1) +1) * this->rho3[t] >=
+                                                this->data->getch() * this->Q[tau][s]);
+                        } else {
+                            //else
+                            //ConstraintUncertaintySet1(tau, t, s) := psib(tau, t, s)  >= -b * Q(tau,s)
+                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet1%d%d%d", tau, t, s),
+                                                this->psib[tau][t][s] - this->rhob2[t] - (t-tau- this->data->getLMin(s - 1) +1) * this->rhob3[t] >= -this->data->getcb() * this->Q[tau][s]);
+                            //ConstraintUncertaintySet2(tau, t, s) := psi(tau, t, s)  >= h * Q(tau,s)
+                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet2%d%d%d", tau, t, s),
+                                                this->psi[tau][t][s]- this->rho2[t] - (t-tau- this->data->getLMin(s - 1) +1) * this->rho3[t] >= this->data->getch() * this->Q[tau][s]);
+                            //end-if
+                        }
+
+                    } else {
+                        if (tau > t - this->data->getLMin(s - 1)) {
+                            //    elif (tau > t -Lmin(s)) then
+                            //ConstraintUncertaintySet3(tau, t, s) := psib(tau, t, s) +lambdab(tau, t, s) >= -b * Q(tau,s)
+                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet3%d%d%d", tau, t, s),
+                                                this->psib[tau][t][s] + this->lambdab[tau][t][s] >=
+                                                -this->data->getcb() * this->Q[tau][s]);
+                            //ConstraintUncertaintySet4(tau, t, s) := psi(tau, t, s)  +lambda(tau, t, s) >= h * Q(tau,s)
+                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet4%d%d%d", tau, t, s),
+                                                this->psi[tau][t][s] + this->lambda[tau][t][s] >=
+                                                this->data->getch() * this->Q[tau][s]);
 
 
-                    } else{
-                        if(tau <=t-this->data->getLMax(s-1))
-                        {
-                            //elif (tau <= t -Lmax(s)) then
-                            //ConstraintUncertaintySet5(tau, t, s) := psib(tau, t, s) -xhib(tau, t, s) >= -b * Q(tau,s)
-                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet5%d%d%d",tau,t,s),
-                                                this->psib[tau][t][s] - this->xhib[tau][t][s] >= -this->data->getcb() * this->Q[tau][s]);
+                        } else {
+                            if (tau <= t - this->data->getLMax(s - 1)) {
+                                //elif (tau <= t -Lmax(s)) then
+                                //ConstraintUncertaintySet5(tau, t, s) := psib(tau, t, s) -xhib(tau, t, s) >= -b * Q(tau,s)
+                                this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet5%d%d%d", tau, t, s),
+                                                    this->psib[tau][t][s] - this->xhib[tau][t][s] - this->rhob2[t] - (t-tau- this->data->getLMin(s - 1) +1) * this->rhob3[t]>=
+                                                    -this->data->getcb() * this->Q[tau][s]);
 
-                            //ConstraintUncertaintySet6(tau, t, s) := psi(tau, t, s)  -xhi(tau, t, s) >= h * Q(tau,s)
-                            this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet6%d%d%d",tau,t,s),
-                                                this->psi[tau][t][s] - this->xhi[tau][t][s] >= this->data->getch() * this->Q[tau][s]);
+                                //ConstraintUncertaintySet6(tau, t, s) := psi(tau, t, s)  -xhi(tau, t, s) >= h * Q(tau,s)
+                                this->pbRob->newCtr(XPRBnewname("ConstraintUncertaintySet6%d%d%d", tau, t, s),
+                                                    this->psi[tau][t][s] - this->xhi[tau][t][s] - this->rho2[t] - (t-tau- this->data->getLMin(s - 1) +1) * this->rho3[t] >=
+                                                    this->data->getch() * this->Q[tau][s]);
+                            }
+
                         }
 
                     }
-
                 }
+
+
             }
+
         }
     }
 
@@ -447,8 +509,24 @@ void ModelRobust::Solve(void){
     XPRSprob opt_prob =  this->pbRob->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->data->getTimeLimite());
     XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
-
+    //this->pbRob->exportProb(1,"lpr");
     this->pbRob->mipOptimise();
+    cout<<"Cost after optimi::"<<this->pbRob->getObjVal()<<endl;
+  /*  for(int t=1; t <= this->data->getNPer(); t++)
+    {
+         cout<<"C"<<t<<":"<<this->c[t].getSol();
+        cout<<"  rhob1:"<<this->rhob1[t].getSol();      cout<<"  rho:"<<this->rho1[t].getSol()<<endl;
+        for(int tau=1; tau<=this->data->getNPer(); tau++)
+        {
+            for(int s=1; s<=this->data->getNSup(); s++)
+            {
+                cout<<"psib"<<tau<<"-"<<s<<":"<<this->psib[t][tau][s].getSol()<<endl;
+            }
+        }
+         cout<<this->c[t].getSol()<<endl;
+         cout<<this->c[t].getSol()<<endl;
+
+    }*/
     end = clock();
     temps = (double) (end-start)/ CLOCKS_PER_SEC;
     this->LastRunning = temps;

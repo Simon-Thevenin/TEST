@@ -31,7 +31,7 @@ GRASP::~GRASP(void)
 }
 
 
-
+/*
 double GRASP::solve()
 {
     int**  Lt ;
@@ -100,7 +100,7 @@ double GRASP::solve()
     cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
     return cost;
 }
-
+*/
 void GRASP::translateLeadTime()
 {
 
