@@ -1,0 +1,32 @@
+Suppliers    1 2 3 4 5 
+Fixed Ordering cost of each supplier o_s
+ 116 90 96 91 87
+Unit price from each supplier (p_t)
+ 10 15 14 15 15
+Holding Cost h
+ 0.2
+Backordering Cost b
+ 2.4
+Imax
+ 70
+Time Period 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 
+Demand d_t
+ 0 0 0 0 0 0 0 0 0 0 0 25 24 23 21 26 25 31 27 31 40 23 25 31 21 25 29 25 38 33 30
+LMax (LMax_t)
+ 11 5 5 3 9
+LMin (LMin_t)
+ 1 0 0 1 0
+
+
+
+
+
+//////////////////
+Comments:
+Lmean = 6 2.5 2.5 2 4.5 
+EOQ =160.624
+T = 20
+S = 5
+TBO =6
+b/h =12
+//////////////////
