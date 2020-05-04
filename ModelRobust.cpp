@@ -508,7 +508,7 @@ void ModelRobust::Solve(void){
     double temps=0;
     XPRSprob opt_prob =  this->pbRob->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->data->getTimeLimite());
-    XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
+    XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
     //this->pbRob->exportProb(1,"lpr");
     this->pbRob->mipOptimise();
     cout<<"Cost after optimi::"<<this->pbRob->getObjVal()<<endl;

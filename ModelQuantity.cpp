@@ -551,7 +551,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 		 nriteration++;
         //this->pbQ->exportProb(1,"lpq");
         XPRSprob opt_prob =  this->pbQ->getXPRSprob();
-        XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
+        XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
         bool status=false;
         if(givenY) {
             this->pbQ->lpOptimise();

@@ -290,7 +290,7 @@ double***  SubProblem::getWorstCaseDelta(double** Q)
     this->UpdateConstrains(Q);
 	//this->pbSub->exportProb(1,"lps");
     XPRSprob opt_prob =  this->pbSub->getXPRSprob();
-    XPRSsetintcontrol(opt_prob,XPRS_MIPTHREADS,  1);
+    XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
 	this->pbSub->mipOptimize();
 	double*** soldelta = new double**[this->data->getNPer()+1]; 
     for(int t=1; t<=this->data->getNPer(); t++)
