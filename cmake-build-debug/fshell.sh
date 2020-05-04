@@ -15,7 +15,7 @@ do
 					#	do
 
 							echo  ./Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma
-							> Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
+						#	> Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
 							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "2" "10000" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
 							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "10" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
 							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "0" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
