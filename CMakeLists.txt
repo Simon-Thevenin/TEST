@@ -15,7 +15,7 @@ ELSE(WIN32)
 
     add_executable(untitled  ./Data.cpp  ./GRASP.cpp  ./ModelQuantity.cpp ./SubProblem.cpp   ./Solution.cpp  ./FGenetic.cpp  ./main.cpp ModelRobust.cpp ModelRobust.h)
 
-    link_directories(../xp/include /../xp/\\lib)
+    link_directories(../xp/include /../xp/lib)
     include_directories(../xp/include ../xp/lib)
     target_link_libraries(untitled ../xp/lib/xprs.lib)
 ENDIF(WIN32)
