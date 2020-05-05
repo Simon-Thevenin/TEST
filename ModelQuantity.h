@@ -21,7 +21,8 @@ public:
 	double **** delta;
 	double LastRunning;
     double LastGap;
-	//int ** givenY;
+    int nriteration;
+    //int ** givenY;
 	XPRBvar** Q;
 	XPRBvar** Y;
 	XPRBvar C;

@@ -65,7 +65,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, name, obtainedY2, cost, ModQ->LastRunning, ModQ->LastGap, -1, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, name, obtainedY2, cost, ModQ->LastRunning, ModQ->LastGap, ModQ->nriteration, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
@@ -100,15 +100,35 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
         obtainedY2[s] =  new int[data->getNPer()];
         for(int t=0; t<data->getNPer(); t++)
         {
-            obtainedY2[s][t] =ModR->Y[t+1][s+1].getSol();
+            if(ModR->Y[t+1][s+1].getSol() > 0.5)
+                obtainedY2[s][t] =  1;
 
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"Robust", obtainedY2, cost, ModR->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"Robust_EvaluateYQ", obtainedY2, cost, ModR->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
     cout<<"robust cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
+
+
+    int** obtainedY = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        obtainedY[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            if(ModR->Y[t+1][s+1].getSol() > 0.5)
+                obtainedY[s][t] =  1;
+        }
+    }
+    ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
+    mod->BuildModel();
+    cost = mod->Solve(true, obtainedY, false, 0.01);
+    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "Robust_ResolveFixY", obtainedY, cost, mod->LastRunning, mod->LastGap, mod->nriteration, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder());
+    cout<<"optimal cost Adversarial Fix Y::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
+    cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
 
 }
 

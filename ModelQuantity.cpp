@@ -532,7 +532,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 {
 	double UB= 9999999999.0; 
 	double LB= 0.0; 
-	int nriteration =0;
+	this->nriteration =0;
 	if(givenY)
 	{
 		this->SetYToValue(givenYvalues);
@@ -548,7 +548,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 
 	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
-		 nriteration++;
+
+        this->nriteration++;
         //this->pbQ->exportProb(1,"lpq");
         XPRSprob opt_prob =  this->pbQ->getXPRSprob();
         XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
@@ -563,7 +564,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         }
 
          if(!status)
-         { return XPRB_INFINITY;}
+         {this->pbQ->exportProb(1,"lpq");
+             return XPRB_INFINITY;}
 
 		 double ** associatedquantities =  this->getQuantities();
 		 LB = this->getCost();
