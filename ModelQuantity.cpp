@@ -545,10 +545,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     clock_t start, end;
     start = clock();
     double temps=0;
-
 	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
-
         this->nriteration++;
         //this->pbQ->exportProb(1,"lpq");
         XPRSprob opt_prob =  this->pbQ->getXPRSprob();
@@ -564,7 +562,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         }
 
          if(!status)
-         {this->pbQ->exportProb(1,"lpq");
+         {      cout<<"infeasible!!!!!"<<endl;
+             this->pbQ->exportProb(1,"lpq");
              return XPRB_INFINITY;}
 
 		 double ** associatedquantities =  this->getQuantities();
@@ -594,6 +593,11 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
 
 	}
+
+
+    XPRSgetintattrib(this->pbQ->getXPRSprob(), XPRS_NODES, &this->LastNrNode);
+    XPRSgetdblattrib(this->pbQ->getXPRSprob(), XPRS_BESTBOUND, &this->LastLB);
+    this->LastStatus = this->pbQ->getMIPStat();
 	this->LastRunning = temps;
     this->LastGap = (UB-LB)/LB;
     //cout<<"optimization cost"<<UB<<endl;

@@ -512,6 +512,11 @@ void ModelRobust::Solve(void){
     //this->pbRob->exportProb(1,"lpr");
     this->pbRob->mipOptimise();
     cout<<"Cost after optimi::"<<this->pbRob->getObjVal()<<endl;
+
+    XPRSgetintattrib(opt_prob,XPRS_NODES, &this->LastNrNode);
+    XPRSgetdblattrib(opt_prob, XPRS_BESTBOUND, &this->LastLB);
+
+    this->LastStatus = this->pbRob->getMIPStat();
   /*  for(int t=1; t <= this->data->getNPer(); t++)
     {
          cout<<"C"<<t<<":"<<this->c[t].getSol();

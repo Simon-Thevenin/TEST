@@ -155,23 +155,21 @@ void Data::ecriture(string nom_fichier,  string c , int* tab,int n){
 
     f.close();
 }
-void Data::Affich_Results(string nom_fichier,  int gamma1,  int gamma2, int gamma3, string method, int** X, double RC, double t, double g, double BIIP, int IterBestSol,  double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk ){
-
+void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamma3,  string method, int** X, double EvalCost, double robustoptcost, double t, double lb, int nrnode, int status, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk,  int nbiter )
+{
     ofstream f(nom_fichier.c_str(), ios::out | ios::app);
     if (!f.is_open())
         cout << "Impossible d'ouvrir le fichier en écriture !" << endl;
     else
     {
-        f <<" instance  nrsupplier nrperiod gamma Method  Sol status LB CPU Gap Nodes #Setups ";
-        f<<"Avge#S/Per Tot#S Used Max#S/Per AvgInventory InvCost Ordering  PurchCost DistSuppl ReliabilitySuppl";
-        f<<" minTBO maxTBO nbrGenerations BestSolInit_Pop GeneraBestSolution"<<endl;
+
 
         double nrsetup=0;
         for(int j=0;j<NSup;j++)
         {
             for(int k=0;k< NPer ; k++)
             {
-                if (X[j][k]>0)
+                if (X[j][k]>0.5)
                     nrsetup+=1;
             }
         }
@@ -190,7 +188,7 @@ void Data::Affich_Results(string nom_fichier,  int gamma1,  int gamma2, int gamm
                 nrsupplierinperiod = 0;
                 for(int j=0;j<NSup;j++)
                 {
-                    if (X[j][k]>0)
+                    if (X[j][k]>0.5)
                     {
                         isperiodwithsetup = true;
                         nrsupplierinperiod += 1;
@@ -214,7 +212,7 @@ void Data::Affich_Results(string nom_fichier,  int gamma1,  int gamma2, int gamm
             issupplierused = false;
             for(int k=0;k< NPer ; k++)
             {
-                if (X[j][k] > 0)
+                if (X[j][k] > 0.5)
                     issupplierused = true;
             }
                 if (issupplierused)
@@ -234,8 +232,14 @@ void Data::Affich_Results(string nom_fichier,  int gamma1,  int gamma2, int gamm
         ordering := sum(t in T, s in S)o(s)*getsol(Y(t,s))
         purchasing := sum(t in T, s in S)p(s)*getsol(Q(t,s))
         /*********************************************************************/
-        f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma1<< " "<<gamma2<< " "<<gamma3<< " "<<method <<" "<< RC<<" "<<  "?" <<  " "<< "?" << " "<< t <<" "<<g<< " "<< "?"<< " "<<  "?"<< " "<< nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding<< " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
-        f<< bestminTBO <<" "<<bestmaxTBO<<" "<<g<<" "<<BIIP<<" "<<IterBestSol<< " "<< backCost << " "<< AvgBavk<< endl;
+
+
+        f <<" instance  nrsupplier nrperiod gamma1 gamma2 gamma3 Method  EvaluationCost/TotalCost RobustReformulationCost/GapForExact CPU LB NrNode OptStatus";
+        f<<" #Setups  Avge#S/Per Tot#SUsed Max#S/Per AvgInventory InvCost AvgBacklog BacklogCost  Ordering  PurchCost avgleadtimeousedsuppliers avgrangeusedsuppliers";
+        f<<" minTBO maxTBO nbrIterations BestSolInit_Pop GeneraBestSolution"<<endl;
+        f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma1<< " "<<gamma2<< " "<<gamma3<< " "<<method <<" "<< EvalCost<< " "<< robustoptcost << " "<< t <<" "<<lb <<" " <<nrnode << " " << status <<" ";
+        f<<" "<<  nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding << " "<< AvgBavk<< " " << backCost << " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
+        f<< bestminTBO <<" "<<bestmaxTBO<<" "<<nbiter<<" "<<BIIP<<" "<<IterBestSol<< " "<< backCost << " "<< AvgBavk<< endl;
     }
 
     f.close();

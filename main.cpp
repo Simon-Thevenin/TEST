@@ -65,7 +65,8 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, name, obtainedY2, cost, ModQ->LastRunning, ModQ->LastGap, ModQ->nriteration, -1,ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning, ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus, -1, -1, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration);
+
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
@@ -102,11 +103,15 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
         {
             if(ModR->Y[t+1][s+1].getSol() > 0.5)
                 obtainedY2[s][t] =  1;
+            else
+                obtainedY2[s][t] =  0;
 
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"Robust_EvaluateYQ", obtainedY2, cost, ModR->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+
+
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
     cout<<"robust cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
@@ -120,12 +125,15 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
         {
             if(ModR->Y[t+1][s+1].getSol() > 0.5)
                 obtainedY[s][t] =  1;
+            else
+                obtainedY[s][t] =  0;
         }
     }
     ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
     mod->BuildModel();
     cost = mod->Solve(true, obtainedY, false, 0.01);
-    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "Robust_ResolveFixY", obtainedY, cost, mod->LastRunning, mod->LastGap, mod->nriteration, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder());
+
+    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "Robust_ResolveFixY", obtainedY, cost,  ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), mod->nriteration);
     cout<<"optimal cost Adversarial Fix Y::::"<<cost<<endl;
     cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
@@ -208,7 +216,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
        // cout<<endl;
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "determinist", obtainedY2, cost, mod->LastRunning, -1, -1, -1,ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder());
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"determinist", obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
 
     cout<<"Deterministic cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
@@ -667,10 +675,10 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
             }
             fichierS<<endl;
             fichierS <<fitness[0]<<" TcPU: "<<temps <<endl;*/
-             ag.ModQ->Solve(true, nouv_gen[0], false, 0.01);
-            double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
+            double cost =  ag.ModQ->Solve(true, nouv_gen[0], false, 0.01);
+           // double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
 
-            data->Affich_Results(FFile, gamma1, gamma2, gamma3, "GA", nouv_gen[0], fitness[0], temps, gen, MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder());
+            data->Affich_Results(FFile, gamma1, gamma2, gamma3, "GA", nouv_gen[0], fitness[0], cost, temps, -1, -1, -1,  MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder(), Iteration+1);
 
 
 
@@ -730,7 +738,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
 int main(int argc, char** argv){
 
 
-    mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+    //mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
    // mainSimon(string(argv[1]), atoi(argv[2])+1, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));

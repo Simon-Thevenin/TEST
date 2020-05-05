@@ -54,6 +54,10 @@ public:
 
     double LastRunning;
 
+    int LastNrNode;
+    double LastLB;
+    int LastStatus;
+
 public:
     ModelRobust( void );
     ModelRobust( Data* d, int gamma1, int gamma2, int gamma3);

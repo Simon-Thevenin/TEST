@@ -21,6 +21,9 @@ public:
 	double **** delta;
 	double LastRunning;
     double LastGap;
+    double LastLB;
+    int LastNrNode;
+    int LastStatus;
     int nriteration;
     //int ** givenY;
 	XPRBvar** Q;
