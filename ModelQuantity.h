@@ -47,9 +47,11 @@ public:
 	double getCost();
 	double** getQuantities();
 	void AddScenario(double*** givendelta);
-	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap);
+	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap, bool FixAndOp);
     void UpdateLastScenario(double*** givendelta);
 	void SetYBinary();
+    void OpenInteval(int a, int b, int**  givenYvalues);
+    void GetYResults( int** givenYvalues );
     double GetPurshasingCosts( );
     double GetOrderingCosts( );
     double GetInventoryCosts( );

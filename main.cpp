@@ -2,7 +2,7 @@
 #include <time.h>
 #include <fstream>
 #include <cstdlib>
-#include "xprb_cpp.h"
+//#include "xprb_cpp.h"
 #include "xprs.h"
 #include "ModelQuantity.h"
 #include "ModelRobust.h"
@@ -32,8 +32,40 @@ Data * getData(string file, int NbPeriod, int NbSupplier)
 
 }
 
+void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3) {
 
+    Data *data = getData(file, NbPeriod, NbSupplier);
+    ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
+    ModQ->BuildModel();
+    string name= "FixAndOpt";
+    int** givenY2 = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        givenY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            givenY2[s][t] =1;
+        }
+    }
 
+    double cost = ModQ->Solve(false, givenY2, false, 0.01, true);
+
+    int** obtainedY2 = new int*[data->getNSup()+1];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+        obtainedY2[s] =  new int[data->getNPer()];
+        for(int t=0; t<data->getNPer(); t++)
+        {
+            obtainedY2[s][t] =ModQ->Y[t+1][s+1].getSol();
+        }
+    }
+    string FFile = pathfile + "resultat7.txt";
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning, ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus, -1, -1, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration);
+
+    cout<<"optimal cost::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
+    cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
+}
 void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3, bool warmstart)
 {
     Data *data = getData(file, NbPeriod, NbSupplier);
@@ -52,9 +84,9 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
               }
           }
 
-          ModQ->Solve(true, givenY2, false, 0.01);
+          ModQ->Solve(true, givenY2, false, 0.01, false);
     }
-    double cost = ModQ->Solve(false, nullptr, false, 0.0001);
+    double cost = ModQ->Solve(false, nullptr, false, 0.0001, false);
     int** obtainedY2 = new int*[data->getNSup()+1];
     for(int s=0; s<data->getNSup(); s++)
     {
@@ -131,7 +163,7 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
     }
     ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
     mod->BuildModel();
-    cost = mod->Solve(true, obtainedY, false, 0.01);
+    cost = mod->Solve(true, obtainedY, false, 0.01, false);
 
     data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "Robust_ResolveFixY", obtainedY, cost,  ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), mod->nriteration);
     cout<<"optimal cost Adversarial Fix Y::::"<<cost<<endl;
@@ -186,7 +218,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
     mod->AddScenario(delta);
     XPRSprob opt_prob =  mod->pbQ->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_MAXTIME, data->getTimeLimite());
-    mod->Solve(false, nullptr, true, 0.01);
+    mod->Solve(false, nullptr, true, 0.01, false);
 
 
     /*************************EVALUATE THE COST****************************/
@@ -225,7 +257,8 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
-    runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
     runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
    // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
     //runGrasp(file, nbp, nbs,gamma);
@@ -675,7 +708,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
             }
             fichierS<<endl;
             fichierS <<fitness[0]<<" TcPU: "<<temps <<endl;*/
-            double cost =  ag.ModQ->Solve(true, nouv_gen[0], false, 0.01);
+            double cost =  ag.ModQ->Solve(true, nouv_gen[0], false, 0.01, false);
            // double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
 
             data->Affich_Results(FFile, gamma1, gamma2, gamma3, "GA", nouv_gen[0], fitness[0], cost, temps, -1, -1, -1,  MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder(), Iteration+1);

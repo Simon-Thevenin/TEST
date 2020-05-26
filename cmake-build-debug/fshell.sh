@@ -16,9 +16,12 @@ do
 
 							echo  ./Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S $gamma
 						#	> Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
-							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "2" "10000" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
-							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "10" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
-							env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "10000" "10" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
+							untitled.exe  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "2" "10000" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
+							untilted.exe  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "10" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
+							untilted.exe  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "10000" "10" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
+							untitled.exe  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "4" "10000" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
+							untilted.exe  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "20" "10000" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt &
+							untilted.exe  Data/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "10000" "10000" "20" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt
 							#env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T2"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "1" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt [${e}] &
 							#env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog Data/$T/"D_"$T2"_"$S"_"$TBO"_"$bh"_"$k.txt $T $S "3" Results/$T/"D_"$T"_"$S"_"$TBO"_"$bh"_"$k.txt  [${f}] &
 							#env LD_LIBRARY_PATH=/home-isis/auto/dapi/s18theve/xp/lib/ ./myprog  Data/$T/"D_"$T2"_12_"$TBO"_"$bh"_"$k.txt $T "12" "1" Results/$T/"D_"$T"_12_"$TBO"_"$bh"_"$k.txt [${g}] &

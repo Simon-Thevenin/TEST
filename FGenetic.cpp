@@ -24,7 +24,7 @@ double FGenetic::RCOST(int*** X, int a, Data *data)
     double tempE = 100000.0;
 
     /** Xpress ***************/
-   tempE=this->ModQ->Solve(true, X[a], true, 0.01);
+   tempE=this->ModQ->Solve(true, X[a], true, 0.01, false);
 
     //si fastUB = true : il va donner une évaluation approchée avec des quantités approchées
     // stopgap : tant que le gap est plus grand que 0.01 on continue de tourner

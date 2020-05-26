@@ -181,6 +181,7 @@ void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamm
         bool isperiodwithsetup;
         double nrsupplierinperiod;
         double Avgsetup;
+        double ordering =0;
 
         for(int k=0;k< NPer ; k++)
             {
@@ -191,6 +192,7 @@ void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamm
                     if (X[j][k]>0.5)
                     {
                         isperiodwithsetup = true;
+                        ordering = ordering + cs[j];
                         nrsupplierinperiod += 1;
                         avgleadtimeousedsuppliers +=  (LMax[j]  + LMin[j] ) /2;
                         avgrangeusedsuppliers += LMax[j]  - LMin[j];
@@ -220,7 +222,7 @@ void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamm
         }
 
         /*** à finir ********************************************************/
-        double ordering =0;
+
         double inventoryTot=0;
         double Avginventory=AvgInv;
         double holding=InvCost;

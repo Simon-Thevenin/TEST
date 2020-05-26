@@ -482,6 +482,46 @@ double ModelQuantity::GetOrderingCosts( ) {
     return result;
 }
 
+void ModelQuantity::OpenInteval(int a, int b, int**  givenYvalues)
+{
+
+    for(int t = 1; t<= this->D->getNPer(); t++)
+    {
+        for(int s= 1; s<=this->D->getNSup(); s++)
+        {
+            if((a<=b && t>=a+1 && t<=b+1 ) || (a>b && ( t+1>=a || t<=b+1 ))) {
+                this->Y[t][s].setType(XPRB_BV);
+                this->Y[t][s].setLB(0.0);
+                this->Y[t][s].setUB(1.0);
+             //   this->Y[t][s].ddmipsol
+            }
+            else {
+                    int val = 0;
+                   if( this->Y[t][s].getSol() >= 0.5)
+                       val =1;
+                     this->Y[t][s].setLB(val);
+                    this->Y[t][s].setUB( val);
+
+
+            }
+        }
+    }
+
+}
+void ModelQuantity::GetYResults(int**  givenYvalues){
+    for(int t=1; t <= this->D->getNPer(); t++)
+    {
+
+        for(int s=1; s<=this->D->getNSup(); s++)
+        {
+            givenYvalues[s-1][t-1]+=this->Y[t][s].getSol() ;
+            cout<<" t:"<<t<<" s:"<<s<<"  "<<this->Y[t][s].getSol() <<endl;
+        }
+
+    }
+
+}
+
 double ModelQuantity::GetInventoryCosts() {
     this->ModSub->GetInventoryCosts();
 }
@@ -489,7 +529,7 @@ double ModelQuantity::GetInventoryCosts() {
 
 double ModelQuantity::GetAvgInventory( )
 {
-    this->ModSub->GetInventoryCosts();
+    this->ModSub->GetAvgInventory();
 }
 
 double ModelQuantity::GetBackorderCosts() {
@@ -528,12 +568,14 @@ double ModelQuantity::getCost()
 }
 
 
-double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double stopatgap)
+double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double stopatgap, bool FixAndOpt)
 {
 	double UB= 9999999999.0; 
 	double LB= 0.0; 
 	this->nriteration =0;
-	if(givenY)
+    int a = 0;
+    int b = 5;
+    if(givenY)
 	{
 		this->SetYToValue(givenYvalues);
 	}
@@ -545,20 +587,32 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     clock_t start, end;
     start = clock();
     double temps=0;
-	while((UB-LB)/UB>stopatgap && (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
+	while(((UB-LB)/UB>stopatgap || FixAndOpt )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
         this->nriteration++;
-        //this->pbQ->exportProb(1,"lpq");
+       // this->pbQ->exportProb(1,"lpq");
         XPRSprob opt_prob =  this->pbQ->getXPRSprob();
         XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
+        XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
+
         bool status=false;
         if(givenY) {
             this->pbQ->lpOptimise();
             status = this->pbQ->getLPStat() == 1;
         }
         else{
-             this->pbQ->mipOptimise();
-             status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4 ;
+             if(FixAndOpt)
+             {   a = (a + 3)%this->D->getNPer();
+                 b = (b + 3) %this->D->getNPer();
+
+                 this->OpenInteval(a, b, givenYvalues);
+                 this->pbQ->mipOptimise();
+                 status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4;
+             }
+             else {
+                 this->pbQ->mipOptimise();
+                 status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4;
+             }
         }
 
          if(!status)
@@ -586,7 +640,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         //this->ModSub->DisplaySol();
 		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
 	
-		//cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+	//	cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
 
         end = clock();
