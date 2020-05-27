@@ -511,7 +511,7 @@ void ModelRobust::Solve(void){
     XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
     //this->pbRob->exportProb(1,"lpr");
     this->pbRob->mipOptimise();
-    cout<<"Cost after optimi::"<<this->pbRob->getObjVal()<<endl;
+    //cout<<"Cost after optimi::"<<this->pbRob->getObjVal()<<endl;
 
     XPRSgetintattrib(opt_prob,XPRS_NODES, &this->LastNrNode);
     XPRSgetdblattrib(opt_prob, XPRS_BESTBOUND, &this->LastLB);
@@ -535,5 +535,110 @@ void ModelRobust::Solve(void){
     end = clock();
     temps = (double) (end-start)/ CLOCKS_PER_SEC;
     this->LastRunning = temps;
+
+}
+
+void ModelRobust::SetYToValue(int** givenY)
+{
+    Data::print("update constraint");
+
+    for(int t = 1; t<= this->data->getNPer(); t++)
+    {
+        for(int s= 1; s<=this->data->getNSup(); s++)
+        {
+            if(givenY[s-1][t-1] == 0)
+            {
+                this->Y[t][s].setLB(1.0* givenY[s-1][t-1]);
+                this->Y[t][s].setUB(1.0* givenY[s-1][t-1]);
+            } else{
+                this->Y[t][s].setUB(1.0* givenY[s-1][t-1]);
+                this->Y[t][s].setLB(1.0* givenY[s-1][t-1]);
+
+            }
+
+
+
+        }
+    }
+}
+
+void ModelRobust::OpenInteval(int a, int b) {
+
+    for (int t = 1; t <= this->data->getNPer(); t++) {
+        for (int s = 1; s <= this->data->getNSup(); s++) {
+            if ((a <= b && t >= a + 1 && t <= b + 1) || (a > b && (t + 1 >= a || t <= b + 1))) {
+                this->Y[t][s].setType(XPRB_BV);
+                this->Y[t][s].setLB(0.0);
+                this->Y[t][s].setUB(1.0);
+                //   this->Y[t][s].ddmipsol
+            } else {
+                int val = 0;
+                if (this->Y[t][s].getSol() >= 0.5)
+                    val = 1;
+                this->Y[t][s].setLB(val);
+                this->Y[t][s].setUB(val);
+
+
+            }
+        }
+    }
+}
+void ModelRobust::FixNonSelectSuplpliers()
+    {
+        for(int s= 1; s<=this->data->getNSup(); s++) {
+
+            bool used = false;
+            for(int t = 1; t<= this->data->getNPer(); t++)
+            {
+                if(this->Y[t][s].getSol()>0.5)
+                    used =true;
+            }
+            if(used)
+            {
+                for(int t = 1; t<= this->data->getNPer(); t++) {
+                    this->Y[t][s].setType(XPRB_BV);
+                    this->Y[t][s].setLB(0.0);
+                    this->Y[t][s].setUB(1.0);
+                }
+            }
+            else
+            {
+                for(int t = 1; t<= this->data->getNPer(); t++) {
+                    int val = 0;
+                    if( this->Y[t][s].getSol() >= 0.5)
+                        val =1;
+                    this->Y[t][s].setLB(val);
+                    this->Y[t][s].setUB( val);
+                }
+
+
+            }
+
+        }
+
+
+    }
+void ModelRobust::FixAndOpt(void) {
+    double temps=0;
+    int nriteration =0;
+    int a = 0;
+    int b = 5;
+    clock_t start, end;
+    start = clock();
+
+    while(temps <= this->data->getTimeLimite())
+    {
+
+        a = (a + 3) % this->data->getNPer();
+        b = (b + 3) % this->data->getNPer();
+
+        this->OpenInteval(a, b);
+        this->pbRob->mipOptimise();
+
+        this->FixNonSelectSuplpliers();
+        this->pbRob->mipOptimise();
+        end = clock();
+        temps = (double) (end-start)/ CLOCKS_PER_SEC;
+    }
 
 }

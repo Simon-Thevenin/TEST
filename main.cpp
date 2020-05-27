@@ -32,12 +32,78 @@ Data * getData(string file, int NbPeriod, int NbSupplier)
 
 }
 
+
+void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3) {
+    Data *data = getData(file, NbPeriod, NbSupplier);
+    ModelRobust* ModR= new ModelRobust(data, gamma1, gamma2, gamma3);
+    ModR->FixAndOpt();
+    /*
+       for(int s=0; s<data->getNSup(); s++) {
+            for (int t = 0; t < data->getNPer(); t++) {
+                cout << " Y[" << t << "][" << s << "]=" << ModR->Y[t + 1][s + 1].getSol();
+                cout << " Q[" << t << "][" << s << "]=" << ModR->Q[t + 1][s + 1].getSol();
+                //  cout<<" I["<<t<<"]["<<s<<"]="<<mod->I[t+1][s+1].getSol();
+                //  cout<<" B["<<t<<"]["<<s<<"]="<<mod->B[t+1][s+1].getSol();
+            }
+            cout << endl;
+        }*/
+    /*************************EVALUATE THE COST****************************/
+    double ** associatedquantities =  ModR->getQuantities();
+    SubProblem* ModSub = new SubProblem(data, gamma1, gamma2, gamma3);
+    ModSub->BuildModel();
+    ModSub->getWorstCaseDelta(associatedquantities);
+    double cost=  ModSub->getAssociatedCost() +ModR->GetSetupCost() + ModR->GetPurshasingCosts();
+
+    int** obtainedY2 = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+    obtainedY2[s] =  new int[data->getNPer()];
+    for(int t=0; t<data->getNPer(); t++)
+    {
+    if(ModR->Y[t+1][s+1].getSol() > 0.5)
+    obtainedY2[s][t] =  1;
+    else
+    obtainedY2[s][t] =  0;
+
+    }
+    }
+    string FFile = pathfile + "resultat7.txt";
+
+
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"FixAndOpt_Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    cout<<"robust cost::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
+    cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
+
+
+    int** obtainedY = new int*[data->getNSup()];
+    for(int s=0; s<data->getNSup(); s++)
+    {
+    obtainedY[s] =  new int[data->getNPer()];
+    for(int t=0; t<data->getNPer(); t++)
+    {
+    if(ModR->Y[t+1][s+1].getSol() > 0.5)
+    obtainedY[s][t] =  1;
+    else
+    obtainedY[s][t] =  0;
+    }
+    }
+    ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
+    mod->BuildModel();
+    cost = mod->Solve(true, obtainedY, false, 0.01, false);
+
+    data->Affich_Results(FFile,   gamma1, gamma2, gamma3, "Robust_FixAndOp_ResolveFixY", obtainedY, cost,  ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), mod->nriteration);
+    cout<<"optimal cost Adversarial Fix Y::::"<<cost<<endl;
+    cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
+    cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
+}
+
 void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3) {
 
     Data *data = getData(file, NbPeriod, NbSupplier);
     ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
     ModQ->BuildModel();
-    string name= "FixAndOpt";
+    string name= "FixAndOpt2";
     int** givenY2 = new int*[data->getNSup()];
     for(int s=0; s<data->getNSup(); s++)
     {
@@ -258,11 +324,12 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
    runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
-   runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
+   runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   //runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   //runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
    // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
     //runGrasp(file, nbp, nbs,gamma);
-    runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3);
+   //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3);
 
 }
 
@@ -708,10 +775,29 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
             }
             fichierS<<endl;
             fichierS <<fitness[0]<<" TcPU: "<<temps <<endl;*/
-            double cost =  ag.ModQ->Solve(true, nouv_gen[0], false, 0.01, false);
+            ag.ModR->SetYToValue(nouv_gen[0]);
+            ag.ModR->Solve();
+
+            double cost = ag.ModR->pbRob->getObjVal();;// ag.ModQ->Solve(true, nouv_gen[0], false, 0.01, false);
            // double cost = ag.ModQ->Solve(false, nullptr, false, 0.001);
 
-            data->Affich_Results(FFile, gamma1, gamma2, gamma3, "GA", nouv_gen[0], fitness[0], cost, temps, -1, -1, -1,  MeillsolPopIni, Iteration+1,ag.ModQ->GetInventoryCosts(), ag.ModQ->GetAvgInventory(), ag.ModQ->GetPurshasingCosts(), ag.ModQ->GetBackorderCosts(), ag.ModQ->GetAvgtBackorder(), Iteration+1);
+            int** obtainedY = new int*[data->getNSup()];
+            for(int s=0; s<data->getNSup(); s++)
+            {
+                obtainedY[s] =  new int[data->getNPer()];
+                for(int t=0; t<data->getNPer(); t++)
+                {
+                    if(ag.ModR->Y[t+1][s+1].getSol() > 0.5)
+                        obtainedY[s][t] =  1;
+                    else
+                        obtainedY[s][t] =  0;
+                }
+            }
+            ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
+            mod->BuildModel();
+            cost = mod->Solve(true, obtainedY, false, 0.01, false);
+
+            data->Affich_Results(FFile, gamma1, gamma2, gamma3, "GA", nouv_gen[0], fitness[0], cost, temps, -1, -1, -1,  MeillsolPopIni, Iteration+1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), Iteration+1);
 
 
 
@@ -775,6 +861,6 @@ int main(int argc, char** argv){
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
    // mainSimon(string(argv[1]), atoi(argv[2])+1, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
-    //mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }

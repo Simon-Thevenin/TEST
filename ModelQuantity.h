@@ -58,5 +58,6 @@ public:
     double GetAvgInventory( );
     double GetBackorderCosts( );
     double GetAvgtBackorder( );
+    void FixNonSelectSuplpliers();
 };
 

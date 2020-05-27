@@ -482,6 +482,41 @@ double ModelQuantity::GetOrderingCosts( ) {
     return result;
 }
 
+void ModelQuantity::FixNonSelectSuplpliers()
+{
+    for(int s= 1; s<=this->D->getNSup(); s++) {
+
+        bool used = false;
+        for(int t = 1; t<= this->D->getNPer(); t++)
+        {
+            if(this->Y[t][s].getSol()>0.5)
+                used =true;
+        }
+        if(used)
+        {
+            for(int t = 1; t<= this->D->getNPer(); t++) {
+                this->Y[t][s].setType(XPRB_BV);
+                this->Y[t][s].setLB(0.0);
+                this->Y[t][s].setUB(1.0);
+            }
+        }
+        else
+        {
+            for(int t = 1; t<= this->D->getNPer(); t++) {
+                int val = 0;
+                if( this->Y[t][s].getSol() >= 0.5)
+                    val =1;
+                this->Y[t][s].setLB(val);
+                this->Y[t][s].setUB( val);
+            }
+
+
+        }
+
+    }
+
+
+}
 void ModelQuantity::OpenInteval(int a, int b, int**  givenYvalues)
 {
 
@@ -602,10 +637,17 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         }
         else{
              if(FixAndOpt)
-             {   a = (a + 3)%this->D->getNPer();
+             {
+                 if(this->nriteration%2 ==1)
+                 {
+                 a = (a + 3)%this->D->getNPer();
                  b = (b + 3) %this->D->getNPer();
 
                  this->OpenInteval(a, b, givenYvalues);
+                 }
+                 else{
+                     this->FixNonSelectSuplpliers();
+                 }
                  this->pbQ->mipOptimise();
                  status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4;
              }

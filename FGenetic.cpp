@@ -7,8 +7,7 @@ using namespace std;
 FGenetic::FGenetic(Data *data, int gamma1,  int gamma2,  int gamma3)
 {
     //ctor
-    this->ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
-    this->ModQ->BuildModel();
+    this->ModR= new ModelRobust(data, gamma1, gamma2, gamma3);
 }
 
 FGenetic::~FGenetic()
@@ -24,8 +23,9 @@ double FGenetic::RCOST(int*** X, int a, Data *data)
     double tempE = 100000.0;
 
     /** Xpress ***************/
-   tempE=this->ModQ->Solve(true, X[a], true, 0.01, false);
-
+    this->ModR->SetYToValue(X[a]);
+    this->ModR->Solve();
+    tempE = this->ModR->pbRob->getObjVal();
     //si fastUB = true : il va donner une évaluation approchée avec des quantités approchées
     // stopgap : tant que le gap est plus grand que 0.01 on continue de tourner
     /*************************/

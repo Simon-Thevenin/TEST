@@ -67,6 +67,10 @@ public:
     int** getY();
     double GetSetupCost();
     double GetPurshasingCosts();
+    void OpenInteval(int a, int b);
+    void FixAndOpt(void);
+    void FixNonSelectSuplpliers();
+    void SetYToValue(int** givenY);
 };
 
 

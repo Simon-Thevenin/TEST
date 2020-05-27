@@ -11,6 +11,8 @@
 #include "Data.h"
 #include "Solution.h"
 #include "ModelQuantity.h"
+#include "ModelRobust.h"
+
 
 class FGenetic
 {
@@ -23,7 +25,7 @@ class FGenetic
         FGenetic(Data *data,  int gamma1,  int gamma2,  int gamma3);
         virtual ~FGenetic();
 
-         ModelQuantity* ModQ;
+        ModelRobust* ModR;
 
         double RCOST(int*** X, int a, Data *data);
         void PopInit(int nb_c, int*** n_g, double* fit, Data *data);
