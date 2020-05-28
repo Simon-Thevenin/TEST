@@ -59,5 +59,6 @@ public:
     double GetBackorderCosts( );
     double GetAvgtBackorder( );
     void FixNonSelectSuplpliers();
+	void FixInitSol(void);
 };
 

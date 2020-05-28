@@ -3,6 +3,8 @@
 //
 #include <cstddef>
 #include "ModelRobust.h"
+#include <math.h>
+
 using namespace ::dashoptimization;
 
 using namespace std;
@@ -508,6 +510,7 @@ void ModelRobust::Solve(void){
     double temps=0;
     XPRSprob opt_prob =  this->pbRob->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->data->getTimeLimite());
+
     XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
     //this->pbRob->exportProb(1,"lpr");
     this->pbRob->mipOptimise();
@@ -557,7 +560,6 @@ void ModelRobust::SetYToValue(int** givenY)
             }
 
 
-
         }
     }
 }
@@ -583,8 +585,8 @@ void ModelRobust::OpenInteval(int a, int b) {
         }
     }
 }
-void ModelRobust::FixNonSelectSuplpliers()
-    {
+void ModelRobust::FixNonSelectSuplpliers(int a, int b)
+{
         for(int s= 1; s<=this->data->getNSup(); s++) {
 
             bool used = false;
@@ -592,53 +594,187 @@ void ModelRobust::FixNonSelectSuplpliers()
             {
                 if(this->Y[t][s].getSol()>0.5)
                     used =true;
+
             }
-            if(used)
-            {
-                for(int t = 1; t<= this->data->getNPer(); t++) {
+
+            for(int t = 1; t<= this->data->getNPer(); t++) {
+                if(used and ((a <= b && t >= a + 1 && t <= b + 1) || (a > b && (t + 1 >= a || t <= b + 1))))
+                {
+
+
                     this->Y[t][s].setType(XPRB_BV);
                     this->Y[t][s].setLB(0.0);
                     this->Y[t][s].setUB(1.0);
                 }
-            }
-            else
-            {
-                for(int t = 1; t<= this->data->getNPer(); t++) {
-                    int val = 0;
-                    if( this->Y[t][s].getSol() >= 0.5)
-                        val =1;
-                    this->Y[t][s].setLB(val);
-                    this->Y[t][s].setUB( val);
+                else
+                {
+                       int val = 0;
+                        if( this->Y[t][s].getSol() >= 0.5)
+                            val =1;
+                        this->Y[t][s].setLB(val);
+                        this->Y[t][s].setUB( val);
                 }
-
-
             }
+
 
         }
 
 
+}
+
+void ModelRobust::FixInitSol(void) {
+
+
+    int bestsup = -1;
+    double bestsupratio = 9999999999;
+    double ratios;
+
+    double cummulD = 0;
+    for(int t = 1; t<= this->data->getNPer(); t++){
+        cummulD += this->data->getDemand(t-1);
     }
+    for(int s= 1; s<=this->data->getNSup(); s++) {
+
+        double EOQ =sqrt(2.0*cummulD*this->data->getSetup(s-1)/(1.0*this->data->getch()));
+        ratios=this->data->getPrice(s-1)*cummulD + this->data->getSetup(s-1) * (cummulD/EOQ);
+
+        if (ratios < bestsupratio)
+        {
+            bestsup = s;
+            bestsupratio = ratios;
+        }
+    }
+
+    for(int s= 1; s<=this->data->getNSup(); s++) {
+
+
+        if(s == bestsup)
+        {
+            for(int t = 1; t<= this->data->getNPer(); t++) {
+                this->Y[t][s].setType(XPRB_BV);
+                this->Y[t][s].setLB(0.0);
+                this->Y[t][s].setUB(1.0);
+            }
+        }
+        else
+        {
+            for(int t = 1; t<= this->data->getNPer(); t++) {
+                int val = 0;
+                this->Y[t][s].setLB(val);
+                this->Y[t][s].setUB( val);
+            }
+
+
+        }
+
+    }
+
+
+}
+
 void ModelRobust::FixAndOpt(void) {
     double temps=0;
     int nriteration =0;
     int a = 0;
-    int b = 5;
+    int b = 0;//5;
+    int intervalsize =5;
+    int olda;
+    bool turncompleted;
+    bool turnsupp=true;
     clock_t start, end;
     start = clock();
+    this->nriterationfixandopt = 0;
+    XPRSprob opt_prob =  this->pbRob->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
+    XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
+
+    this->FixInitSol();
+    Data::print("Before Optimizel:");
+   // XPRB::setMsgLevel(3);
+
+    //this->pbRob->setMsgLevel(3);
+    //XPRSsetintcontrol(opt_prob, XPRS_LPLOG, 3);
+   // XPRSsetintcontrol(opt_prob, XPRS_MIPLOG, 3);
+    XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.05);
+
+    this->pbRob->mipOptimise();
+    XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.0001);
+
+    Data::print("Cost initial:",  this->pbRob->getObjVal());
+
+    double lastturncost=this->pbRob->getObjVal();
+    double bestsol=this->pbRob->getObjVal();
+    double timebestol = 0.0;
 
     while(temps <= this->data->getTimeLimite())
     {
 
-        a = (a + 3) % this->data->getNPer();
-        b = (b + 3) % this->data->getNPer();
+        turncompleted =false;
+        if(turnsupp)
+        {
 
-        this->OpenInteval(a, b);
-        this->pbRob->mipOptimise();
+            olda=a;
+            //a = (a + 3) % this->data->getNPer();
+            //b = (b + 3) % this->data->getNPer();
+            a = (a + 1) % this->data->getNPer();
+            b = (b + 1) % this->data->getNPer();
+            if (olda>a)
+            {turncompleted =true;}
+            this->OpenInteval(a, b);
+            this->pbRob->mipOptimise();
+            Data::print("Cost open interval:",  this->pbRob->getObjVal());
+        }
+        else{
+            olda=a;
+            a = (a + intervalsize) % this->data->getNPer();
+            b = (b + intervalsize) % this->data->getNPer();
+            this->FixNonSelectSuplpliers(a,b);
+            this->pbRob->mipOptimise();
+            Data::print("Cost open supplier:", this->pbRob->getObjVal());
+            if (olda>a)
+            {turncompleted =true;}
+        }
 
-        this->FixNonSelectSuplpliers();
-        this->pbRob->mipOptimise();
+
+        if(turncompleted) {
+           if(turnsupp)
+           {
+               turnsupp = false;
+               a=0;
+               b=10;
+
+           }
+           else
+           {
+               if (lastturncost==this->pbRob->getObjVal())
+               {
+                   intervalsize=intervalsize+5;
+                   if(intervalsize>this->data->getNPer())
+                   {
+                       intervalsize = this->data->getNPer();
+                   }
+               }
+               else
+                   {
+                       lastturncost=this->pbRob->getObjVal();
+                   }
+               turnsupp = true;
+               a=0;
+               b=1;
+           }
+        }
+
+        if (this->pbRob->getObjVal()<bestsol)
+        {
+            bestsol=this->pbRob->getObjVal();
+            timebestol = temps;
+        }
+
         end = clock();
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
+        this->nriterationfixandopt++;
     }
+    this->durationFixAndOpt = temps;
+    this->TimeBastSolFixAndOpt = timebestol;
 
 }

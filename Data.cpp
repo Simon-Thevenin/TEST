@@ -238,7 +238,7 @@ void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamm
 
         f <<" instance  nrsupplier nrperiod gamma1 gamma2 gamma3 Method  EvaluationCost/TotalCost RobustReformulationCost/GapForExact CPU LB NrNode OptStatus";
         f<<" #Setups  Avge#S/Per Tot#SUsed Max#S/Per AvgInventory InvCost AvgBacklog BacklogCost  Ordering  PurchCost avgleadtimeousedsuppliers avgrangeusedsuppliers";
-        f<<" minTBO maxTBO nbrIterations BestSolInit_Pop GeneraBestSolution"<<endl;
+        f<<" minTBO maxTBO nbrIterations BestSolInit_Pop/nriterationFixandOptRobust GeneraBestSolution"<<endl;
         f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma1<< " "<<gamma2<< " "<<gamma3<< " "<<method <<" "<< EvalCost<< " "<< robustoptcost << " "<< t <<" "<<lb <<" " <<nrnode << " " << status <<" ";
         f<<" "<<  nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding << " "<< AvgBavk<< " " << backCost << " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
         f<< bestminTBO <<" "<<bestmaxTBO<<" "<<nbiter<<" "<<BIIP<<" "<<IterBestSol<< " "<< backCost << " "<< AvgBavk<< endl;

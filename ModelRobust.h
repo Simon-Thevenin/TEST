@@ -57,6 +57,9 @@ public:
     int LastNrNode;
     double LastLB;
     int LastStatus;
+    int nriterationfixandopt;
+    double durationFixAndOpt;
+    double TimeBastSolFixAndOpt;
 
 public:
     ModelRobust( void );
@@ -69,8 +72,9 @@ public:
     double GetPurshasingCosts();
     void OpenInteval(int a, int b);
     void FixAndOpt(void);
-    void FixNonSelectSuplpliers();
+    void FixNonSelectSuplpliers(int a, int b);
     void SetYToValue(int** givenY);
+    void FixInitSol(void);
 };
 
 

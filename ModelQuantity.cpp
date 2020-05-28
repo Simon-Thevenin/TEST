@@ -603,6 +603,56 @@ double ModelQuantity::getCost()
 }
 
 
+void ModelQuantity::FixInitSol(void) {
+
+
+    int bestsup = -1;
+    double bestsupratio = 9999999999;
+    double ratios;
+
+    double cummulD = 0;
+    for(int t = 1; t<= this->D->getNPer(); t++){
+        cummulD += this->D->getDemand(t-1);
+    }
+    for(int s= 1; s<=this->D->getNSup(); s++) {
+
+        double EOQ =sqrt(2.0*cummulD*this->D->getSetup(s-1)/(1.0*this->D->getch()));
+        ratios=this->D->getPrice(s-1)*cummulD + this->D->getSetup(s-1) * (cummulD/EOQ);
+
+        if (ratios < bestsupratio)
+        {
+            bestsup = s;
+            bestsupratio = ratios;
+        }
+    }
+
+    for(int s= 1; s<=this->D->getNSup(); s++) {
+
+
+        if(s == bestsup)
+        {
+            for(int t = 1; t<= this->D->getNPer(); t++) {
+                this->Y[t][s].setType(XPRB_BV);
+                this->Y[t][s].setLB(0.0);
+                this->Y[t][s].setUB(1.0);
+            }
+        }
+        else
+        {
+            for(int t = 1; t<= this->D->getNPer(); t++) {
+                int val = 0;
+                this->Y[t][s].setLB(val);
+                this->Y[t][s].setUB( val);
+            }
+
+
+        }
+
+    }
+
+
+}
+
 double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double stopatgap, bool FixAndOpt)
 {
 	double UB= 9999999999.0; 
@@ -622,6 +672,12 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     clock_t start, end;
     start = clock();
     double temps=0;
+
+    if(FixAndOpt) {
+        this->FixInitSol();
+        this->pbQ->mipOptimise();
+    }
+
 	while(((UB-LB)/UB>stopatgap || FixAndOpt )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
         this->nriteration++;

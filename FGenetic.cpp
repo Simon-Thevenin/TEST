@@ -25,6 +25,9 @@ double FGenetic::RCOST(int*** X, int a, Data *data)
     /** Xpress ***************/
     this->ModR->SetYToValue(X[a]);
     this->ModR->Solve();
+    XPRSprob opt_prob =  this->ModR->pbRob->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
+    XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
     tempE = this->ModR->pbRob->getObjVal();
     //si fastUB = true : il va donner une évaluation approchée avec des quantités approchées
     // stopgap : tant que le gap est plus grand que 0.01 on continue de tourner
