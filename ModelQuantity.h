@@ -33,8 +33,13 @@ public:
     XPRBctr* HoldingConstraint;
     XPRBctr* BackorderConstraint;
 	Data* D;
+	int Gamma1;
+	int Gamma2;
+	int Gamma3;
 	double totalsetupcosts;
-
+    int nriterationfixandopt;
+    double durationFixAndOpt;
+    double TimeBastSolFixAndOpt;
 public:
 	
 	ModelQuantity( void );
@@ -47,10 +52,10 @@ public:
 	double getCost();
 	double** getQuantities();
 	void AddScenario(double*** givendelta);
-	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap, bool FixAndOp);
+	double Solve(bool givenY, int** givenY2, bool fastUB, double stopatgap);
     void UpdateLastScenario(double*** givendelta);
 	void SetYBinary();
-    void OpenInteval(int a, int b, int**  givenYvalues);
+    void OpenInteval(int a, int b, int** givenYvalues);
     void GetYResults( int** givenYvalues );
     double GetPurshasingCosts( );
     double GetOrderingCosts( );
@@ -58,7 +63,9 @@ public:
     double GetAvgInventory( );
     double GetBackorderCosts( );
     double GetAvgtBackorder( );
-    void FixNonSelectSuplpliers();
 	void FixInitSol(void);
+    void FixAndOpt(void);
+    void FixNonSelectSuppliers(int a, int b, int** givenYvalues);
+
 };
 

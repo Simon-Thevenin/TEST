@@ -233,7 +233,7 @@ void SubProblem::BuildModel(void){
 
 void SubProblem::UpdateConstrains(double** givenQ)
 {
-	Data::print("update constraint");
+//	Data::print("update constraint");
 	for(int t=1; t<=this->data->getNPer(); t++)
 	{
 		for(int tau=1; tau<=t; tau++)
@@ -286,7 +286,7 @@ void SubProblem::DisplaySol(void)
 
 double***  SubProblem::getWorstCaseDelta(double** Q)
 {
-	Data::print("Compute worst case delta");
+	//Data::print("Compute worst case delta");
     this->UpdateConstrains(Q);
 	//this->pbSub->exportProb(1,"lps");
     XPRSprob opt_prob =  this->pbSub->getXPRSprob();

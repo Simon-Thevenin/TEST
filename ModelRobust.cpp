@@ -672,7 +672,7 @@ void ModelRobust::FixInitSol(void) {
 
 }
 
-void ModelRobust::FixAndOpt(void) {
+void ModelRobust::FixAndOpt(bool fast) {
     double temps=0;
     int nriteration =0;
     int a = 0;
@@ -690,13 +690,15 @@ void ModelRobust::FixAndOpt(void) {
 
     this->FixInitSol();
     Data::print("Before Optimizel:");
-   // XPRB::setMsgLevel(3);
+    //XPRB::setMsgLevel(3);
 
     //this->pbRob->setMsgLevel(3);
     //XPRSsetintcontrol(opt_prob, XPRS_LPLOG, 3);
    // XPRSsetintcontrol(opt_prob, XPRS_MIPLOG, 3);
-    XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.05);
-
+    if(this->data->getNPer()>=50 )
+         XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.05);
+    else
+        XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.01);
     this->pbRob->mipOptimise();
     XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.0001);
 
@@ -705,8 +707,8 @@ void ModelRobust::FixAndOpt(void) {
     double lastturncost=this->pbRob->getObjVal();
     double bestsol=this->pbRob->getObjVal();
     double timebestol = 0.0;
-
-    while(temps <= this->data->getTimeLimite())
+    bool stop = false;
+    while(temps <= this->data->getTimeLimite() && !stop)
     {
 
         turncompleted =false;
@@ -741,13 +743,15 @@ void ModelRobust::FixAndOpt(void) {
            {
                turnsupp = false;
                a=0;
-               b=10;
+               b=intervalsize;
 
            }
            else
            {
                if (lastturncost==this->pbRob->getObjVal())
                {
+                   stop = fast;
+
                    intervalsize=intervalsize+5;
                    if(intervalsize>this->data->getNPer())
                    {

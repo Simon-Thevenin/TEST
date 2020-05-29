@@ -71,7 +71,7 @@ public:
     double GetSetupCost();
     double GetPurshasingCosts();
     void OpenInteval(int a, int b);
-    void FixAndOpt(void);
+    void FixAndOpt(bool fast);
     void FixNonSelectSuplpliers(int a, int b);
     void SetYToValue(int** givenY);
     void FixInitSol(void);

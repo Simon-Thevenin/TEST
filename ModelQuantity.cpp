@@ -2,7 +2,7 @@
 #include "ModelQuantity.h"
 #include <iostream>
 #include <cmath>
-
+#include "ModelRobust.h"
 //#include "xprb_cpp.h"
 //#include "xprs.h"
 using namespace ::dashoptimization;
@@ -26,6 +26,9 @@ ModelQuantity::ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 )
 	 
 	 ModSub->BuildModel();
 	 this->D=d;
+	 this->Gamma1 = gamma1;
+     this->Gamma2 = gamma1;
+     this->Gamma3 = gamma1;
 	 Data::print("start");
 	 pbQ = new XPRBprob("MyProb");
     XPRSprob opt_prob =  this->pbQ->getXPRSprob();
@@ -267,7 +270,7 @@ void ModelQuantity::BuildModel(void){
 
 void ModelQuantity::SetYToValue(int** givenY)
 {
-	Data::print("update constraint");
+	//Data::print("update constraint");
    this->totalsetupcosts = 0;
 	for(int t = 1; t<= this->D->getNPer(); t++)
 	{
@@ -344,7 +347,7 @@ void ModelQuantity::UpdateLastScenario(double*** givendelta)
 void ModelQuantity::AddScenario(double*** givendelta)
 {
 
-	Data::print("Define variables");
+	//Data::print("Define variables");
 	
 
 	//c: array(T,WMax) of mpvar	! total holding or backordering cost in period t for scenario w
@@ -366,7 +369,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 		BigM+=this->D->getDemand(t-1);
 	}
 	
-	Data::print("Define Constraints");
+	//Data::print("Define Constraints");
 
 
   //!Constraint related to holding cost
@@ -386,7 +389,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 		  }
 		
 	}
-	Data::print("Create expression cumulativeDemand ");
+	//Data::print("Create expression cumulativeDemand ");
 	XPRBexpr* cumulativeDemand=new XPRBexpr[this->D->getNPer()+1];
 	for(int t = 1; t<= this->D->getNPer(); t++)
 	{
@@ -397,7 +400,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
         }
 	}
      this->HoldingConstraint = new XPRBctr[this->D->getNPer()+1];
-	Data::print("ConstraintHoldin");
+	//Data::print("ConstraintHoldin");
 		for(int t =1; t<= this->D->getNPer(); t++)
 		{
             this->HoldingConstraint[t] = this->pbQ->newCtr(XPRBnewname("ConstraintHolding%d",t),
@@ -406,7 +409,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 		}
 //forall(t in T, w in W)
 //	ConstraintBackorder(t,w) := c(t, w) >= -b*(sum(tau in 1..t, s in S) delta(tau,t,s,w) * Q(tau,s)-sum(tau in 1..t)d(tau))
-	Data::print("ConstraintBacklog");
+	//Data::print("ConstraintBacklog");
     this->BackorderConstraint = new XPRBctr[this->D->getNPer()+1];
 		for(int t =1; t<= this->D->getNPer(); t++)
 		{
@@ -415,7 +418,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 		}
    //forall(w in W)
 	//ConstraintCostScenario(w) := Cw(w) = sum(t in T)  c(t, w)
-	Data::print("ConstraintCostScenario");
+//	Data::print("ConstraintCostScenario");
 	XPRBexpr cumulativeCost  = *new XPRBexpr();
 		for(int t =1; t<= this->D->getNPer(); t++)
         {
@@ -426,7 +429,7 @@ void ModelQuantity::AddScenario(double*** givendelta)
 	this->pbQ->newCtr(XPRBnewname("ConstraintCostScenario"),
 										Cw >= cumulativeCost );
 		
-	Data::print("ConstraintWorstCaseCost");
+//	Data::print("ConstraintWorstCaseCost");
 //forall(w in W)
 //	ConstraintWorstCaseCost(w) := C >= Cw(w)
 		this->pbQ->newCtr(XPRBnewname("ConstraintWorstCaseCost"),
@@ -482,42 +485,7 @@ double ModelQuantity::GetOrderingCosts( ) {
     return result;
 }
 
-void ModelQuantity::FixNonSelectSuplpliers()
-{
-    for(int s= 1; s<=this->D->getNSup(); s++) {
-
-        bool used = false;
-        for(int t = 1; t<= this->D->getNPer(); t++)
-        {
-            if(this->Y[t][s].getSol()>0.5)
-                used =true;
-        }
-        if(used)
-        {
-            for(int t = 1; t<= this->D->getNPer(); t++) {
-                this->Y[t][s].setType(XPRB_BV);
-                this->Y[t][s].setLB(0.0);
-                this->Y[t][s].setUB(1.0);
-            }
-        }
-        else
-        {
-            for(int t = 1; t<= this->D->getNPer(); t++) {
-                int val = 0;
-                if( this->Y[t][s].getSol() >= 0.5)
-                    val =1;
-                this->Y[t][s].setLB(val);
-                this->Y[t][s].setUB( val);
-            }
-
-
-        }
-
-    }
-
-
-}
-void ModelQuantity::OpenInteval(int a, int b, int**  givenYvalues)
+void ModelQuantity::OpenInteval(int a, int b, int** givenYvalues)
 {
 
     for(int t = 1; t<= this->D->getNPer(); t++)
@@ -531,11 +499,10 @@ void ModelQuantity::OpenInteval(int a, int b, int**  givenYvalues)
              //   this->Y[t][s].ddmipsol
             }
             else {
-                    int val = 0;
-                   if( this->Y[t][s].getSol() >= 0.5)
-                       val =1;
-                     this->Y[t][s].setLB(val);
-                    this->Y[t][s].setUB( val);
+                    int val = givenYvalues[s-1][t-1];
+
+                   this->Y[t][s].setLB(val);
+                   this->Y[t][s].setUB( val);
 
 
             }
@@ -550,7 +517,7 @@ void ModelQuantity::GetYResults(int**  givenYvalues){
         for(int s=1; s<=this->D->getNSup(); s++)
         {
             givenYvalues[s-1][t-1]+=this->Y[t][s].getSol() ;
-            cout<<" t:"<<t<<" s:"<<s<<"  "<<this->Y[t][s].getSol() <<endl;
+           // cout<<" t:"<<t<<" s:"<<s<<"  "<<this->Y[t][s].getSol() <<endl;
         }
 
     }
@@ -582,7 +549,7 @@ double** ModelQuantity::getQuantities( )
 {
 	
 	
-	Data::print("Backlog/Inventory Cost:",this->C.getSol());
+	//Data::print("Backlog/Inventory Cost:",this->C.getSol());
 	this->totalsetupcosts = 0.0;
 	double** sol_Q = new double*[this->D->getNPer()+1]; 
     for(int t=1; t <= this->D->getNPer(); t++)
@@ -642,7 +609,7 @@ void ModelQuantity::FixInitSol(void) {
             for(int t = 1; t<= this->D->getNPer(); t++) {
                 int val = 0;
                 this->Y[t][s].setLB(val);
-                this->Y[t][s].setUB( val);
+                this->Y[t][s].setUB(val);
             }
 
 
@@ -653,13 +620,12 @@ void ModelQuantity::FixInitSol(void) {
 
 }
 
-double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double stopatgap, bool FixAndOpt)
+double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double stopatgap)
 {
 	double UB= 9999999999.0; 
 	double LB= 0.0; 
 	this->nriteration =0;
-    int a = 0;
-    int b = 5;
+
     if(givenY)
 	{
 		this->SetYToValue(givenYvalues);
@@ -673,12 +639,9 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     start = clock();
     double temps=0;
 
-    if(FixAndOpt) {
-        this->FixInitSol();
-        this->pbQ->mipOptimise();
-    }
 
-	while(((UB-LB)/UB>stopatgap || FixAndOpt )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
+
+	while(((UB-LB)/UB>stopatgap )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
 	{
         this->nriteration++;
        // this->pbQ->exportProb(1,"lpq");
@@ -692,25 +655,10 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
             status = this->pbQ->getLPStat() == 1;
         }
         else{
-             if(FixAndOpt)
-             {
-                 if(this->nriteration%2 ==1)
-                 {
-                 a = (a + 3)%this->D->getNPer();
-                 b = (b + 3) %this->D->getNPer();
 
-                 this->OpenInteval(a, b, givenYvalues);
-                 }
-                 else{
-                     this->FixNonSelectSuplpliers();
-                 }
                  this->pbQ->mipOptimise();
                  status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4;
-             }
-             else {
-                 this->pbQ->mipOptimise();
-                 status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4;
-             }
+
         }
 
          if(!status)
@@ -720,7 +668,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 
 		 double ** associatedquantities =  this->getQuantities();
 		 LB = this->getCost();
-		 Data::print("get the associated costs", this->getCost());
+		 //Data::print("get the associated costs", this->getCost());
 		 double totprice = 0.0;
 		 for(int s=1; s<=this->D->getNSup(); s++)
 		 {
@@ -731,14 +679,13 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 		  }
 
 		 /*          The function below are not implemnted      */
-
-		int gamma = 3;
-	
 		double*** worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
         //this->ModSub->DisplaySol();
 		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
-	
-	//	cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+        string s  ="LB: "+ std::to_string(LB) + " UB:" + std::to_string(UB) +  "  setup:" + std::to_string(this->totalsetupcosts) + " price:" +std::to_string(totprice) ;
+        Data::print(s);
+
+        //	cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
 		 this->AddScenario(worstdelta);
 
         end = clock();
@@ -757,4 +704,237 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
    // cout<<"Back Cost:"<<this->GetBackorderCosts()<<" Avg Back:"<<this->GetAvgtBackorder()<<" Pursh cost:"<<this->GetPurshasingCosts()<<endl;
 
     return UB;
+}
+
+
+void ModelQuantity::FixNonSelectSuppliers(int a, int b, int** givenYvalues)
+{
+    for(int s= 1; s<=this->D->getNSup(); s++) {
+
+        bool used = false;
+        for(int t = 1; t<= this->D->getNPer(); t++)
+        {
+            if(this->Y[t][s].getSol()>0.5 and ((a <= b && t >= a + 1 && t <= b + 1) || (a > b && (t + 1 >= a || t <= b + 1))))
+                used =true;
+
+        }
+        if(used)
+          //  cout<<"used!!!"<<endl;
+        for(int t = 1; t<= this->D->getNPer(); t++) {
+            if(used and ((a <= b && t >= a + 1 && t <= b + 1) || (a > b && (t + 1 >= a || t <= b + 1))))
+            {
+
+
+                this->Y[t][s].setType(XPRB_BV);
+                this->Y[t][s].setLB(0.0);
+                this->Y[t][s].setUB(1.0);
+            }
+            else
+            {
+                int val = givenYvalues[s-1][t-1];
+
+                this->Y[t][s].setLB(val);
+                this->Y[t][s].setUB( val);
+            }
+        }
+
+
+    }
+
+
+}
+
+
+void ModelQuantity::FixAndOpt(void) {
+    double temps=0;
+    double UB= 9999999999.0;
+    double LB= 0.0;
+    int nriteration =0;
+    int a = 0;
+    int b = 1;//5;
+    int intervalsize =5;
+    int olda;
+    bool turncompleted;
+    bool turnsupp=true;
+    clock_t start, end;
+    start = clock();
+    this->nriterationfixandopt = 0;
+    XPRSprob opt_prob =  this->pbQ->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
+    XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
+
+    ModelRobust* ModR= new ModelRobust(this->D, this->Gamma1 , this->Gamma2, this->Gamma3);
+    ModR->FixAndOpt(true);
+    int **givenY2 = new int *[D->getNSup() + 1];
+    for (int s = 0; s < D->getNSup(); s++) {
+        givenY2[s] = new int[D->getNPer()];
+        for (int t = 0; t < D->getNPer(); t++) {
+            givenY2[s][t] = ModR->Y[t + 1][s + 1].getSol();
+        }
+    }
+
+    double bestsol = this->Solve(true, givenY2, false, 0.01);
+   // this->FixInitSol();
+    Data::print("#######################################################");
+    Data::print(" Start with raw generation");
+    Data::print("#######################################################");
+    //XPRB::setMsgLevel(3);
+
+   //this->pbQ->setMsgLevel(3);
+    //XPRSsetintcontrol(opt_prob, XPRS_LPLOG, 3);
+    // XPRSsetintcontrol(opt_prob, XPRS_MIPLOG, 3);
+    XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.1);
+
+    //this->pbQ->mipOptimise();
+    XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.0001);
+
+
+    int **BestY2 = new int *[D->getNSup() + 1];
+    for (int s = 0; s < D->getNSup(); s++) {
+        BestY2[s] = new int[D->getNPer()];
+        for (int t = 0; t < D->getNPer(); t++) {
+            BestY2[s][t] = givenY2[s][t];
+        }
+    }
+
+
+
+    Data::print("Cost initial:",  this->pbQ->getObjVal());
+
+    double lastturncost=bestsol;
+    double timebestol = 0.0;
+    bool reoptimizeforY = false;
+
+    while(temps <= this->D->getTimeLimite())
+    {
+
+        turncompleted =false;
+        if(turnsupp)
+        {
+
+            olda=a;
+            //a = (a + 3) % this->data->getNPer();
+            //b = (b + 3) % this->data->getNPer();
+            a = (a + 1) % this->D->getNPer();
+            b = (b + 1) % this->D->getNPer();
+            if (olda>a)
+            {turncompleted =true;}
+
+            this->OpenInteval(a, b, BestY2);
+            this->pbQ->mipOptimise();
+            Data::print("Cost open interval:",  this->pbQ->getObjVal());
+        }
+        else{
+            olda=a;
+            a = (a + intervalsize) % this->D->getNPer();
+            b = (b + intervalsize) % this->D->getNPer();
+           // cout<< "a-b:"<<a<<"-"<<b<<endl;
+            this->FixNonSelectSuppliers(a,b, BestY2);
+            this->pbQ->mipOptimise();
+            Data::print("Cost open supplier:", this->pbQ->getObjVal());
+            if (olda>a)
+            {turncompleted =true;}
+        }
+
+
+
+
+
+
+        LB = this->getCost();
+        if(turncompleted || true) {
+            if (reoptimizeforY) {
+                int **givenY2 = new int *[D->getNSup() + 1];
+                for (int s = 0; s < D->getNSup(); s++) {
+                    givenY2[s] = new int[D->getNPer()];
+                    for (int t = 0; t < D->getNPer(); t++) {
+                        givenY2[s][t] = this->Y[t + 1][s + 1].getSol();
+                    }
+                }
+
+                UB = this->Solve(true, givenY2, false, 0.01);
+            }
+            else {
+                double **associatedquantities = this->getQuantities();
+
+                Data::print("get the associated costs", this->getCost());
+                double totprice = 0.0;
+                for (int s = 1; s <= this->D->getNSup(); s++) {
+                    for (int t = 1; t <= this->D->getNPer(); t++) {
+                        totprice += associatedquantities[t][s] * this->D->getPrice(s - 1);
+                    }
+                }
+
+
+                /*          The function below are not implemnted      */
+
+
+                double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
+                UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;
+                if(UB>LB) {
+                    this->AddScenario(worstdelta);
+                }
+            }
+            //this->ModSub->DisplaySol();
+
+
+            if (UB < bestsol) {
+               // cout<<"IMPROVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0"<<endl;
+                bestsol = UB;
+                if(bestsol-UB> 0.01)
+                    timebestol = temps;
+
+                 for (int s = 0; s < D->getNSup(); s++) {
+                     for (int t = 0; t < D->getNPer(); t++) {
+                         BestY2[s][t] = this->Y[t + 1][s + 1].getSol();
+                     }
+                 }
+            }
+
+
+
+            if(turncompleted) {
+                if(turnsupp)
+                {
+                    turnsupp = false;
+                    a=0;
+                    b=intervalsize;
+
+                }
+                else
+                {
+                    if (lastturncost==bestsol)
+                    {
+                        intervalsize=intervalsize+5;
+                        if(intervalsize>this->D->getNPer())
+                        {
+                            intervalsize = this->D->getNPer();
+                        }
+                    }
+                    else
+                    {
+                        lastturncost=bestsol;
+                    }
+                    turnsupp = true;
+                    a=0;
+                    b=1;
+                }
+            }
+
+            string s = "Fix and opt cost: " + std::to_string(LB) + " associated worst case cost:" + std::to_string(UB) + "best sol: " + std::to_string(bestsol) +
+                       "  setup:" + std::to_string(this->totalsetupcosts);
+
+            Data::print(s);
+
+        }
+
+
+        end = clock();
+        temps = (double) (end-start)/ CLOCKS_PER_SEC;
+        this->nriterationfixandopt++;
+    }
+    this->Solve(true, BestY2, false, 0.01);
+    this->durationFixAndOpt = temps;
+    this->TimeBastSolFixAndOpt = timebestol;
+
 }
