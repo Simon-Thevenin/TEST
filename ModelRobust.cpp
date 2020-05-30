@@ -731,7 +731,7 @@ void ModelRobust::FixAndOpt(bool fast) {
             b = (b + 1) % this->data->getNPer();
             if (olda>a)
             {turncompleted =true;}
-            cout<<"yo"<<endl;
+            cout<<"yo "<<a<<"-"<<b<<endl;
             this->OpenInteval(a, b);
             cout<<"yo2"<<endl;
             this->pbRob->mipOptimise();
