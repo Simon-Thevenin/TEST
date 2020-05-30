@@ -576,7 +576,7 @@ void ModelRobust::OpenInteval(int a, int b) {
                 this->Y[t][s].setUB(1.0);
                 //   this->Y[t][s].ddmipsol
             } else {
-                int val = .0;
+                int val = 0.0;
                 if (this->Y[t][s].getSol() >= 0.5)
                     val = 1.0;
                 this->Y[t][s].setLB(val);
