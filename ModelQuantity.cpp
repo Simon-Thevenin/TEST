@@ -500,9 +500,19 @@ void ModelQuantity::OpenInteval(int a, int b, int** givenYvalues)
             }
             else {
                     int val = givenYvalues[s-1][t-1];
+                if (givenYvalues[s-1][t-1] >= 0.5)
+                {
+                    val = 1;
+                    this->Y[t][s].setUB(val);
+                    this->Y[t][s].setLB(val);
+                }
+                else
+                {
+                    val = 0;
+                    this->Y[t][s].setLB(val);
+                    this->Y[t][s].setUB(val);
 
-                   this->Y[t][s].setLB(val);
-                   this->Y[t][s].setUB( val);
+                }
 
 
             }
@@ -731,10 +741,22 @@ void ModelQuantity::FixNonSelectSuppliers(int a, int b, int** givenYvalues)
             }
             else
             {
-                int val = givenYvalues[s-1][t-1];
 
-                this->Y[t][s].setLB(val);
-                this->Y[t][s].setUB( val);
+                int val = 0;
+
+                if (givenYvalues[s-1][t-1] >= 0.5)
+                {
+                    val = 1;
+                    this->Y[t][s].setUB(val);
+                    this->Y[t][s].setLB(val);
+                }
+                else
+                {
+                    val = 0;
+                    this->Y[t][s].setLB(val);
+                    this->Y[t][s].setUB(val);
+
+                }
             }
         }
 
