@@ -300,12 +300,12 @@ int Data::getMaxTBO(){
 }
 void Data::print(string s)
 {
-	if(false)
+	if(true)
 		cout<<s<<endl; 
 }
 void Data::print(string s, double value)
 {
-	if(false)
+	if(true)
 		cout<<s<<value<<endl; 
 }
 
