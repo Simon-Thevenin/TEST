@@ -1,1 +1,3 @@
 g++ *.cpp -o ./cmake-build-debug/myprog -Wl,-rpath-link,"/home-isis/auto/dapi/s18theve/xp/lib/" -I"/home-isis/auto/dapi/s18theve/xp/include/" -L"/home-isis/auto/dapi/s18theve/xp/lib/" -I"/home-isis/auto/dapi/s18theve/xp/lib/" -l"xprs" -l"xprb" -l"xprm_mc" -l"xprm_rt" -l"xprl" -w -g -Wall -m64 -std=c++0x
+
+ export XPRESS=/home-isis/auto/dapi/s18theve/xp/bin

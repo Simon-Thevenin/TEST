@@ -276,13 +276,13 @@ void ModelQuantity::SetYToValue(int** givenY)
 	{
 	  for(int s= 1; s<=this->D->getNSup(); s++)
 	  {
-          if(givenY[s-1][t-1] == 0)
+          if(givenY[s-1][t-1] <= 0.0)
           {
-              this->Y[t][s].setLB(1.0* givenY[s-1][t-1]);
-              this->Y[t][s].setUB(1.0* givenY[s-1][t-1]);
+              this->Y[t][s].setLB(0.0);
+              this->Y[t][s].setUB(0.0);
           } else{
-              this->Y[t][s].setUB(1.0* givenY[s-1][t-1]);
-              this->Y[t][s].setLB(1.0* givenY[s-1][t-1]);
+              this->Y[t][s].setUB(1.0);
+              this->Y[t][s].setLB(1.0);
 
           }
 
@@ -769,7 +769,11 @@ void ModelQuantity::FixAndOpt(void) {
     for (int s = 0; s < D->getNSup(); s++) {
         givenY2[s] = new int[D->getNPer()];
         for (int t = 0; t < D->getNPer(); t++) {
-            givenY2[s][t] = ModR->Y[t + 1][s + 1].getSol();
+
+            if (ModR->Y[t + 1][s + 1].getSol() >= 0.5)
+                givenY2[s][t] = 1.0;
+            else
+                givenY2[s][t] = 0.0;
         }
     }
 
@@ -796,7 +800,6 @@ void ModelQuantity::FixAndOpt(void) {
             BestY2[s][t] = givenY2[s][t];
         }
     }
-
 
 
     Data::print("Cost initial:",  this->pbQ->getObjVal());
@@ -868,7 +871,6 @@ void ModelQuantity::FixAndOpt(void) {
 
                 /*          The function below are not implemnted      */
 
-
                 double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
                 UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;
                 if(UB>LB) {
@@ -879,16 +881,21 @@ void ModelQuantity::FixAndOpt(void) {
 
 
             if (UB < bestsol) {
-               // cout<<"IMPROVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0"<<endl;
+                cout<<"IMPROVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0"<<endl;
                 bestsol = UB;
                 if(bestsol-UB> 0.01)
                     timebestol = temps;
 
                  for (int s = 0; s < D->getNSup(); s++) {
                      for (int t = 0; t < D->getNPer(); t++) {
-                         BestY2[s][t] = this->Y[t + 1][s + 1].getSol();
+                         if (this->Y[t + 1][s + 1].getSol() >= 0.5)
+                            BestY2[s][t] = 1.0;
+                         else
+                            BestY2[s][t] = 0.0;
                      }
                  }
+
+
             }
 
 
@@ -933,6 +940,7 @@ void ModelQuantity::FixAndOpt(void) {
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
         this->nriterationfixandopt++;
     }
+
     this->Solve(true, BestY2, false, 0.01);
     this->durationFixAndOpt = temps;
     this->TimeBastSolFixAndOpt = timebestol;

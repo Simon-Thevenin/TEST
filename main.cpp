@@ -114,7 +114,7 @@ void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, doub
         }
     }
 
-    ModQ->Solve(true, givenY2, false, 0.05);
+    //ModQ->Solve(true, givenY2, false, 0.05);
 
     ModQ->FixAndOpt();
 

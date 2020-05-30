@@ -37,6 +37,7 @@ CMakeFiles/untitled.dir/GRASP.cpp.obj: C:/xpressmp/include/xprs.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: ../Data.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: ../ModelQuantity.cpp
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: ../ModelQuantity.h
+CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: ../ModelRobust.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: ../SubProblem.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: C:/xpressmp/include/mosel_mc.h
 CMakeFiles/untitled.dir/ModelQuantity.cpp.obj: C:/xpressmp/include/mosel_rt.h

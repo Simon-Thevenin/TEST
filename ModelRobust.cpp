@@ -16,6 +16,8 @@ ModelRobust::ModelRobust( Data* d, int gamma1_, int gamma2_, int gamma3_) {
     this->gamma3 = gamma3_;
     pbRob = new XPRBprob("MyProb");
     pbRob->setMsgLevel(0);
+    XPRSprob opt_prob =  pbRob->getXPRSprob();
+    XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->data->getTimeLimite());
     // I: array(T) of mpvar	! Inventory level at end of period t
     I= new XPRBvar[this->data->getNPer()+1];
     for(int t=1; t<=this->data->getNPer(); t++)
@@ -574,12 +576,11 @@ void ModelRobust::OpenInteval(int a, int b) {
                 this->Y[t][s].setUB(1.0);
                 //   this->Y[t][s].ddmipsol
             } else {
-                int val = 0;
+                int val = .0;
                 if (this->Y[t][s].getSol() >= 0.5)
-                    val = 1;
+                    val = 1.0;
                 this->Y[t][s].setLB(val);
                 this->Y[t][s].setUB(val);
-
 
             }
         }
@@ -605,6 +606,7 @@ void ModelRobust::FixNonSelectSuplpliers(int a, int b)
                     this->Y[t][s].setType(XPRB_BV);
                     this->Y[t][s].setLB(0.0);
                     this->Y[t][s].setUB(1.0);
+
                 }
                 else
                 {
@@ -613,6 +615,7 @@ void ModelRobust::FixNonSelectSuplpliers(int a, int b)
                             val =1;
                         this->Y[t][s].setLB(val);
                         this->Y[t][s].setUB( val);
+
                 }
             }
 
@@ -654,6 +657,7 @@ void ModelRobust::FixInitSol(void) {
                 this->Y[t][s].setType(XPRB_BV);
                 this->Y[t][s].setLB(0.0);
                 this->Y[t][s].setUB(1.0);
+
             }
         }
         else
@@ -662,6 +666,7 @@ void ModelRobust::FixInitSol(void) {
                 int val = 0;
                 this->Y[t][s].setLB(val);
                 this->Y[t][s].setUB( val);
+
             }
 
 
@@ -676,7 +681,7 @@ void ModelRobust::FixAndOpt(bool fast) {
     double temps=0;
     int nriteration =0;
     int a = 0;
-    int b = 0;//5;
+    int b = 1;//5;
     int intervalsize =5;
     int olda;
     bool turncompleted;
@@ -695,6 +700,8 @@ void ModelRobust::FixAndOpt(bool fast) {
     //this->pbRob->setMsgLevel(3);
     //XPRSsetintcontrol(opt_prob, XPRS_LPLOG, 3);
    // XPRSsetintcontrol(opt_prob, XPRS_MIPLOG, 3);
+
+    XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  30);
     if(this->data->getNPer()>=50 )
          XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.05);
     else
@@ -723,6 +730,7 @@ void ModelRobust::FixAndOpt(bool fast) {
             if (olda>a)
             {turncompleted =true;}
             this->OpenInteval(a, b);
+
             this->pbRob->mipOptimise();
             Data::print("Cost open interval:",  this->pbRob->getObjVal());
         }
