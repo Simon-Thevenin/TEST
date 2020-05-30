@@ -695,9 +695,9 @@ void ModelRobust::FixAndOpt(bool fast) {
 
     this->FixInitSol();
     Data::print("Before Optimizel:");
-    //XPRB::setMsgLevel(3);
+    XPRB::setMsgLevel(3);
 
-    //this->pbRob->setMsgLevel(3);
+    this->pbRob->setMsgLevel(3);
     //XPRSsetintcontrol(opt_prob, XPRS_LPLOG, 3);
    // XPRSsetintcontrol(opt_prob, XPRS_MIPLOG, 3);
 
@@ -731,8 +731,9 @@ void ModelRobust::FixAndOpt(bool fast) {
             {turncompleted =true;}
             cout<<"yo"<<endl;
             this->OpenInteval(a, b);
-
+            cout<<"yo2"<<endl;
             this->pbRob->mipOptimise();
+            cout<<"yo3"<<endl;
             Data::print("Cost open interval:",  this->pbRob->getObjVal());
         }
         else{
