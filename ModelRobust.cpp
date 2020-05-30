@@ -710,7 +710,7 @@ void ModelRobust::FixAndOpt(bool fast) {
     XPRSsetdblcontrol(opt_prob,XPRS_MIPRELSTOP,  0.0001);
 
     Data::print("Cost initial:",  this->pbRob->getObjVal());
-
+    Data::print("status:",this->pbRob->getMIPStat());
     double lastturncost=this->pbRob->getObjVal();
     double bestsol=this->pbRob->getObjVal();
     double timebestol = 0.0;
