@@ -723,7 +723,7 @@ void ModelRobust::FixAndOpt(bool fast) {
     Data::print("Before Optimizel:");
     //XPRB::setMsgLevel(3);
 
-   // this->pbRob->setMsgLevel(3);
+    //this->pbRob->setMsgLevel(3);
     //XPRSsetintcontrol(opt_prob, XPRS_LPLOG, 3);
    // XPRSsetintcontrol(opt_prob, XPRS_MIPLOG, 3);
 
@@ -755,6 +755,7 @@ void ModelRobust::FixAndOpt(bool fast) {
             b = (b + 1) % this->data->getNPer();
             if (olda>a)
             {turncompleted =true;}
+            XPRSpostsolve(this->pbRob->getXPRSprob());
             this->OpenInteval(a, b);
             this->pbRob->mipOptimise();
             Data::print("Cost open interval:",  this->pbRob->getObjVal());
@@ -763,6 +764,7 @@ void ModelRobust::FixAndOpt(bool fast) {
             olda=a;
             a = (a + intervalsize) % this->data->getNPer();
             b = (b + intervalsize) % this->data->getNPer();
+            XPRSpostsolve(this->pbRob->getXPRSprob());
             this->FixNonSelectSuplpliers(a,b);
             this->pbRob->mipOptimise();
             Data::print("Cost open supplier:", this->pbRob->getObjVal());

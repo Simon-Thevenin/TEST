@@ -844,7 +844,7 @@ void ModelQuantity::FixAndOpt(void) {
             b = (b + 1) % this->D->getNPer();
             if (olda>a)
             {turncompleted =true;}
-
+            XPRSpostsolve(this->pbQ->getXPRSprob());
             this->OpenInteval(a, b, BestY2);
             this->pbQ->mipOptimise();
             Data::print("Cost open interval:",  this->pbQ->getObjVal());
@@ -854,6 +854,7 @@ void ModelQuantity::FixAndOpt(void) {
             a = (a + intervalsize) % this->D->getNPer();
             b = (b + intervalsize) % this->D->getNPer();
            // cout<< "a-b:"<<a<<"-"<<b<<endl;
+            XPRSpostsolve(this->pbQ->getXPRSprob());
             this->FixNonSelectSuppliers(a,b, BestY2);
             this->pbQ->mipOptimise();
             Data::print("Cost open supplier:", this->pbQ->getObjVal());
