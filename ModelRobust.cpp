@@ -574,11 +574,13 @@ void ModelRobust::OpenInteval(int a, int b) {
                 this->Y[t][s].setType(XPRB_BV);
                 this->Y[t][s].setLB(0.0);
                 this->Y[t][s].setUB(1.0);
+                cout<<"a t "<<t<<" s "<<s<<endl;
                 //   this->Y[t][s].ddmipsol
             } else {
                 int val = 0.0;
                 if (this->Y[t][s].getSol() >= 0.5)
                     val = 1.0;
+                cout<<"b t "<<t<<" s "<<s<<endl;
                 this->Y[t][s].setLB(val);
                 this->Y[t][s].setUB(val);
 
