@@ -329,10 +329,10 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
    runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
-   runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+  // runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
    //runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
   // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
-   // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
+    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
     //runGrasp(file, nbp, nbs,gamma);
    //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3);
 
