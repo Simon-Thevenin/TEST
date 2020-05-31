@@ -781,6 +781,7 @@ void ModelQuantity::FixAndOpt(void) {
     clock_t start, end;
     start = clock();
     this->nriterationfixandopt = 0;
+    this->TimeBastSolFixAndOpt =0;
     XPRSprob opt_prob =  this->pbQ->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
     XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
@@ -800,6 +801,7 @@ void ModelQuantity::FixAndOpt(void) {
     }
 
     double bestsol = this->Solve(true, givenY2, false, 0.01);
+    this->TimeBastSolFixAndOpt = (double) (clock()-start)/ CLOCKS_PER_SEC;;
    // this->FixInitSol();
     Data::print("#######################################################");
     Data::print(" Start with raw generation");
@@ -905,10 +907,11 @@ void ModelQuantity::FixAndOpt(void) {
 
             if (UB < bestsol) {
                 cout<<"IMPROVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0"<<endl;
-                bestsol = UB;
-                if(bestsol-UB> 0.01)
-                    timebestol = temps;
 
+                if(bestsol-UB> 0.01)
+                    this->TimeBastSolFixAndOpt = (double) (clock()-start)/ CLOCKS_PER_SEC;
+                cout<<"time best sol "<< this->TimeBastSolFixAndOpt <<endl;
+                bestsol = UB;
                  for (int s = 0; s < D->getNSup(); s++) {
                      for (int t = 0; t < D->getNPer(); t++) {
                          if (this->Y[t + 1][s + 1].getSol() >= 0.5)
@@ -966,6 +969,6 @@ void ModelQuantity::FixAndOpt(void) {
 
     this->Solve(true, BestY2, false, 0.01);
     this->durationFixAndOpt = temps;
-    this->TimeBastSolFixAndOpt = timebestol;
+    cout<<"time best sol "<< this->TimeBastSolFixAndOpt <<endl;
 
 }

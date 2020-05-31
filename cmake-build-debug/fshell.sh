@@ -1,7 +1,7 @@
 #!/bin/csh
 
 mkdir Results
-for T in '10' '30' # '50' '10' '30' '50'
+for T in '10' '30' '50' #  '10' '30' '50'
 do
 	mkdir Results/$T
 	for S in '10' '5' '15'
