@@ -740,7 +740,7 @@ void ModelRobust::FixAndOpt(bool fast) {
     double lastturncost=this->pbRob->getObjVal();
     double bestsol=this->pbRob->getObjVal();
     double timebestol = 0.0;
-    bool stop = true;
+    bool stop = false;
     while(temps <= this->data->getTimeLimite() && !stop)
     {
 
