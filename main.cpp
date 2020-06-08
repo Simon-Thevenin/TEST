@@ -862,10 +862,10 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
 int main(int argc, char** argv){
 
 
-   mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+  // mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
    // mainSimon(string(argv[1]), atoi(argv[2])+1, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
-  //  mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }
