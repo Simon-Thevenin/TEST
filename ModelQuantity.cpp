@@ -648,7 +648,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     clock_t start, end;
     start = clock();
     double temps=0;
-
+    int iter=0;
 
 
 	while(((UB-LB)/UB>stopatgap )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
@@ -658,6 +658,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         XPRSprob opt_prob =  this->pbQ->getXPRSprob();
         XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
         XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
+        XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->D->getTimeLimite()-temps);
+
 
         bool status=false;
         if(givenY) {
@@ -688,19 +690,22 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 			  }
 		  }
 
-		 /*          The function below are not implemnted      */
-		double*** worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
-        //this->ModSub->DisplaySol();
-		UB = ModSub ->getAssociatedCost() +this->totalsetupcosts + totprice;
-        string s  ="LB: "+ std::to_string(LB) + " UB:" + std::to_string(UB) +  "  setup:" + std::to_string(this->totalsetupcosts) + " price:" +std::to_string(totprice) ;
-        Data::print(s);
-
-        //	cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
-		 this->AddScenario(worstdelta);
-
         end = clock();
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
+       if (  temps <= this->D->getTimeLimite()) {
+           double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
+           //this->ModSub->DisplaySol();
+           UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;
+           string s = "LB: " + std::to_string(LB) + " UB:" + std::to_string(UB) + "  setup:" +
+                      std::to_string(this->totalsetupcosts) + " price:" + std::to_string(totprice);
+           Data::print(s);
 
+           //	cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+           this->AddScenario(worstdelta);
+       }
+        end = clock();
+        temps = (double) (end-start)/ CLOCKS_PER_SEC;
+        iter=iter+1;
 	}
 
 
@@ -708,6 +713,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     XPRSgetdblattrib(this->pbQ->getXPRSprob(), XPRS_BESTBOUND, &this->LastLB);
     this->LastStatus = this->pbQ->getMIPStat();
 	this->LastRunning = temps;
+    this->LastNrIteration = iter;
     this->LastGap = (UB-LB)/LB;
     //cout<<"optimization cost"<<UB<<endl;
    // cout<<"Inv Cost:"<<this->GetInventoryCosts()<<" Avg Inv:"<<this->GetAvgInventory()<<" Order Cost:"<<this->GetOrderingCosts()<<endl;

@@ -168,7 +168,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning, ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus, -1, -1, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration);
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning,  ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus, ModQ->LastNrIteration, -1, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration);
 
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
@@ -253,15 +253,21 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
 }*/
 
 
-void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3)
+void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3, string Type)
 {
     string Thefile = pathfile+file;
     ifstream fichier( Thefile, ios::in);
     Data *data = new Data(NbPeriod, NbSupplier, Thefile);
     int* Lmean = new int[data->getNSup()+1];
+
     for(int s= 1; s<=data->getNSup(); s++)
     {
-        Lmean[s] = data->getLMin(s-1); //(int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
+        if(Type== "Min")
+            Lmean[s] = data->getLMin(s-1); //(int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
+        if(Type== "Mean")
+            Lmean[s] =(int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
+        if(Type== "Max")
+            Lmean[s] = data->getLMax(s-1); //(int)((data->getLMax(s-1) + data->getLMin(s-1))/2);
     }
     double*** delta = new double**[data->getNPer()+1];
 
@@ -319,22 +325,24 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
        // cout<<endl;
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"determinist", obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    data->Affich_Results(FFile,   gamma1, gamma2,gamma3,"determinist"+Type, obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
 
-    cout<<"Deterministic cost::::"<<cost<<endl;
+    cout<<"Deterministic"<<Type<<" cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
 
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
-   runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
+  // runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
   // runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-   //runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-  // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
-   // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
+  // runRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+ //  runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true);
+  // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false);
     //runGrasp(file, nbp, nbs,gamma);
-   //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3);
+   runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min");
+   runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max");
+   runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean");
 
 }
 
@@ -862,10 +870,10 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
 int main(int argc, char** argv){
 
 
-  // mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+  //mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
-   // mainSimon(string(argv[1]), atoi(argv[2])+1, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
-    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+    mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
+  //  mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }

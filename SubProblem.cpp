@@ -90,7 +90,9 @@ void SubProblem::BuildModel(void){
 	{
 		BigM1+=this->data->getDemand(t-1);
 	}
-	 
+
+
+
 
 	//TotalCost :=  sum(t in T)( I(t)*h + B(t)*b )
 	Data::print("Build Objective");
@@ -204,6 +206,8 @@ void SubProblem::BuildModel(void){
 					this->pbSub->newCtr(XPRBnewname("Constraintdelta4%d%d%d", tau, t, s),
 								delta[tau][t][s] == 0);
 				}
+
+
 				this->pbSub->newCtr(XPRBnewname("Constraintdelta5%d%d%d", tau, t, s),
 							     	delta[tau][t][s] <= 1);
 				this->pbSub->newCtr(XPRBnewname("Constraintdelta6%d%d%d", tau, t, s),
@@ -220,11 +224,29 @@ void SubProblem::BuildModel(void){
 		this->pbSub->newCtr(XPRBnewname("ConstraintBacj%d",  t),
 							B[t] >= 0);
 		//ConstraintInv2(t) := I(t)  <= alpha(t)*BigM
+        double BigMOld = 0;
+        for(int tau=1; tau<=this->data->getNPer(); tau++)
+        {
+            BigMOld+=this->data->getDemand(tau-1);
+        }
+       double  BigMbInv = 0;
+        for(int tau=1; tau<=t; tau++)
+        {
+            BigMbInv+=this->data->getDemand(tau-1);
+        }
 		this->pbSub->newCtr(XPRBnewname("ConstraintInv2%d",  t),
-							I[t] <= alpha[t]*BigM1);
+							I[t] <= alpha[t]*BigMbInv);
+
+        double BigMbBack = 0;
+        for(int tau=t; tau<=this->data->getNPer(); tau++)
+        {
+            BigMbBack+=this->data->getDemand(tau-1);
+        }
+
+
 		//ConstraintBac2(t) := B(t) <= (1- alpha(t))*BigM
 		this->pbSub->newCtr(XPRBnewname("ConstraintBac2%d",  t),
-							B[t] <= (1-alpha[t])*BigM1);
+							B[t] <= (1-alpha[t])*BigMbInv);
 		//Constraint_alphaIntegrality(t) := Constraint_alphaIntegrality(t) is_binary
 		this->pbSub->newCtr(XPRBnewname("ConstraintInv%d",  t),
 							I[t] >= 0);

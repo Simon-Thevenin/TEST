@@ -20,6 +20,7 @@ public:
 	int S;
 	double **** delta;
 	double LastRunning;
+	int LastNrIteration;
     double LastGap;
     double LastLB;
     int LastNrNode;
