@@ -155,7 +155,7 @@ void Data::ecriture(string nom_fichier,  string c , int* tab,int n){
 
     f.close();
 }
-void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamma3,  string method, int** X, double EvalCost, double robustoptcost, double t, double lb, int nrnode, int status, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk,  int nbiter )
+void Data::Affich_Results(string nom_fichier, int additionalsetup,  int gamma1, int gamma2, int gamma3,  string method, int** X, double EvalCost, double robustoptcost, double t, double lb, int nrnode, int status, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk,  int nbiter )
 {
     ofstream f(nom_fichier.c_str(), ios::out | ios::app);
     if (!f.is_open())
@@ -239,7 +239,7 @@ void Data::Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamm
         f <<" instance  nrsupplier nrperiod gamma1 gamma2 gamma3 Method  EvaluationCost/TotalCost RobustReformulationCost/GapForExact CPU LB NrNode OptStatus";
         f<<" #Setups  Avge#S/Per Tot#SUsed Max#S/Per AvgInventory InvCost AvgBacklog BacklogCost  Ordering  PurchCost avgleadtimeousedsuppliers avgrangeusedsuppliers";
         f<<" minTBO maxTBO nbrIterations BestSolInit_Pop/nriterationFixandOptRobust  FixandOpttimebestSolRobust/GeneraBestSolution"<<endl;
-        f<<" "<<this->dataFile_<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma1<< " "<<gamma2<< " "<<gamma3<< " "<<method <<" "<< EvalCost<< " "<< robustoptcost << " "<< t <<" "<<lb <<" " <<nrnode << " " << status <<" ";
+        f<<" "<<this->dataFile_<<" "<<additionalsetup<<" "<<this->getNSup()<<" "<<this->getNPer()<<" "<<gamma1<< " "<<gamma2<< " "<<gamma3<< " "<<method <<" "<< EvalCost<< " "<< robustoptcost << " "<< t <<" "<<lb <<" " <<nrnode << " " << status <<" ";
         f<<" "<<  nrsetup<< " "<< Avgsetup<<  " "<< nrsuppliers<<  " "<< maxSupPerPeriod<< " "<< Avginventory<< " "<< holding << " "<< AvgBavk<< " " << backCost << " "<< ordering<< " "<< purchasing<< " "<< avgleadtimeousedsuppliers<< " "<< avgrangeusedsuppliers<<" ";
         f<< bestminTBO <<" "<<bestmaxTBO<<" "<<nbiter<<" "<<BIIP<<" "<<IterBestSol<< " "<< backCost << " "<< AvgBavk<< endl;
     }
@@ -269,6 +269,9 @@ double Data::getcb(){
 }
 double Data::getSetup(int i){
     return cs[i];//*25;
+}
+void Data::setSetup(int i, int cost){
+    cs[i] = cost;//*25;
 }
 double* Data::getcs(){
     return cs;

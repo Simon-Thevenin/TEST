@@ -56,7 +56,7 @@ public:
     void ecriture(string  nom_fichier, string c , double* tab,int n);
     void ecriture(string  nom_fichier, string c , int* tab,int n);
 
-    void Affich_Results(string nom_fichier,   int gamma1, int gamma2, int gamma3,  string method, int** X, double EvalCost, double robustoptcost, double t, double lb, int nrnode, int status, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk,  int nbiter );
+    void Affich_Results(string nom_fichier, int additionalsetup,  int gamma1, int gamma2, int gamma3,  string method, int** X, double EvalCost, double robustoptcost, double t, double lb, int nrnode, int status, double BIIP, int IterBestSol, double InvCost, double AvgInv, double PurshCost, double backCost, double AvgBavk,  int nbiter );
 
 
     int getNPer();
@@ -70,6 +70,7 @@ public:
 
     // Setup (odering) costs
     double getSetup(int i);
+    void setSetup(int i, int cost);
     double* getcs();
 
     // Unit price

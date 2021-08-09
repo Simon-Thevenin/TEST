@@ -230,7 +230,7 @@ void SubProblem::BuildModel(void){
             BigMOld+=this->data->getDemand(tau-1);
         }
        double  BigMbInv = 0;
-        for(int tau=1; tau<=t; tau++)
+        for(int tau=t; tau<=this->data->getNPer(); tau++)
         {
             BigMbInv+=this->data->getDemand(tau-1);
         }
@@ -238,7 +238,7 @@ void SubProblem::BuildModel(void){
 							I[t] <= alpha[t]*BigMbInv);
 
         double BigMbBack = 0;
-        for(int tau=t; tau<=this->data->getNPer(); tau++)
+        for(int tau=1; tau<=t; tau++)
         {
             BigMbBack+=this->data->getDemand(tau-1);
         }
@@ -246,7 +246,7 @@ void SubProblem::BuildModel(void){
 
 		//ConstraintBac2(t) := B(t) <= (1- alpha(t))*BigM
 		this->pbSub->newCtr(XPRBnewname("ConstraintBac2%d",  t),
-							B[t] <= (1-alpha[t])*BigMbInv);
+							B[t] <= (1-alpha[t])*BigMbBack);
 		//Constraint_alphaIntegrality(t) := Constraint_alphaIntegrality(t) is_binary
 		this->pbSub->newCtr(XPRBnewname("ConstraintInv%d",  t),
 							I[t] >= 0);
@@ -328,6 +328,18 @@ double***  SubProblem::getWorstCaseDelta(double** Q)
 				}
 		 }
 	  }
+	cout<<endl;
+/*	cout<<"worst lead time: ";
+	for(int t=1; t<=this->data->getNPer(); t++)
+	{
+		int tau =t;
+		while (tau<=this->data->getNPer()&&soldelta[t][tau][1]==0)
+			tau ++;
+		cout<< tau-t-1<<" ";
+
+
+	}
+	cout<<endl;*/
 	return soldelta;
 
 }

@@ -649,9 +649,13 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
     start = clock();
     double temps=0;
     int iter=0;
+    double previoustime = 0.0;
+    if(!fastUB)
+        previoustime =  this->LastRunning;
 
 
-	while(((UB-LB)/UB>stopatgap )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite())
+
+    while(((UB-LB)/UB>stopatgap )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite() - previoustime)
 	{
         this->nriteration++;
        // this->pbQ->exportProb(1,"lpq");
@@ -693,6 +697,14 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
         end = clock();
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
        if (  temps <= this->D->getTimeLimite()) {
+
+         /*  for(int s=1; s<=this->D->getNSup(); s++)
+           {
+               for(int t=1; t<=this->D->getNPer(); t++)
+               {
+                  cout<<associatedquantities[t][s]<<" ";
+               }
+           }*/
            double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
            //this->ModSub->DisplaySol();
            UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;
@@ -700,7 +712,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
                       std::to_string(this->totalsetupcosts) + " price:" + std::to_string(totprice);
            Data::print(s);
 
-           //	cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+           //cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
            this->AddScenario(worstdelta);
        }
         end = clock();
