@@ -328,7 +328,7 @@ double***  SubProblem::getWorstCaseDelta(double** Q)
 				}
 		 }
 	  }
-	cout<<endl;
+	//cout<<endl;
 /*	cout<<"worst lead time: ";
 	for(int t=1; t<=this->data->getNPer(); t++)
 	{

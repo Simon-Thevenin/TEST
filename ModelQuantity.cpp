@@ -424,7 +424,10 @@ void ModelQuantity::AddScenario(double*** givendelta)
         {
             cumulativeCost += c[t];
         }
-	
+
+
+   // this->pbQ->newCtr(XPRBnewname("MeetDemand2"),
+   //                   c[this->D->getNPer()] == 0 );
 
 	this->pbQ->newCtr(XPRBnewname("ConstraintCostScenario"),
 										Cw >= cumulativeCost );
@@ -696,15 +699,19 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 
         end = clock();
         temps = (double) (end-start)/ CLOCKS_PER_SEC;
+        double sum =0.0;
        if (  temps <= this->D->getTimeLimite()) {
 
-         /*  for(int s=1; s<=this->D->getNSup(); s++)
+          for(int s=1; s<=this->D->getNSup(); s++)
            {
                for(int t=1; t<=this->D->getNPer(); t++)
                {
                   cout<<associatedquantities[t][s]<<" ";
+                   sum = sum +associatedquantities[t][s];
                }
-           }*/
+           }
+          cout << " sum " << sum;
+          cout<<endl;
            double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
            //this->ModSub->DisplaySol();
            UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;

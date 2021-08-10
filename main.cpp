@@ -343,21 +343,22 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
-   runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
-   runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-/*  for(int a =0; a <=15; a++)
-{
-      int additionalSetup = 10*a;
-      runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, additionalSetup  );
-      runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, additionalSetup);
+   //runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   //runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+//  for(int a =0; a <=10; a++)
+//{
+//      int additionalSetup = 50*a;
+//      runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, additionalSetup  );
+      runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 150);
 
-  }*/
-    runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
-  runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false,0);
+ // }
+    //
+   // runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
+  //runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
    //runGrasp(file, nbp, nbs,gamma);
-   runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min");
-   runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max");
-  runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean");
+   //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min");
+   //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max");
+  //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean");
 
 }
 
@@ -888,7 +889,7 @@ int main(int argc, char** argv){
   //mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
-    mainSimon(string(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
+    mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
   //  mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }
