@@ -162,6 +162,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
     }
     cout<<"solve with non fixed Y."<<endl;
     double cost = ModQ->Solve(false, nullptr, false, 0.0001);
+    cout<<"solved."<<endl;
     int** obtainedY2 = new int*[data->getNSup()+1];
     for(int s=0; s<data->getNSup(); s++)
     {
@@ -177,7 +178,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<ModQ->GetBackorderCosts()<<" Avg Back:"<<ModQ->GetAvgtBackorder()<<" Pursh cost:"<<ModQ->GetPurshasingCosts()<<endl;
-
+    ModQ->DisplaySol();
 }
 
 void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double gamma2, double gamma3, int additionalsetup)
@@ -196,8 +197,10 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
         }
         cout << endl;
     }*/
+
     /*************************EVALUATE THE COST****************************/
     double ** associatedquantities =  ModR->getQuantities();
+    cout<<"Qty:";
     for(int s=1; s<=data->getNSup(); s++)
     {
         for(int t=1; t<=data->getNPer(); t++)
@@ -262,11 +265,12 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
 }*/
 
 
-void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3, string Type)
+void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3, string Type, int addidtionalsetup)
 {
     string Thefile = pathfile+file;
     ifstream fichier( Thefile, ios::in);
     Data *data = new Data(NbPeriod, NbSupplier, Thefile);
+    data->setSetup(0,  data->getSetup(0) + addidtionalsetup);
     int* Lmean = new int[data->getNSup()+1];
 
     for(int s= 1; s<=data->getNSup(); s++)
@@ -345,20 +349,25 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
    //runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
    //runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-//  for(int a =0; a <=10; a++)
+//  for(int a =0; a <=15; a++)
 //{
-//      int additionalSetup = 50*a;
-//      runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, additionalSetup  );
-      runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 150);
+//        int a=1;
+//      int additionalSetup = 10*a;
+ //     runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, additionalSetup  );
+//      runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, additionalSetup);
+ //     runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min", additionalSetup);
 
- // }
+// }
     //
-   // runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
-  //runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
+    cout << nbp <<endl;
+    runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min", 0);
+    runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max", 0);
+    runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean", 0);
+    runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
+ //   runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
+    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 0);
    //runGrasp(file, nbp, nbs,gamma);
-   //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min");
-   //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max");
-  //runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean");
+
 
 }
 
@@ -886,7 +895,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
 int main(int argc, char** argv){
 
 
-  //mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+//mainSimon(string(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
     mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));

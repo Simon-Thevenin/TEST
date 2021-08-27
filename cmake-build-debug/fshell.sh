@@ -8,7 +8,7 @@ do
 	do
 		for bh in '12'
 		do
-			for TBO in '4' '10' '20' #'2'  #'4' '6'  //2, 4 pour T=10, 4,10,20 pour 30 et 50
+			for TBO in '1' '2' '4' '10' '20' #'2'  #'4' '6'  //2, 4 pour T=10, 4,10,20 pour 30 et 50
 			do
 						k=1
 						#while [ $k -le 2 ]

@@ -329,13 +329,13 @@ double***  SubProblem::getWorstCaseDelta(double** Q)
 		 }
 	  }
 	//cout<<endl;
-/*	cout<<"worst lead time: ";
+	/*cout<<"worst lead time: ";
 	for(int t=1; t<=this->data->getNPer(); t++)
 	{
 		int tau =t;
 		while (tau<=this->data->getNPer()&&soldelta[t][tau][1]==0)
 			tau ++;
-		cout<< tau-t-1<<" ";
+		cout<< tau-t<<" ";
 
 
 	}

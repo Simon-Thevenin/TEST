@@ -706,12 +706,12 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
            {
                for(int t=1; t<=this->D->getNPer(); t++)
                {
-                  cout<<associatedquantities[t][s]<<" ";
+               //   cout<<associatedquantities[t][s]<<" ";
                    sum = sum +associatedquantities[t][s];
                }
            }
-          cout << " sum " << sum;
-          cout<<endl;
+         // cout << " sum " << sum;
+         // cout<<endl;
            double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
            //this->ModSub->DisplaySol();
            UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;
@@ -719,7 +719,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
                       std::to_string(this->totalsetupcosts) + " price:" + std::to_string(totprice);
            Data::print(s);
 
-           //cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+          // cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
            this->AddScenario(worstdelta);
        }
         end = clock();
