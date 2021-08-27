@@ -658,14 +658,17 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 
 
 
-    while(((UB-LB)/UB>stopatgap )&& (!fastUB || nriteration<1) && temps <= this->D->getTimeLimite() - previoustime)
+    while(((UB-LB)/UB>stopatgap )&& (!fastUB || nriteration<1) && (temps <= this->D->getTimeLimite() - previoustime || nriteration<1) )
 	{
         this->nriteration++;
        // this->pbQ->exportProb(1,"lpq");
         XPRSprob opt_prob =  this->pbQ->getXPRSprob();
         XPRSsetintcontrol(opt_prob,XPRS_THREADS,  1);
         XPRSsetintcontrol(opt_prob,XPRS_KEEPBASIS,  1);
-        XPRSsetintcontrol(opt_prob,XPRS_MAXTIME,  this->D->getTimeLimite()-temps);
+        double tlim= this->D->getTimeLimite()-temps;
+        if (tlim<=10)
+            tlim = 10;
+        XPRSsetintcontrol(opt_prob,XPRS_MAXTIME, tlim );
 
 
         bool status=false;
@@ -697,10 +700,11 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 			  }
 		  }
 
-        end = clock();
-        temps = (double) (end-start)/ CLOCKS_PER_SEC;
+       // end = clock();
+       // temps = (double) (end-start)/ CLOCKS_PER_SEC;
         double sum =0.0;
-       if (  temps <= this->D->getTimeLimite()) {
+		// cout<<"Start UB Computation"<<endl;
+       if (  true) {
 
           for(int s=1; s<=this->D->getNSup(); s++)
            {
@@ -719,7 +723,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
                       std::to_string(this->totalsetupcosts) + " price:" + std::to_string(totprice);
            Data::print(s);
 
-          // cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+         //  cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
            this->AddScenario(worstdelta);
        }
         end = clock();

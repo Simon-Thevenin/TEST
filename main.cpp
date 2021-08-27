@@ -76,7 +76,7 @@ void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
 
 
-    int** obtainedY = new int*[data->getNSup()];
+    /*int** obtainedY = new int*[data->getNSup()];
     for(int s=0; s<data->getNSup(); s++)
     {
     obtainedY[s] =  new int[data->getNPer()];
@@ -95,7 +95,7 @@ void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1
     data->Affich_Results(FFile, 0,  gamma1, gamma2, gamma3, "Robust_FixAndOp_ResolveFixY", obtainedY, cost,  ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt,  ModR->TimeBastSolFixAndOpt,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), mod->nriteration);
     cout<<"optimal cost Adversarial Fix Y::::"<<cost<<endl;
     cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
-    cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
+    cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;*/
 }
 
 void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3) {
@@ -347,8 +347,8 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
-   //runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
-   //runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
 //  for(int a =0; a <=15; a++)
 //{
 //        int a=1;
@@ -364,7 +364,9 @@ int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3)
     runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max", 0);
     runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean", 0);
     runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
- //   runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
+    cout<<"ExanctNW"<<endl;
+    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
+    cout<<"Exanct"<<endl;
     runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 0);
    //runGrasp(file, nbp, nbs,gamma);
 
@@ -899,6 +901,7 @@ int main(int argc, char** argv){
 
     //cout<<"REMOVE THE +11 !!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
     mainSimon(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),atoi(argv[6]));
-  //  mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
+    cout<<"GA"<<endl;
+    mainOussama(string(argv[1]), atoi(argv[2])+11, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]), atoi(argv[6]));
 
 }
