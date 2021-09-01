@@ -784,8 +784,9 @@ void ModelRobust::FixAndOpt(bool fast) {
            }
            else
            {
-               if (lastturncost==this->pbRob->getObjVal())
+               if (lastturncost>=this->pbRob->getObjVal()-0.001 && lastturncost<=this->pbRob->getObjVal()+0.001)
                {
+
                    stop = fast;
 
                    intervalsize=intervalsize+5;

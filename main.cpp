@@ -116,7 +116,6 @@ void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, doub
     }
 
     //ModQ->Solve(true, givenY2, false, 0.05);
-
     ModQ->FixAndOpt();
 
     int** obtainedY2 = new int*[data->getNSup()+1];
@@ -829,7 +828,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
                 for(int t=0; t<data->getNPer(); t++)
                 {
                     if(ag.ModR->Y[t+1][s+1].getSol() > 0.5)
-                        obtainedY[s][t] =  1;
+                    { obtainedY[s][t] =  1; }
                     else
                         obtainedY[s][t] =  0;
                 }

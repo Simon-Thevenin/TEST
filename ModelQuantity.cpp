@@ -723,7 +723,7 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
                       std::to_string(this->totalsetupcosts) + " price:" + std::to_string(totprice);
            Data::print(s);
 
-         //  cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
+           //cout<<"LB: " << LB << " UB:"<<UB<<  "  setup:"<<this->totalsetupcosts << " price:" <<totprice<< endl;
            this->AddScenario(worstdelta);
        }
         end = clock();
@@ -935,7 +935,7 @@ void ModelQuantity::FixAndOpt(void) {
 
 
             if (UB < bestsol) {
-                cout<<"IMPROVED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0"<<endl;
+                cout<<"IMPROVED!!!!! new Best Sol:"<<UB<<endl;
 
                 if(bestsol-UB> 0.01)
                     this->TimeBastSolFixAndOpt = (double) (clock()-start)/ CLOCKS_PER_SEC;
