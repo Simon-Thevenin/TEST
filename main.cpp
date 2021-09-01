@@ -69,9 +69,9 @@ void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1
     }
     string FFile = pathfile + "resultat7.txt";
 
-    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_Only_Init", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    //data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_Only_Init", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
 
-    //data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
     cout<<"robust cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
@@ -348,8 +348,8 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
- //  runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
-   runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
+ //  runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
 //  for(int a =0; a <=15; a++)
 //{
 //        int a=1;
