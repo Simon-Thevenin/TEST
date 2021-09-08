@@ -817,5 +817,6 @@ void ModelRobust::FixAndOpt(bool fast) {
     }
     this->durationFixAndOpt = temps;
     this->TimeBastSolFixAndOpt = timebestol;
+    cout<<"Cost after fiw and opt RO:"<<bestsol<<endl;
 
 }

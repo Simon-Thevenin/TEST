@@ -23,6 +23,8 @@ public:
 	int LastNrIteration;
     double LastGap;
     double LastLB;
+    double timeInSub;
+    double timeInMaster;
     int LastNrNode;
     int LastStatus;
     int nriteration;

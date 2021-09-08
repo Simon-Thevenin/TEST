@@ -36,7 +36,7 @@ Data * getData(string file, int NbPeriod, int NbSupplier)
 void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3) {
     Data *data = getData(file, NbPeriod, NbSupplier);
     ModelRobust* ModR= new ModelRobust(data, gamma1, gamma2, gamma3);
-    ModR->FixAndOpt(false);
+    ModR->FixAndOpt(true);
     /*
        for(int s=0; s<data->getNSup(); s++) {
             for (int t = 0; t < data->getNPer(); t++) {
@@ -71,7 +71,7 @@ void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1
 
     //data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_Only_Init", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
 
-    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"FixAndOpt_Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->durationFixAndOpt, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, ModR->nriterationfixandopt, ModR->TimeBastSolFixAndOpt, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1, -1.0, -1.0);
     cout<<"robust cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
@@ -105,7 +105,9 @@ void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, doub
     ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
     ModQ->BuildModel();
     string name= "FixAndOpt2";
-    int** givenY2 = new int*[data->getNSup()];
+   // ModelRobust* ModR2= new ModelRobust(data, gamma1, gamma2, gamma3);
+   // ModR2->FixAndOpt(true);
+   /* int** givenY2 = new int*[data->getNSup()];
     for(int s=0; s<data->getNSup(); s++)
     {
         givenY2[s] =  new int[data->getNPer()];
@@ -113,7 +115,7 @@ void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, doub
         {
             givenY2[s][t] =1;
         }
-    }
+    }*/
 
     //ModQ->Solve(true, givenY2, false, 0.05);
     ModQ->FixAndOpt();
@@ -131,7 +133,7 @@ void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, doub
 
 
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning, ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus,  ModQ->nriterationfixandopt, ModQ->TimeBastSolFixAndOpt, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration);
+    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning, ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus,  ModQ->nriterationfixandopt, ModQ->TimeBastSolFixAndOpt, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration, -1.0, -1.0);
 
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
@@ -173,7 +175,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
         }
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile, additionalsetup,  gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning,  ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus, ModQ->LastNrIteration, -1, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration);
+    data->Affich_Results(FFile, additionalsetup,  gamma1, gamma2,gamma3,name, obtainedY2, cost, ModQ->LastGap, ModQ->LastRunning,  ModQ->LastLB, ModQ->LastNrNode,  ModQ->LastStatus, ModQ->LastNrIteration, -1, ModQ->GetInventoryCosts(), ModQ->GetAvgInventory(), ModQ->GetPurshasingCosts(), ModQ->GetBackorderCosts(), ModQ->GetAvgtBackorder(), ModQ->nriteration, ModQ->timeInSub, ModQ->timeInMaster);
 
     cout<<"optimal cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModQ->GetInventoryCosts()<<" Avg Inv:"<<ModQ->GetAvgInventory()<<" Order Cost:"<<ModQ->GetOrderingCosts()<<endl;
@@ -226,7 +228,7 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
     string FFile = pathfile + "resultat7.txt";
 
 
-    data->Affich_Results(FFile, additionalsetup,   gamma1, gamma2,gamma3,"Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    data->Affich_Results(FFile, additionalsetup,   gamma1, gamma2,gamma3,"Robust_EvaluateYQ", obtainedY2, cost, ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), ModR->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1, -1.0, -1.0);
     cout<<"robust cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<ModR->GetSetupCost()<<endl;
     cout<<"Back Cost:"<<ModSub->GetBackorderCosts()<<" Avg Back:"<<ModSub->GetAvgtBackorder()<<" Pursh cost:"<<ModR->GetPurshasingCosts()<<endl;
@@ -248,7 +250,7 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
     mod->BuildModel();
     cost = mod->Solve(true, obtainedY, false, 0.01);
 
-    data->Affich_Results(FFile, additionalsetup,  gamma1, gamma2, gamma3, "Robust_ResolveFixY", obtainedY, cost,  ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), mod->nriteration);
+    data->Affich_Results(FFile, additionalsetup,  gamma1, gamma2, gamma3, "Robust_ResolveFixY", obtainedY, cost,  ModR->pbRob->getObjVal(), ModR->LastRunning, ModR->LastLB, ModR->LastNrNode,  ModR->LastStatus, -1, -1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), mod->nriteration, -1.0, -1.0);
     cout<<"optimal cost Adversarial Fix Y::::"<<cost<<endl;
     cout<<"Inv Cost:"<<mod->GetInventoryCosts()<<" Avg Inv:"<<mod->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
     cout<<"Back Cost:"<<mod->GetBackorderCosts()<<" Avg Back:"<<mod->GetAvgtBackorder()<<" Pursh cost:"<<mod->GetPurshasingCosts()<<endl;
@@ -338,7 +340,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
        // cout<<endl;
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"determinist"+Type, obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1);
+    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"determinist"+Type, obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1, -1.0, -1.0);
 
     cout<<"Deterministic"<<Type<<" cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
@@ -348,7 +350,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
    runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
- //  runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
+  // runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
 //  for(int a =0; a <=15; a++)
 //{
 //        int a=1;
@@ -365,9 +367,9 @@ int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3)
   ///  runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean", 0);
   //  runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
   //  cout<<"ExanctNW"<<endl;
-  //  runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
+    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
   //  cout<<"Exanct"<<endl;
-  //  runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 0);
+   runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 0);
    //runGrasp(file, nbp, nbs,gamma);
 
 
@@ -837,7 +839,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
             mod->BuildModel();
             cost = mod->Solve(true, obtainedY, false, 0.01);
 
-            data->Affich_Results(FFile, 0, gamma1, gamma2, gamma3, "GA", nouv_gen[0], cost, fitness[0],  temps, -1, -1, -1,  MeillsolPopIni, Iteration+1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), Iteration+1);
+            data->Affich_Results(FFile, 0, gamma1, gamma2, gamma3, "GA", nouv_gen[0], cost, fitness[0],  temps, -1, -1, -1,  MeillsolPopIni, Iteration+1,mod->GetInventoryCosts(), mod->GetAvgInventory(), mod->GetPurshasingCosts(), mod->GetBackorderCosts(), mod->GetAvgtBackorder(), Iteration+1, -1.0, -1.0);
 
 
 

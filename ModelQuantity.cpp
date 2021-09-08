@@ -27,8 +27,8 @@ ModelQuantity::ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 )
 	 ModSub->BuildModel();
 	 this->D=d;
 	 this->Gamma1 = gamma1;
-     this->Gamma2 = gamma1;
-     this->Gamma3 = gamma1;
+     this->Gamma2 = gamma2;
+     this->Gamma3 = gamma3;
 	 Data::print("start");
 	 pbQ = new XPRBprob("MyProb");
     XPRSprob opt_prob =  this->pbQ->getXPRSprob();
@@ -638,7 +638,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
 	double UB= 9999999999.0; 
 	double LB= 0.0; 
 	this->nriteration =0;
-
+    this->timeInMaster =0.0;
+    this->timeInSub =0.0;
     if(givenY)
 	{
 		this->SetYToValue(givenYvalues);
@@ -670,6 +671,8 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
             tlim = 10;
         XPRSsetintcontrol(opt_prob,XPRS_MAXTIME, tlim );
 
+        clock_t starttemptime, endtemptime;
+        starttemptime = clock();
 
         bool status=false;
         if(givenY) {
@@ -682,6 +685,9 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
                  status = this->pbQ->getMIPStat() == 6 || this->pbQ->getMIPStat() == 4;
 
         }
+        endtemptime = clock();
+        double temptime = (double) (endtemptime - starttemptime)/ CLOCKS_PER_SEC;
+        this->timeInMaster = this->timeInMaster  + temptime;
 
          if(!status)
          {      cout<<"infeasible!!!!!"<<endl;
@@ -716,7 +722,12 @@ double ModelQuantity::Solve(bool givenY, int** givenYvalues, bool fastUB, double
            }
          // cout << " sum " << sum;
          // cout<<endl;
+           clock_t starttemptime, endtemptime;
+           starttemptime = clock();
            double ***worstdelta = this->ModSub->getWorstCaseDelta(associatedquantities);
+           endtemptime = clock();
+           double temptime = (double) (endtemptime - starttemptime)/ CLOCKS_PER_SEC;
+           this->timeInSub = this->timeInSub  + temptime;
            //this->ModSub->DisplaySol();
            UB = ModSub->getAssociatedCost() + this->totalsetupcosts + totprice;
            string s = "LB: " + std::to_string(LB) + " UB:" + std::to_string(UB) + "  setup:" +
@@ -797,6 +808,7 @@ void ModelQuantity::FixNonSelectSuppliers(int a, int b, int** givenYvalues)
 
 
 void ModelQuantity::FixAndOpt(void) {
+
     double temps=0;
     double UB= 9999999999.0;
     double LB= 0.0;
