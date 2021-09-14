@@ -20,10 +20,10 @@ ModelQuantity::ModelQuantity(void)
 	cout<<"Not Implemented: DO NOT USE" <<endl;
 }
 
-ModelQuantity::ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 )
+ModelQuantity::ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3, bool aggregatedformul )
 {
 	 this->ModSub = new SubProblem(d, gamma1, gamma2, gamma3 );
-	 
+     this->aggregatedFormulation= aggregatedformul;
 	 ModSub->BuildModel();
 	 this->D=d;
 	 this->Gamma1 = gamma1;
@@ -61,6 +61,23 @@ ModelQuantity::ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 )
 	 {
 		 givenY[s] =  new int[this->D->getNPer()];
 	 }*/
+
+    if(this->aggregatedFormulation)
+    {
+        q = new XPRBvar**[this->D->getNPer()+1];
+        for(int t=1; t<=this->D->getNPer(); t++)
+        {
+            q[t] = new XPRBvar*[this->D->getNPer()+1];
+            for(int tau=1; tau<=this->D->getNPer(); tau++) {
+                q[t][tau] = new XPRBvar[this->D->getNSup() + 1];
+                for (int s = 1; s <= this->D->getNSup(); s++) {
+                    q[t][tau][s] = this->pbQ->newVar("Q", XPRB_PL, 0.0, XPRB_INFINITY); //XPRB_BV
+                }
+            }
+        }
+
+
+    }
 
 	Q = new XPRBvar*[this->D->getNPer()+1];
 	for(int t=1; t<=this->D->getNPer(); t++)
@@ -135,6 +152,54 @@ void ModelQuantity::BuildModel(void){
 	}
 	
 	Data::print("Define Constraints");
+
+
+
+	if( this->aggregatedFormulation)
+	{
+        XPRBexpr** cumulativeqtyQ=new XPRBexpr*[this->D->getNPer()+1];
+
+    for(int t=1; t<=this->D->getNPer(); t++) {
+        cumulativeqtyQ[t]=new XPRBexpr[this->D->getNSup()+1];
+        for(int s= 1; s<=this->D->getNSup(); s++)
+        {
+            for(int tau = 1; tau<= this->D->getNPer(); tau++) {
+                cumulativeqtyQ[t][s] += this->q[t][tau][s];
+            }
+             this->pbQ->newCtr(XPRBnewname("ConstraintQty%d%d",t, s),
+                                                          Q[t][s] == cumulativeqtyQ[t][s]  );
+        }
+
+
+    }
+
+
+    XPRBexpr** cumulativeqtyQatt=new XPRBexpr*[this->D->getNPer()+1];
+
+    for(int t=1; t<=this->D->getNPer(); t++) {
+        cumulativeqtyQatt[t]=new XPRBexpr[this->D->getNSup()+1];
+        for(int s= 1; s<=this->D->getNSup(); s++)
+        {
+            for(int tau = 1; tau<= this->D->getNPer(); tau++) {
+                cumulativeqtyQatt[t][s] += this->q[tau][t][s];
+            }
+            this->pbQ->newCtr(XPRBnewname("ConstraintQtyatt%d%d",t, s),
+                                                             cumulativeqtyQatt[t][s] == this->D->getDemand(t-1)  );
+        }
+    }
+
+        for(int t=1; t<=this->D->getNPer(); t++) {
+            for(int s= 1; s<=this->D->getNSup(); s++)
+            {
+                for(int tau = 1; tau<= this->D->getNPer(); tau++) {
+                   this->pbQ->newCtr(XPRBnewname("ConstraintBigMforq%d%d%d",t, tau, s),
+                                     this->q[t][tau][s] <= this->D->getDemand(tau-1) * this->Y[t][s]  );
+                }
+
+            }
+        }
+}
+
 
 
   //!Constraint related to holding cost
@@ -245,8 +310,8 @@ void ModelQuantity::BuildModel(void){
         }
 	}
 	Data::print("MeetDemand");
-	this->pbQ->newCtr(XPRBnewname("MeetDemand"),
-						   *cumulativeQuantityTot >= cumulativeDemand[this->D->getNPer()] );
+	//this->pbQ->newCtr(XPRBnewname("MeetDemand"),
+	//					   *cumulativeQuantityTot >= cumulativeDemand[this->D->getNPer()] );
 
 
    
@@ -425,6 +490,8 @@ void ModelQuantity::AddScenario(double*** givendelta)
             cumulativeCost += c[t];
         }
 
+  //  this->pbQ->newCtr(XPRBnewname("ConstraintEndOfHorizon"),
+  //                    c[this->D->getNPer()] == 0 );
 
    // this->pbQ->newCtr(XPRBnewname("MeetDemand2"),
    //                   c[this->D->getNPer()] == 0 );

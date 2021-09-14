@@ -1,6 +1,6 @@
 Suppliers    1
 Fixed Ordering cost of each supplier o_s
- 10
+ 0
 Unit price from each supplier (p_t)
  1
 Holding Cost h
@@ -8,11 +8,10 @@ Holding Cost h
 Backordering Cost b
  6
 Imax
- 1000000
-Time Period 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1000000
+Time Period 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 Demand d_t
-0 0 0 0 0 22 43 39 36 13 18 28 9 49 14
-
+0 0 0 0 0 26 48 23 2 29 46 25 44 48 25 24 5 30 14 3
 LMax (LMax_t)
  5
 LMin (LMin_t)

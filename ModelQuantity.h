@@ -29,6 +29,7 @@ public:
     int LastStatus;
     int nriteration;
     //int ** givenY;
+    XPRBvar*** q;
 	XPRBvar** Q;
 	XPRBvar** Y;
 	XPRBvar C;
@@ -36,6 +37,7 @@ public:
     XPRBctr* HoldingConstraint;
     XPRBctr* BackorderConstraint;
 	Data* D;
+	bool aggregatedFormulation;
 	int Gamma1;
 	int Gamma2;
 	int Gamma3;
@@ -46,7 +48,7 @@ public:
 public:
 	
 	ModelQuantity( void );
-	ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3 );
+	ModelQuantity( Data* d, int gamma1, int gamma2, int gamma3, bool aggregatedformulation );
 	~ModelQuantity(void);
 	void BuildModel(void); 
 	void SetYToValue(int** Y);

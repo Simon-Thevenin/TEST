@@ -102,7 +102,7 @@ void runFixAndOptRobust(string file, int NbPeriod, int NbSupplier, double gamma1
 void runFixAndOpt(string file, int NbPeriod, int NbSupplier, double gamma1, double gamma2, double gamma3) {
 
     Data *data = getData(file, NbPeriod, NbSupplier);
-    ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
+    ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3, false);
     ModQ->BuildModel();
     string name= "FixAndOpt2";
    // ModelRobust* ModR2= new ModelRobust(data, gamma1, gamma2, gamma3);
@@ -144,7 +144,7 @@ void runExact(string file, int NbPeriod, int NbSupplier, double gamma1, double g
 
     Data *data = getData(file, NbPeriod, NbSupplier);
     data->setSetup(0, data->getSetup(0)+additionalsetup);
-    ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3);
+    ModelQuantity* ModQ= new ModelQuantity(data, gamma1, gamma2, gamma3, false);
     ModQ->LastRunning = 0.0;
     ModQ->BuildModel();
     string name= "ExactNoWarmStart";
@@ -246,7 +246,7 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
                 obtainedY[s][t] =  0;
         }
     }
-    ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
+    ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3, false );
     mod->BuildModel();
     cost = mod->Solve(true, obtainedY, false, 0.01);
 
@@ -267,7 +267,7 @@ void runRobust(string file, int NbPeriod, int NbSupplier, double gamma1,  double
 }*/
 
 
-void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3, string Type, int addidtionalsetup)
+void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int gamma2, int gamma3, string Type, int addidtionalsetup, bool aggregatedForm)
 {
     string Thefile = pathfile+file;
     ifstream fichier( Thefile, ios::in);
@@ -275,6 +275,9 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
     data->setSetup(0,  data->getSetup(0) + addidtionalsetup);
     int* Lmean = new int[data->getNSup()+1];
 
+    string name= "determinist";
+    if( aggregatedForm )
+        name = "deterministAggregate";
     for(int s= 1; s<=data->getNSup(); s++)
     {
         if(Type== "Min")
@@ -305,13 +308,13 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
         }
     }
 
-    ModelQuantity* mod = new ModelQuantity(data,0, 0, 0 );
+    ModelQuantity* mod = new ModelQuantity(data,0, 0, 0, aggregatedForm );
     mod->BuildModel();
     mod->AddScenario(delta);
     XPRSprob opt_prob =  mod->pbQ->getXPRSprob();
     XPRSsetintcontrol(opt_prob,XPRS_MAXTIME, data->getTimeLimite());
     mod->Solve(false, nullptr, true, 0.01);
-
+   //mod->DisplaySol();
 
     /*************************EVALUATE THE COST****************************/
     double ** associatedquantities =  mod->getQuantities();
@@ -340,7 +343,7 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
        // cout<<endl;
     }
     string FFile = pathfile + "resultat7.txt";
-    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,"determinist"+Type, obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1, -1.0, -1.0);
+    data->Affich_Results(FFile, 0,  gamma1, gamma2,gamma3,name+Type, obtainedY2, cost, mod->pbQ->getObjVal(), mod->LastRunning, mod->LastLB, mod->LastNrNode,  mod->LastStatus, -1, -1, ModSub->GetInventoryCosts(), ModSub->GetAvgInventory(), mod->GetPurshasingCosts(), ModSub->GetBackorderCosts(), ModSub->GetAvgtBackorder(), -1, -1.0, -1.0);
 
     cout<<"Deterministic"<<Type<<" cost::::"<<cost<<endl;
     cout<<"Inv Cost:"<<ModSub->GetInventoryCosts()<<" Avg Inv:"<<ModSub->GetAvgInventory()<<" Order Cost:"<<mod->GetOrderingCosts()<<endl;
@@ -349,27 +352,27 @@ void runDeterministic(string file, int NbPeriod, int NbSupplier, int gamma1, int
 }
 
 int mainSimon(string file, int nbp, int nbs, int gamma1, int gamma2, int gamma3) {
-   runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
+   //runFixAndOpt(file, nbp, nbs, gamma1, gamma2, gamma3  );
   // runFixAndOptRobust(file, nbp, nbs, gamma1, gamma2, gamma3  );
-//  for(int a =0; a <=15; a++)
+// for(int a =0; a <=15; a++)
 //{
 //        int a=1;
-//      int additionalSetup = 10*a;
- //     runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, additionalSetup  );
-//      runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, additionalSetup);
- //     runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min", additionalSetup);
+   //   int additionalSetup = 10*a;
+  //    runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, additionalSetup  );
+    //  runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, additionalSetup);
+   //  runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min", additionalSetup);
 
-// }
+ //}
     //
   //  cout << nbp <<endl;
   //  runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Min", 0);
   //  runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Max", 0);
-  ///  runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean", 0);
+    runDeterministic(file, nbp, nbs, gamma1, gamma2, gamma3, "Mean", 0, true);
   //  runRobust(file, nbp, nbs, gamma1, gamma2, gamma3, 0  );
   //  cout<<"ExanctNW"<<endl;
-    runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
+   // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, false, 0);
   //  cout<<"Exanct"<<endl;
-   runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 0);
+  // runExact(file, nbp, nbs, gamma1, gamma2, gamma3, true, 0);
    //runGrasp(file, nbp, nbs,gamma);
 
 
@@ -835,7 +838,7 @@ int mainOussama(string file, int nbp, int nbs, int gamma1_,  int gamma2_, int ga
                         obtainedY[s][t] =  0;
                 }
             }
-            ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3 );
+            ModelQuantity* mod = new ModelQuantity(data,gamma1, gamma2, gamma3, false );
             mod->BuildModel();
             cost = mod->Solve(true, obtainedY, false, 0.01);
 
